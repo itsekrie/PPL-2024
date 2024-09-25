@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "360127361261",
+    "project_id": "sipaling-undip",
+    "storage_bucket": "sipaling-undip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360127361261:android:fb776b546d95804a96dce4",
+        "android_client_info": {
+          "package_name": "com.saltware.sipaling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbbRSikEc5y60Ik2hyS6hkRyOUlYyDEbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
