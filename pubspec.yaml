@@ -10,6 +10,12 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^3.5.0
+  go_router: ^14.2.8
+  firebase_auth: ^5.3.0
+  cloud_firestore: ^5.4.2
+  provider: ^6.1.2
+  google_sign_in_dartio: ^0.3.0
+  firebase_admin: ^0.3.0
 
 dev_dependencies:
   flutter_test:
