@@ -7,10 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:si_paling_undip/loginPage/auth_service.dart';
-import 'package:si_paling_undip/dashboard.dart';
-import 'package:si_paling_undip/loginPage/login_page.dart';
-import 'package:si_paling_undip/monitoring_page.dart';
+import 'package:si_paling_undip/IRS/Pages/ViewIRSPage.dart';
+import 'package:si_paling_undip/KHS/Pages/KHSPage.dart';
+import 'package:si_paling_undip/Login/Services/auth_service.dart';
+import 'package:si_paling_undip/Dashboard/Pages/dashboard.dart';
+import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
+import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
+import 'package:si_paling_undip/Ruangan/Pages/Ruangan.Dart';
 import 'package:si_paling_undip/firebase_options.dart';
 
 
@@ -50,6 +53,18 @@ final GoRouter _router = GoRouter(
           path: 'monitoring',
           builder: (context, state) => const MonitoringPage(),
         ),
+        GoRoute(
+          path: 'irs',
+          builder: (context, state) => const ViewIRSPage(), 
+        ),
+        GoRoute(
+          path: 'ruangan',
+          builder: (context, state) => const ViewRuang(), 
+        ),
+        GoRoute(
+          path: 'khs',
+          builder: (context, state) => const KHS()
+        )
       ],
     ),
   ],
