@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:si_paling_undip/Dashboard/Pages/DashNew.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSPage.dart';
 import 'package:si_paling_undip/KHS/Pages/KHSPage.dart';
+import 'package:si_paling_undip/Login/Pages/PilihRole.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import 'package:si_paling_undip/Dashboard/Pages/dashboard.dart';
 import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
@@ -47,6 +49,11 @@ final GoRouter _router = GoRouter(
               return '/';
             }
           ,
+        ),
+
+        GoRoute(
+          path: "Role",
+          builder: (context, state) => const Role(), 
         ),
 
         GoRoute(
