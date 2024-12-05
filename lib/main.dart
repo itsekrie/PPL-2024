@@ -18,86 +18,72 @@ import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
 import 'package:si_paling_undip/Ruangan/Pages/Ruangan.Dart';
 import 'package:si_paling_undip/firebase_options.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-   const MyApp() 
-  );
+  runApp(const MyApp());
 }
 
 final GoRouter _router = GoRouter(
-  routes:
- <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const Dashboard(),
-      routes: [
-        GoRoute(
-          path: 'login',
-          builder: (context, state) => const LoginPage(),
-          redirect:
-            (context, state) async {
+    routes: <RouteBase>[
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const Dashboard(),
+        routes: [
+          GoRoute(
+            path: 'login',
+            builder: (context, state) => const LoginPage(),
+            redirect: (context, state) async {
               final user = FirebaseAuth.instance.currentUser;
-              if(user == null){
+              if (user == null) {
                 return null;
               }
               return '/';
-            }
-          ,
-        ),
+            },
+          ),
 
-        GoRoute(
-          path: "Role",
-          builder: (context, state) => const Role(), 
-        ),
+          GoRoute(
+            path: "Role",
+            builder: (context, state) => const Role(),
+          ),
 
-        GoRoute(
-          path: 'monitoring',
-          builder: (context, state) => const MonitoringPage(),
-        ),
-        GoRoute(
-          path: 'irs',
-          builder: (context, state) => const ViewIRSPage(), 
-        ),
-        GoRoute(
-          path: 'ruangan',
-          builder: (context, state) => const ViewRuang(), 
-        ),
-        GoRoute(
-          path: 'khs',
-          builder: (context, state) => const KHS()
-        )
-      ],
-    ),
-  ],
-  redirect: (context, state) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if(user == null){
-      return '/login';
-    }
-    return null;
-  }
-    
-);
+          GoRoute(
+            path: 'monitoring',
+            builder: (context, state) => const MonitoringPage(),
+          ),
+          GoRoute(
+            path: 'irs',
+            builder: (context, state) => const ViewIRSPage(),
+          ),
+          // GoRoute(
+          //   path: 'ruangan',
+          //   builder: (context, state) => const ViewRuang(),
+          // ),
+          GoRoute(path: 'khs', builder: (context, state) => const KHS())
+        ],
+      ),
+    ],
+    redirect: (context, state) async {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return '/login';
+      }
+      return null;
+    });
 
-class MyApp extends StatelessWidget{
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp.router(
-        routerConfig: _router,
-        title: 'SiPalingUndip | ',
-        theme: ThemeData(
+      routerConfig: _router,
+      title: 'SiPalingUndip | ',
+      theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)
-        ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)),
     );
   }
 }
