@@ -30,17 +30,28 @@ class RuangService {
     }).toList();
   }
 
+  Future<bool> isRuangExists(String nama) async {
+    final snapshot = await _firestore.collection('Ruang').where('nama', isEqualTo: nama).get();
+    return snapshot.docs.isNotEmpty;
+  }
+
   Future<void> addRuang(String gedung, String nama, int kapasitas, String departemen) async {
+    if (await isRuangExists(nama)) {
+      throw Exception('Ruang dengan nama $nama sudah ada.');
+    }
     await _firestore.collection('Ruang').add({
       'gedung': gedung,
       'nama': nama,
       'kapasitas': kapasitas,
       'departemen': departemen,
-      'status' : 'belum_diajukan',
+      'status': 'belum_diajukan',
     });
   }
 
   Future<void> editRuang(String id, String gedung, String nama, int kapasitas, String departemen, String status) async {
+    if (await isRuangExists(nama)) {
+      throw Exception('Ruang dengan nama $nama sudah ada.');
+    }
     await _firestore.collection('Ruang').doc(id).update({
       'gedung': gedung,
       'nama': nama,

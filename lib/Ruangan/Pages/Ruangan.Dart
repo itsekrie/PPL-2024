@@ -29,6 +29,8 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
   
   String? selectedDepartemen;
 
+  final RuangService _ruangService = RuangService();
+
   @override
   void initState() {
     super.initState();
@@ -89,9 +91,9 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                       Expanded(
                         child: _buildTextField(
                           controller: namaController,
-                          labelText: ' Nama Gedung',
+                          labelText: ' Nama Ruang',
                           icon: Icons.business,
-                          hintText: 'Masukkan nama gedung',
+                          hintText: 'Masukkan nama ruang',
                         ),
                       ),
                     ],
@@ -144,20 +146,37 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                   ),
                   const SizedBox(height: 32),
                   ElevatedButton.icon(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.of(context).pop(RuangKuliah(
-                          widget.ruang?.no ?? '',
-                          gedungController.text,
-                          namaController.text,
-                          int.tryParse(kapasitasController.text) ?? 0,
-                          selectedDepartemen ?? '',
-                          widget.isEdit ? widget.ruang!.status : 'belum_diajukan', // Ensure this is included
-                        ));
+                        try {
+                          if (widget.isEdit) {
+                            await _ruangService.editRuang(
+                              widget.ruang!.no,
+                              gedungController.text,
+                              namaController.text,
+                              int.tryParse(kapasitasController.text) ?? 0,
+                              selectedDepartemen ?? '',
+                              widget.ruang!.status,
+                            );
+                          } else {
+                            await _ruangService.addRuang(
+                              gedungController.text,
+                              namaController.text,
+                              int.tryParse(kapasitasController.text) ?? 0,
+                              selectedDepartemen ?? '',
+                            );
+                          }
+                          Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+                        } catch (e) {
+                          // Tampilkan pesan kesalahan
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(e.toString())),
+                          );
+                        }
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
-                    label: Text(widget.isEdit ? 'Update' : 'Tambah'),
+                    label: Text(widget.isEdit ? 'Update' : 'Tambah', style: TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -259,7 +278,7 @@ class _ViewRuangState extends State<ViewRuang> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 16.0),
               child: TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffF18265),
@@ -276,154 +295,158 @@ class _ViewRuangState extends State<ViewRuang> {
                 ),
               ),
             ),
-            Card(
-              child: FutureBuilder<List<RuangKuliah>>(
-                future: _ruangService.fetchData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('Tidak ada data'));
-                  } else {
-                    final ruangList = snapshot.data!;
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Table(
-                        border: TableBorder.all(),
-                        children: [
-                          TableRow(
-                            decoration: BoxDecoration(color: Colors.grey[300]),
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('No', style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Gedung', style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Nama Gedung', style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Kapasitas', style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Departemen', style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Aksi', style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                            ],
-                          ),
-                          ...ruangList.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final ruang = entry.value;
-                            return TableRow(
-                              children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Card(
+                child: FutureBuilder<List<RuangKuliah>>(
+                  future: _ruangService.fetchData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('Tidak ada data'));
+                    } else {
+                      final ruangList = snapshot.data!;
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Table(
+                          border: TableBorder.all(),
+                          children: [
+                            TableRow(
+                              decoration: BoxDecoration(color: Colors.grey[300]),
+                              children: const [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('${index + 1}'),
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text('No', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(ruang.gedung),
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text('Gedung', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(ruang.nama),
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text('Nama Ruang', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('${ruang.kapasitas}'),
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text('Kapasitas', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(ruang.departemen),
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text('Departemen', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Builder(
-                                    builder: (context) {
-                                      if (ruang.status == 'belum_diajukan') {
-                                        return Row(
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(Icons.edit, color: Colors.blue),
-                                              onPressed: () {
-                                                navigateToAddEditPage(
-                                                  ruang: ruang,
-                                                  isEdit: true,
-                                                );
-                                              },
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(Icons.delete, color: Colors.red),
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      title: const Text('Konfirmasi Hapus'),
-                                                      content: const Text('Apakah Anda yakin ingin menghapus ruang ini?'),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                          child: const Text('Batal'),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            _ruangService.deleteRuang(ruang.no);
-                                                            Navigator.of(context).pop();
-                                                            setState(() {}); // Refresh the view after deleting
-                                                          },
-                                                          child: const Text('Hapus'),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      } else if (ruang.status == 'diajukan') {
-                                        return const Text(
-                                          'Belum Disetujui',
-                                          style: TextStyle(color: Colors.orange),
-                                          textAlign: TextAlign.center,
-                                        );
-                                      } else if (ruang.status == 'disetujui') {
-                                        return const Text(
-                                          'Sudah Disetujui',
-                                          style: TextStyle(color: Colors.green),
-                                          textAlign: TextAlign.center,
-                                        );
-                                      }
-                                      return const SizedBox(); // Return an empty widget if none of the conditions match
-                                    },
-                                  ),                                                  
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text('Aksi', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ),
                               ],
-                            );
-                          }).toList(),
-                        ],
-                      ),
-                    );
-                  }
-                },
+                            ),
+                            ...ruangList.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final ruang = entry.value;
+                              return TableRow(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('${index + 1}'),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(ruang.gedung),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(ruang.nama),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('${ruang.kapasitas}'),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(ruang.departemen),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Builder(
+                                      builder: (context) {
+                                        if (ruang.status == 'belum_diajukan' || ruang.status == 'ditolak') {
+                                          return Row(
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                                onPressed: () {
+                                                  navigateToAddEditPage(
+                                                    ruang: ruang,
+                                                    isEdit: true,
+                                                  );
+                                                },
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.delete, color: Colors.red),
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: const Text('Konfirmasi Hapus'),
+                                                        content: const Text('Apakah Anda yakin ingin menghapus ruang ini?'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            child: const Text('Batal'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              _ruangService.deleteRuang(ruang.no);
+                                                              Navigator.of(context).pop();
+                                                              setState(() {}); // Refresh the view after deleting
+                                                            },
+                                                            child: const Text('Hapus'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        } else if (ruang.status == 'diajukan') {
+                                          return const Text(
+                                            'Belum Disetujui',
+                                            style: TextStyle(color: Colors.orange),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else if (ruang.status == 'disetujui') {
+                                          return const Text(
+                                            'Sudah Disetujui',
+                                            style: TextStyle(color: Colors.green),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } 
+                                        return const SizedBox(); // Return an empty widget if none of the conditions match
+                                      },
+                                    ),                                                  
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
               ),
             ),
+            
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end, // Menempatkan tombol di sebelah kanan
                 children: [
