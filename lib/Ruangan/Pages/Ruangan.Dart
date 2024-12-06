@@ -152,6 +152,7 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                           namaController.text,
                           int.tryParse(kapasitasController.text) ?? 0,
                           selectedDepartemen ?? '',
+                          widget.isEdit ? widget.ruang!.status : 'belum_diajukan', // Ensure this is included
                         ));
                       }
                     },
@@ -229,13 +230,14 @@ class _ViewRuangState extends State<ViewRuang> {
 
     if (result != null && result is RuangKuliah) {
       if (isEdit) {
-        _ruangService.editRuang(ruang!.no, result.gedung, result.nama, result.kapasitas, result.departemen);
+        _ruangService.editRuang(ruang!.no, result.gedung, result.nama, result.kapasitas, result.departemen, ruang.status);
       } else {
         _ruangService.addRuang(result.gedung, result.nama, result.kapasitas, result.departemen);
       }
       setState(() {}); // Refresh the view after adding or editing
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,49 +349,68 @@ class _ViewRuangState extends State<ViewRuang> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.edit, color: Colors.blue),
-                                        onPressed: () {
-                                          navigateToAddEditPage(
-                                            ruang: ruang,
-                                            isEdit: true,
-                                          );
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete, color: Colors.red),
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: const Text('Konfirmasi Hapus'),
-                                                content: const Text('Apakah Anda yakin ingin menghapus ruang ini?'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: const Text('Batal'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      _ruangService.deleteRuang(ruang.no);
-                                                      Navigator.of(context).pop();
-                                                      setState(() {}); // Refresh the view after deleting
-                                                    },
-                                                    child: const Text('Hapus'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                  child: Builder(
+                                    builder: (context) {
+                                      if (ruang.status == 'belum_diajukan') {
+                                        return Row(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.edit, color: Colors.blue),
+                                              onPressed: () {
+                                                navigateToAddEditPage(
+                                                  ruang: ruang,
+                                                  isEdit: true,
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete, color: Colors.red),
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: const Text('Konfirmasi Hapus'),
+                                                      content: const Text('Apakah Anda yakin ingin menghapus ruang ini?'),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: const Text('Batal'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            _ruangService.deleteRuang(ruang.no);
+                                                            Navigator.of(context).pop();
+                                                            setState(() {}); // Refresh the view after deleting
+                                                          },
+                                                          child: const Text('Hapus'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      } else if (ruang.status == 'diajukan') {
+                                        return const Text(
+                                          'Belum Disetujui',
+                                          style: TextStyle(color: Colors.orange),
+                                          textAlign: TextAlign.center,
+                                        );
+                                      } else if (ruang.status == 'disetujui') {
+                                        return const Text(
+                                          'Sudah Disetujui',
+                                          style: TextStyle(color: Colors.green),
+                                          textAlign: TextAlign.center,
+                                        );
+                                      }
+                                      return const SizedBox(); // Return an empty widget if none of the conditions match
+                                    },
+                                  ),                                                  
                                 ),
                               ],
                             );
@@ -401,9 +422,34 @@ class _ViewRuangState extends State<ViewRuang> {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end, // Menempatkan tombol di sebelah kanan
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFA500), // Ubah warna menjadi orange
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () async {
+                      await _ruangService.ajukanSemuaRuang(); // Panggil fungsi untuk mengajukan semua
+                      setState(() {}); // Perbarui UI setelah perubahan
+                    },
+                    child: const Text(
+                      'Ajukan Semua',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
