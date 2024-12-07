@@ -16,6 +16,7 @@ dependencies:
   provider: ^6.1.2
   google_sign_in_dartio: ^0.3.0
   firebase_admin: ^0.3.0
+  syncfusion_flutter_calendar: ^27.2.5
 
 dev_dependencies:
   flutter_test:
