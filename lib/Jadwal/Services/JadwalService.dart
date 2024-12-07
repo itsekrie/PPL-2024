@@ -1,41 +1,34 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'PertemuanService.dart';
 
 class Jadwal {
-  final int starttime, endtime, day, year;
-  final String matakuliah, kelas, ruang;
+  final String matakuliah, kelas;
+  final List<Pertemuan> pertemuanList;
 
   const Jadwal({
-    required this.starttime,
-    required this.endtime,
-    required this.day,
-    required this.year,
     required this.matakuliah,
     required this.kelas,
-    required this.ruang,
+    required this.pertemuanList,
   });
 
   factory Jadwal.fromJson(Map<String, dynamic> json) {
+    var pertemuanJsonList = json['pertemuan'] as List;
+    List<Pertemuan> pertemuanList = pertemuanJsonList.map((pertemuanJson) {
+      return Pertemuan.fromJson(pertemuanJson);
+    }).toList();
+
     return Jadwal(
-      starttime: json['starttime'] ?? '',
-      endtime: json['endtime'] ?? '',
-      day: json['day'] ?? '',
-      year: json['year'] ?? '',
-      matakuliah: json['matakuliah'] ?? '',
-      kelas: json['kelas'] ?? '',
-      ruang: json['ruang'] ?? '',
+      matakuliah: json['matakuliah'],
+      kelas: json['kelas'],
+      pertemuanList: pertemuanList,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'starttime': starttime,
-      'endtime': endtime,
-      'day': day,
-      'year': year,
       'matakuliah': matakuliah,
       'kelas': kelas,
-      'ruang': ruang,
+      'pertemuan': pertemuanList.map((p) => p.toJson()).toList(),
     };
   }
 }
@@ -53,7 +46,36 @@ class JadwalService {
     return jadwalList;
   }
 
-  Future<void> addJadwal(Jadwal jadwal) async {
+  Future<void> addJadwalWithPertemuan({
+    required String matakuliah,
+    required String kelas,
+    required int starttime,
+    required int endtime,
+    required int day,
+    required int year,
+    required String ruang,
+  }) async {
+    // Generate 14 pertemuan otomatis
+    List<Pertemuan> pertemuanList = List.generate(14, (index) {
+      return Pertemuan(
+        pertemuanke: index + 1, // iterasi pertemuan ke-1 hingga ke-14
+        starttime: starttime,
+        endtime: endtime,
+        day: (day + index) % 7 +
+            1, // Mengatur hari secara berulang dalam seminggu
+        year: year,
+        ruang: ruang,
+      );
+    });
+
+    // Buat jadwal dengan pertemuan
+    Jadwal jadwal = Jadwal(
+      matakuliah: matakuliah,
+      kelas: kelas,
+      pertemuanList: pertemuanList,
+    );
+
+    // Tambahkan jadwal ke Firestore
     await _firestore.collection('Jadwal').add(jadwal.toJson());
   }
 }
