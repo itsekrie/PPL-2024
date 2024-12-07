@@ -15,6 +15,7 @@ import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import 'package:si_paling_undip/Dashboard/Pages/dashboard.dart';
 import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
 import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
+import 'package:si_paling_undip/Ruangan/Pages/AccRuang.dart';
 import 'package:si_paling_undip/Ruangan/Pages/Ruangan.Dart';
 import 'package:si_paling_undip/firebase_options.dart';
 
@@ -57,11 +58,18 @@ final GoRouter _router = GoRouter(
             path: 'irs',
             builder: (context, state) => const ViewIRSPage(),
           ),
-          // GoRoute(
-          //   path: 'ruangan',
-          //   builder: (context, state) => const ViewRuang(),
-          // ),
-          GoRoute(path: 'khs', builder: (context, state) => const KHS())
+          GoRoute(
+            path: 'ruangan',
+            builder: (context, state) => const ViewRuang(),
+          ),
+          GoRoute(
+            path: 'khs', 
+            builder: (context, state) => const KHS()
+          ),
+          GoRoute(
+            path: 'accruang', 
+            builder: (context, state) =>  const AccRuang()
+          )
         ],
       ),
     ],
