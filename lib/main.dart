@@ -15,6 +15,7 @@ import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import 'package:si_paling_undip/Dashboard/Pages/dashboard.dart';
 import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
 import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
+import 'package:si_paling_undip/RencanaAkademik/Pages/MataKuliah.dart';
 import 'package:si_paling_undip/RencanaAkademik/Pages/RencanaAkademik.dart';
 import 'package:si_paling_undip/Ruangan/Pages/AccRuang.dart';
 import 'package:si_paling_undip/Ruangan/Pages/Ruang.dart';
@@ -97,7 +98,10 @@ final GoRouter _router = GoRouter(
           GoRoute(path: 'khs', builder: (context, state) => const KHS()),
           GoRoute(
               path: 'raka',
-              builder: (context, state) => const RencanaAkademik())
+              builder: (context, state) => const RencanaAkademik()),
+          GoRoute(
+              path: 'mk',
+              builder: (context, state) => const ViewMK())
         ],
       ),
     ],

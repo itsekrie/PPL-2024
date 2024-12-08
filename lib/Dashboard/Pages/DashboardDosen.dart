@@ -5,14 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+class DashboardDosen extends StatefulWidget {
+  const DashboardDosen({super.key});
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<DashboardDosen> createState() => _DashboardDosenState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardDosenState extends State<DashboardDosen> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -48,10 +48,10 @@ return StreamBuilder<DocumentSnapshot>(
       // Lakukan sesuatu dengan array Role
       if (roles.contains('Dosen')) {
         print('User is a Dosen');
-        return buildDashboardUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
+        return buildDashboardDosenUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
       } else if (roles.contains('Kaprodi')) {
         print('User is a Kaprodi');
-        return buildDashboardUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
+        return buildDashboardDosenUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
       } else {
         print('User has unknown roles');
         return const Center(child: Text('Unknown Role'));
@@ -64,7 +64,7 @@ return StreamBuilder<DocumentSnapshot>(
 
 
 
-  Widget buildDashboardUI(BuildContext context, String role) {
+  Widget buildDashboardDosenUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     print('Building UI for role: $role');
@@ -135,25 +135,6 @@ return StreamBuilder<DocumentSnapshot>(
                       child: Center(
                         child: Column(
                           children: [
-                            if (role == 'Mahasiswa') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _KhsButton(),
-                              SizedBox(height: 20),
-                              _BimbinganButton(),
-                              SizedBox(height: 20),
-                              _RegisterasiButton(),
-                            ] else if (role == 'Kaprodi') ...const [
-                              _MataKuliahButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                              SizedBox(height: 20),
-                              _MonitoringButton(),
-                            ] else if (role == 'Dosen') ...const [
                               _JadwalButton(),
                               SizedBox(height: 20),
                               _IrsButton(),
@@ -163,175 +144,11 @@ return StreamBuilder<DocumentSnapshot>(
                               _MonitoringButton(),
                               SizedBox(height: 20),
                               _InputNilaiButton(),
-                            ] else if (role == 'Dekan') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            ] else if (role == 'Akademik') ...const [
-                              _JadwalAkademikButton(),
-                              SizedBox(height: 20),
-                              _RuangKelasButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            ] else ...const [
-                              // Widget alternatif untuk non-mahasiswa
-                              Text('Anda Siapa?'),
-                            ],
                           ],
                         ),
                       ),
                     ),
                   ),
-                  if (role == 'Mahasiswa') ...{
-                    DashboardContainer(
-                      width: width / 4,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text: 'Dosen Wali:',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              children: [
-                                TextSpan(
-                                    text: ' Krisna Okky, S.Si.',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal)),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: '( NIP:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: ' 24060122120017',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: ' )',
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(30),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Status Akademik',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                NotActiveAcademic(),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 30,
-                              right: 30,
-                              bottom: 30,
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Semester Akademik Sekarang',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  '2024/2025 Ganjil',
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 30,
-                              right: 30,
-                              bottom: 30,
-                            ),
-                            child: Wrap(
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      'IPK',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '3.5',
-                                      style: TextStyle(
-                                        fontSize: 35,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      'SKSk',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '87',
-                                      style: TextStyle(
-                                        fontSize: 35,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 30,
-                              right: 30,
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Semester Studi',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  '5',
-                                  style: TextStyle(
-                                    fontSize: 35,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  },
                 ],
               ),
             ),
@@ -342,11 +159,11 @@ return StreamBuilder<DocumentSnapshot>(
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardDosenContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardDosenContainer({
     required this.width,
     required this.child,
     super.key,
@@ -368,11 +185,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardDosenButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardDosenButton({
     required this.icon,
     required this.content,
     super.key,
