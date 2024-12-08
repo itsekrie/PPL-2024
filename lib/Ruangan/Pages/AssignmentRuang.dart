@@ -501,8 +501,7 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 16),
+                  ),                  const SizedBox(height: 16),
                   if (ruangDetail != null) ...[
                     const SizedBox(height: 16),
                     Card(
