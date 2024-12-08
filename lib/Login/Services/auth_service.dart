@@ -42,9 +42,14 @@ class AuthService {
       required BuildContext context}) async {
     try {
       if (roleAmount > 1) {
+<<<<<<< HEAD
+        context.go("/Role");
+=======
         context.go("/role");
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
       } else {
-        setRole(uID, role[0]);
+        await setRole(uID, role[0]);
+        await Future.delayed(const Duration(seconds: 1));
         context.go("/");
       }
     } catch (e) {

@@ -1,13 +1,57 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  Future<String>? roleFuture;
+  String role = '';
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    roleFuture = _getRole(); // Initialize the future
+    roleFuture!.then((value) {}).catchError((error) {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: roleFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          final String role = snapshot.data!;
+
+          return buildDashboardUI(context, role);
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
+    );
+  }
+
+  Future<String> _getRole() async {
+    User? user = _firebaseAuth.currentUser;
+    final AuthService authService = AuthService();
+    final String funcrole = await authService.currentRole();
+
+    return funcrole;
+  }
+
+  Widget buildDashboardUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
@@ -77,11 +121,211 @@ class Dashboard extends StatelessWidget {
                       padding: EdgeInsets.only(right: 60),
                       child: Center(
                         child: Column(
+<<<<<<< HEAD
+                          children: [
+                            if (role == 'Mahasiswa') ...const [
+                              _JadwalButton(),
+                              SizedBox(height: 20),
+                              _IrsButton(),
+                              SizedBox(height: 20),
+                              _KhsButton(),
+                              SizedBox(height: 20),
+                              _BimbinganButton(),
+                              SizedBox(height: 20),
+                              _RegisterasiButton(),
+                            ] else if (role == 'kaprodi') ...const [
+                              _MataKuliahButton(),
+                              SizedBox(height: 20),
+                              _IrsButton(),
+                              SizedBox(height: 20),
+                              _RencanaAkademikButton(),
+                              SizedBox(height: 20),
+                              _MonitoringButton(),
+                            ] else if (role == 'pembimbing') ...const [
+                              _JadwalButton(),
+                              SizedBox(height: 20),
+                              _IrsButton(),
+                              SizedBox(height: 20),
+                              _BimbinganButton(),
+                              SizedBox(height: 20),
+                              _MonitoringButton(),
+                              SizedBox(height: 20),
+                              _InputNilaiButton(),
+                            ] else if (role == 'dekan') ...const [
+                              _JadwalButton(),
+                              SizedBox(height: 20),
+                              _RencanaAkademikButton(),
+                            ] else if (role == 'akademik') ...const [
+                              _JadwalAkademikButton(),
+                              SizedBox(height: 20),
+                              _RuangKelasButton(),
+                              SizedBox(height: 20),
+                              _RencanaAkademikButton(),
+                            ] else ...const [
+                              // Widget alternatif untuk non-mahasiswa
+                              Text('Anda Siapa?'),
+                            ],
+                          ],
+=======
                           children: [],
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
                         ),
                       ),
                     ),
                   ),
+<<<<<<< HEAD
+                  if (role == 'Mahasiswa') ...{
+                    DashboardContainer(
+                      width: width / 4,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: 'Dosen Wali:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              children: [
+                                TextSpan(
+                                    text: ' Krisna Okky, S.Si.',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal)),
+                              ],
+                            ),
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              text: '( NIP:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' 24060122120017',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' )',
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(30),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Status Akademik',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                NotActiveAcademic(),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 30,
+                              right: 30,
+                              bottom: 30,
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Semester Akademik Sekarang',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  '2024/2025 Ganjil',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 30,
+                              right: 30,
+                              bottom: 30,
+                            ),
+                            child: Wrap(
+                              children: [
+                                Column(
+                                  children: [
+                                    Text(
+                                      'IPK',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '3.5',
+                                      style: TextStyle(
+                                        fontSize: 35,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      'SKSk',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '87',
+                                      style: TextStyle(
+                                        fontSize: 35,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 30,
+                              right: 30,
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Semester Studi',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  '5',
+                                  style: TextStyle(
+                                    fontSize: 35,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  },
+=======
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
                 ],
               ),
             ),
@@ -205,13 +449,13 @@ class NotActiveAcademic extends StatelessWidget {
   }
 }
 
-// PARENT BUTTON START
 class _JadwalButton extends RouteButton {
-  const _JadwalButton({required super.route})
+  const _JadwalButton()
       : super(
           icon: Icons.note_add,
           iconColor: Colors.black,
           content: "Jadwal",
+          route: '/jadwal',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -222,11 +466,12 @@ class _JadwalButton extends RouteButton {
 }
 
 class _IrsButton extends RouteButton {
-  const _IrsButton({required super.route})
+  const _IrsButton()
       : super(
           icon: Icons.note_add,
           iconColor: Colors.black,
           content: "IRS",
+          route: 'irs',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -237,11 +482,12 @@ class _IrsButton extends RouteButton {
 }
 
 class _BimbinganButton extends RouteButton {
-  const _BimbinganButton({required super.route})
+  const _BimbinganButton()
       : super(
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Bimbingan",
+          route: 'bimbingan',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -252,11 +498,12 @@ class _BimbinganButton extends RouteButton {
 }
 
 class _RencanaAkademikButton extends RouteButton {
-  const _RencanaAkademikButton({required super.route})
+  const _RencanaAkademikButton()
       : super(
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Rencana Akademik",
+          route: 'rencanaakademik',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -267,11 +514,12 @@ class _RencanaAkademikButton extends RouteButton {
 }
 
 class _MonitoringButton extends RouteButton {
-  const _MonitoringButton({required super.route})
+  const _MonitoringButton()
       : super(
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Monitoring",
+          route: 'monitoring',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -280,19 +528,14 @@ class _MonitoringButton extends RouteButton {
           height: 120,
         );
 }
-// PARENT BUTTON END
 
-//##########################################################
-//##########################################################
-
-// KAPRODI BUTTON START
 class _MataKuliahButton extends RouteButton {
   const _MataKuliahButton()
       : super(
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Mata Kuliah",
-          route: 'route',
+          route: 'matakuliah',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -300,40 +543,6 @@ class _MataKuliahButton extends RouteButton {
           width: double.infinity,
           height: 120,
         );
-}
-
-class _IrsKaprodiButton extends _IrsButton {
-  const _IrsKaprodiButton() : super(route: 'route');
-}
-
-class _RencanaAkademikKaprodiButton extends _RencanaAkademikButton {
-  const _RencanaAkademikKaprodiButton() : super(route: 'route');
-}
-
-class _MonitoringKaprodiButton extends _MonitoringButton {
-  const _MonitoringKaprodiButton() : super(route: 'route');
-}
-
-//KAPRODI BUTTON END
-
-//##########################################################
-//##########################################################
-
-// PEMBIMBING BUTTON START
-class _JadwalPembimbingButton extends _JadwalButton {
-  const _JadwalPembimbingButton() : super(route: 'route');
-}
-
-class _IrsPembimbingButton extends _IrsButton {
-  const _IrsPembimbingButton() : super(route: 'route');
-}
-
-class _BimbinganPembimbingButton extends _BimbinganButton {
-  const _BimbinganPembimbingButton() : super(route: 'route');
-}
-
-class _MonitoringPembimbingButton extends _MonitoringButton {
-  const _MonitoringPembimbingButton() : super(route: 'route');
 }
 
 class _InputNilaiButton extends RouteButton {
@@ -342,7 +551,7 @@ class _InputNilaiButton extends RouteButton {
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Input Nilai",
-          route: 'route',
+          route: 'inputnilai',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -351,23 +560,6 @@ class _InputNilaiButton extends RouteButton {
           height: 120,
         );
 }
-// PEMBIMBING BUTTON END
-
-//##########################################################
-//##########################################################
-
-// MAHASISWA BUTTON START
-class _JadwalMhsButton extends _JadwalButton {
-  const _JadwalMhsButton() : super(route: 'route');
-}
-
-class _IrsMhsButton extends _IrsButton {
-  const _IrsMhsButton() : super(route: 'route');
-}
-
-class _BimbinganMhsButton extends _BimbinganButton {
-  const _BimbinganMhsButton() : super(route: 'route');
-}
 
 class _KhsButton extends RouteButton {
   const _KhsButton()
@@ -375,7 +567,7 @@ class _KhsButton extends RouteButton {
           icon: Icons.note_alt,
           iconColor: Colors.black,
           content: "KHS",
-          route: 'route',
+          route: 'khs',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -391,7 +583,7 @@ class _RegisterasiButton extends RouteButton {
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Registerasi",
-          route: 'route',
+          route: 'registerasi',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -400,27 +592,21 @@ class _RegisterasiButton extends RouteButton {
           height: 120,
         );
 }
-// MAHASISWA BUTTON END
 
-//##########################################################
-//##########################################################
-
-// DEKAN BUTTON START
-class _JadwalDekanButton extends _JadwalButton {
-  const _JadwalDekanButton() : super(route: 'route');
-}
-
-class _RencanaAkademikDekanButton extends _RencanaAkademikButton {
-  const _RencanaAkademikDekanButton() : super(route: 'route');
-}
-// DEKAN BUTTON END
-
-//##########################################################
-//##########################################################
-
-// AKADEMIK BUTTON START
-class _JadwalAkademikButton extends _JadwalButton {
-  const _JadwalAkademikButton() : super(route: 'route');
+class _JadwalAkademikButton extends RouteButton {
+  const _JadwalAkademikButton()
+      : super(
+          icon: Icons.app_registration_rounded,
+          iconColor: Colors.black,
+          content: "Jadwal Akademik",
+          route: 'jadwalakademik',
+          buttonColor: Colors.white,
+          fontColor: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          width: double.infinity,
+          height: 120,
+        );
 }
 
 class _RuangKelasButton extends RouteButton {
@@ -429,7 +615,7 @@ class _RuangKelasButton extends RouteButton {
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Ruang Kelas",
-          route: 'route',
+          route: 'ruangan',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -438,8 +624,11 @@ class _RuangKelasButton extends RouteButton {
           height: 120,
         );
 }
+<<<<<<< HEAD
+=======
 
 class _RencanaAkademikAkademikButton extends _RencanaAkademikButton {
   const _RencanaAkademikAkademikButton() : super(route: 'route');
 }
 // AKADEMIK BUTTON END
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
