@@ -4,12 +4,12 @@ class MataKuliah {
   String no;
   String namaMK;
   String kodeMK;
-  int SKS;
+  int sks;
   int semester;
   String jenis;
 
   MataKuliah(
-      this.no, this.kodeMK, this.namaMK, this.SKS, this.semester, this.jenis);
+      this.no, this.kodeMK, this.namaMK, this.sks, this.semester, this.jenis);
 }
 
 class MataKuliahService {

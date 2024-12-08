@@ -32,55 +32,57 @@ void main() async {
 }
 
 final GoRouter _router = GoRouter(
+  initialLocation: '/mk',
     routes: <RouteBase>[
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const Dashboard(),
-        routes: [
+      // GoRoute(
+      //   path: '/',
+      //   builder: (context, state) => const Dashboard(),
+      //   routes: [
+          // GoRoute(
+          //   path: 'login',
+          //   builder: (context, state) => const LoginPage(),
+          //   redirect: (context, state) async {
+          //     final user = FirebaseAuth.instance.currentUser;
+          //     if (user == null) {
+          //       return null;
+          //     }
+          //     return '/';
+          //   },
+          // ),
+          // GoRoute(
+          //   path: "Role",
+          //   builder: (context, state) => const Role(),
+          // ),
+          // GoRoute(
+          //   path: 'monitoring',
+          //   builder: (context, state) => const MonitoringPage(),
+          // ),
+          // GoRoute(
+          //   path: 'irs',
+          //   builder: (context, state) => const IRS(),
+          // ),
+          // GoRoute(
+          //   path: 'ruangan',
+          //   builder: (context, state) => const ViewRuangOnly(),
+          // ),
+          // GoRoute(path: 'khs', builder: (context, state) => const KHS()),
+          // GoRoute(
+          //     path: 'raka',
+          //     builder: (context, state) => const RencanaAkademik()),
           GoRoute(
-            path: 'login',
-            builder: (context, state) => const LoginPage(),
-            redirect: (context, state) async {
-              final user = FirebaseAuth.instance.currentUser;
-              if (user == null) {
-                return null;
-              }
-              return '/';
-            },
-          ),
-          GoRoute(
-            path: "Role",
-            builder: (context, state) => const Role(),
-          ),
-          GoRoute(
-            path: 'monitoring',
-            builder: (context, state) => const MonitoringPage(),
-          ),
-          GoRoute(
-            path: 'irs',
-            builder: (context, state) => const IRS(),
-          ),
-          GoRoute(
-            path: 'ruangan',
-            builder: (context, state) => const ViewRuangOnly(),
-          ),
-          GoRoute(path: 'khs', builder: (context, state) => const KHS()),
-          GoRoute(
-              path: 'raka',
-              builder: (context, state) => const RencanaAkademik()),
-          GoRoute(
-              path: 'mk',
+              path: '/mk',
               builder: (context, state) => const ViewMK())
-        ],
-      ),
-    ],
-    redirect: (context, state) async {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        return '/login';
-      }
-      return null;
-    });
+         ],
+    //   ),
+    // ],
+    // redirect: (context, state) async {
+    //   final user = FirebaseAuth.instance.currentUser;
+    //   if (user == null) {
+    //     return '/login';
+    //   }
+    //   return null;
+    // }
+    );
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
