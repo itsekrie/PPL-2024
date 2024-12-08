@@ -93,9 +93,9 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () {
-                            AuthService().signOut();
-                            context.go("Login");
+                          onPressed: () async {
+                            await AuthService().signOut();
+                            context.go("/login");
                           },
                           child: const Text("Logout"))
                     ],
@@ -112,15 +112,16 @@ class _DashboardState extends State<Dashboard> {
                 left: 120,
                 right: 120,
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 60),
+                      padding: EdgeInsets.only(right: 60),
                       child: Center(
                         child: Column(
+<<<<<<< HEAD
                           children: [
                             if (role == 'Mahasiswa') ...const [
                               _JadwalButton(),
@@ -165,10 +166,14 @@ class _DashboardState extends State<Dashboard> {
                               Text('Anda Siapa?'),
                             ],
                           ],
+=======
+                          children: [],
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
                         ),
                       ),
                     ),
                   ),
+<<<<<<< HEAD
                   if (role == 'Mahasiswa') ...{
                     DashboardContainer(
                       width: width / 4,
@@ -319,6 +324,8 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                   },
+=======
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
                 ],
               ),
             ),
@@ -617,3 +624,11 @@ class _RuangKelasButton extends RouteButton {
           height: 120,
         );
 }
+<<<<<<< HEAD
+=======
+
+class _RencanaAkademikAkademikButton extends _RencanaAkademikButton {
+  const _RencanaAkademikAkademikButton() : super(route: 'route');
+}
+// AKADEMIK BUTTON END
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb

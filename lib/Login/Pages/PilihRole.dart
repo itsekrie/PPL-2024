@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+<<<<<<< HEAD
 import 'package:si_paling_undip/Dashboard/Pages/DashNew.dart';
+=======
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 
 class Role extends StatefulWidget {
@@ -29,7 +32,11 @@ class _RoleState extends State<Role> {
       uid = user.uid;
       try {
         List<dynamic>? roles = await AuthService().getRoles(uid);
+<<<<<<< HEAD
         if (roles != null && roles.length >= 2) {
+=======
+        if (roles.length >= 2) {
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
           setState(() {
             roleA = roles[0];
             roleB = roles[1];
@@ -147,6 +154,7 @@ class RoleButton extends StatelessWidget {
     );
   }
 }
+<<<<<<< HEAD
 
 // class KaprodiButton extends RoleButton {
 //   const KaprodiButton({
@@ -174,3 +182,5 @@ class RoleButton extends StatelessWidget {
 //           content: const Text("Dekan"),
 //         );
 // }
+=======
+>>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
