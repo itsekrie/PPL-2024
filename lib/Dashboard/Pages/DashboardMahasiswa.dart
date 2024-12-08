@@ -135,7 +135,6 @@ return StreamBuilder<DocumentSnapshot>(
                       child: Center(
                         child: Column(
                           children: [
-                            if (role == 'Mahasiswa') ...const [
                               _JadwalButton(),
                               SizedBox(height: 20),
                               _IrsButton(),
@@ -145,44 +144,11 @@ return StreamBuilder<DocumentSnapshot>(
                               _BimbinganButton(),
                               SizedBox(height: 20),
                               _RegisterasiButton(),
-                            ] else if (role == 'Kaprodi') ...const [
-                              _MataKuliahButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                              SizedBox(height: 20),
-                              _MonitoringButton(),
-                            ] else if (role == 'Dosen') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _BimbinganButton(),
-                              SizedBox(height: 20),
-                              _MonitoringButton(),
-                              SizedBox(height: 20),
-                              _InputNilaiButton(),
-                            ] else if (role == 'Dekan') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            ] else if (role == 'Akademik') ...const [
-                              _JadwalAkademikButton(),
-                              SizedBox(height: 20),
-                              _RuangKelasButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            ] else ...const [
-                              // Widget alternatif untuk non-mahasiswa
-                              Text('Anda Siapa?'),
-                            ],
                           ],
                         ),
                       ),
                     ),
                   ),
-                  if (role == 'Mahasiswa') ...{
                     DashboardContainer(
                       width: width / 4,
                       child: const Column(
@@ -331,7 +297,6 @@ return StreamBuilder<DocumentSnapshot>(
                         ],
                       ),
                     ),
-                  },
                 ],
               ),
             ),
