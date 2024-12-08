@@ -122,6 +122,7 @@ class _FormLoginState extends State<FormLogin> {
                 if (value == null || value.isEmpty) {
                   return "Masukkan Password";
                 }
+                return null;
               },
             ),
             const SizedBox(

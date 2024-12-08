@@ -89,7 +89,7 @@ class AuthService {
     }
   }
 
-  Future<String> getUID(String uID) {
+  Future<String> getUID() {
     return _firebaseAuth.currentUser!.uid as Future<String>;
   }
 

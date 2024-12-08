@@ -10,6 +10,7 @@ class IRSMahasiswa extends StatefulWidget {
 class _IRSMahasiswaState extends State<IRSMahasiswa> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -18,6 +19,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
+
             children: [
               Expanded(
                 flex: 1,
@@ -60,6 +62,7 @@ class AddMatkul extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -82,6 +85,7 @@ class AddMatkul extends StatelessWidget {
         ),
       ),
     );
+
   }
 }
 
@@ -90,6 +94,7 @@ class IRSCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,6 +114,7 @@ class IRSCounter extends StatelessWidget {
         ],
       ),
     );
+
   }
 }
 
@@ -117,6 +123,7 @@ class IRSTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
@@ -130,6 +137,7 @@ class IRSTab extends StatelessWidget {
         },
       ),
     );
+
   }
 }
 
@@ -138,6 +146,7 @@ class EntryIRS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -221,6 +230,7 @@ class EntryIRS extends StatelessWidget {
         ),
       ),
     );
+
   }
 }
 
