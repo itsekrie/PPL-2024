@@ -5,14 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+class DashboardKaprodi extends StatefulWidget {
+  const DashboardKaprodi({super.key});
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<DashboardKaprodi> createState() => _DashboardKaprodiState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardKaprodiState extends State<DashboardKaprodi> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -48,10 +48,10 @@ return StreamBuilder<DocumentSnapshot>(
       // Lakukan sesuatu dengan array Role
       if (roles.contains('Dosen')) {
         print('User is a Dosen');
-        return buildDashboardUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
+        return buildDashboardKaprodiUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
       } else if (roles.contains('Kaprodi')) {
         print('User is a Kaprodi');
-        return buildDashboardUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
+        return buildDashboardKaprodiUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
       } else {
         print('User has unknown roles');
         return const Center(child: Text('Unknown Role'));
@@ -64,7 +64,7 @@ return StreamBuilder<DocumentSnapshot>(
 
 
 
-  Widget buildDashboardUI(BuildContext context, String role) {
+  Widget buildDashboardKaprodiUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     print('Building UI for role: $role');
@@ -158,11 +158,11 @@ return StreamBuilder<DocumentSnapshot>(
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardKaprodiContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardKaprodiContainer({
     required this.width,
     required this.child,
     super.key,
@@ -184,11 +184,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardKaprodiButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardKaprodiButton({
     required this.icon,
     required this.content,
     super.key,

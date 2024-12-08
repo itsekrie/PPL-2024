@@ -5,14 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+class DashboardMahasiswa extends StatefulWidget {
+  const DashboardMahasiswa({super.key});
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<DashboardMahasiswa> createState() => _DashboardMahasiswaState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardMahasiswaState extends State<DashboardMahasiswa> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -48,10 +48,10 @@ return StreamBuilder<DocumentSnapshot>(
       // Lakukan sesuatu dengan array Role
       if (roles.contains('Dosen')) {
         print('User is a Dosen');
-        return buildDashboardUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
+        return buildDashboardMahasiswaUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
       } else if (roles.contains('Kaprodi')) {
         print('User is a Kaprodi');
-        return buildDashboardUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
+        return buildDashboardMahasiswaUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
       } else {
         print('User has unknown roles');
         return const Center(child: Text('Unknown Role'));
@@ -64,7 +64,7 @@ return StreamBuilder<DocumentSnapshot>(
 
 
 
-  Widget buildDashboardUI(BuildContext context, String role) {
+  Widget buildDashboardMahasiswaUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     print('Building UI for role: $role');
@@ -149,7 +149,7 @@ return StreamBuilder<DocumentSnapshot>(
                       ),
                     ),
                   ),
-                    DashboardContainer(
+                    DashboardMahasiswaContainer(
                       width: width / 4,
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -307,11 +307,11 @@ return StreamBuilder<DocumentSnapshot>(
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardMahasiswaContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardMahasiswaContainer({
     required this.width,
     required this.child,
     super.key,
@@ -333,11 +333,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardMahasiswaButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardMahasiswaButton({
     required this.icon,
     required this.content,
     super.key,
