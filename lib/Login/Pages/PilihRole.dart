@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashNew.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 
 class Role extends StatefulWidget {
@@ -29,7 +28,7 @@ class _RoleState extends State<Role> {
       uid = user.uid;
       try {
         List<dynamic>? roles = await AuthService().getRoles(uid);
-        if (roles != null && roles.length >= 2) {
+        if (roles.length >= 2) {
           setState(() {
             roleA = roles[0];
             roleB = roles[1];

@@ -18,7 +18,7 @@ class _RencanaAkademikState extends State<RencanaAkademik> {
               onPressed: () async {
                 await Rencanaakademikservice().getRoomSchedule("Informatika");
               },
-              child: Text("get rooms"))
+              child: const Text("get rooms"))
         ],
       ),
     );

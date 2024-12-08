@@ -53,7 +53,7 @@ class DashboardDosen extends StatelessWidget {
                             await AuthService().signOut();
                             context.go("/login");
                           },
-                          child: Text("Logout"))
+                          child: const Text("Logout"))
                     ],
                   ),
                 ),

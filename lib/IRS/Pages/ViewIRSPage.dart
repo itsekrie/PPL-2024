@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:si_paling_undip/IRS/Services/IRSServices.dart';
 
 class IRSMahasiswa extends StatefulWidget {
   const IRSMahasiswa({super.key});
@@ -12,7 +11,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 205, 205, 205),
+      color: const Color.fromARGB(255, 205, 205, 205),
       child: const Row(
         children: [
           Column(
@@ -44,7 +43,7 @@ class AddMatkul extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("AddBar");
+    return const Text("AddBar");
   }
 }
 
@@ -55,7 +54,7 @@ class IRSCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("IRSCounter");
+    return const Text("IRSCounter");
   }
 }
 
@@ -66,7 +65,7 @@ class IRSTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("IRS Tab");
+    return const Text("IRS Tab");
   }
 }
 
@@ -77,7 +76,7 @@ class EntryIRS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("IRSMahasiswa");
+    return const Text("IRSMahasiswa");
   }
 }
 

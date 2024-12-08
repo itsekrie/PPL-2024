@@ -18,7 +18,7 @@ class AssignmentRuangService {
   Future<List<AssignmentRuang>> fetchData() async {
     final snapshot = await _firestore.collection('Ruang').get();
     return snapshot.docs.where((doc) => doc.id != 'Master').map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       return AssignmentRuang(
         doc.id,
         data['gedung'],
@@ -163,7 +163,7 @@ Future<void> deleteRuang(String id, String departemen) async {
     // Ambil semua ruang yang tidak memiliki departemen dan status
     final ruangList = snapshot.docs
         .where((doc) {
-          final data = doc.data() as Map<String, dynamic>;
+          final data = doc.data();
           final isCurrentSelected = currentSelectedRuang != null && data['nama'] == currentSelectedRuang;
 
           return doc.id != 'Master' &&
@@ -188,7 +188,7 @@ Future<void> deleteRuang(String id, String departemen) async {
 
   if (querySnapshot.docs.isNotEmpty) {
     final doc = querySnapshot.docs.first;
-    final data = doc.data() as Map<String, dynamic>;
+    final data = doc.data();
     return AssignmentRuang(
       doc.id,
       data['gedung'] ?? '',

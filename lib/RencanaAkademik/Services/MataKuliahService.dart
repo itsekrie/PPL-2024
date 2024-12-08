@@ -25,7 +25,7 @@ class MataKuliahService {
         .collection(Sem)
         .get();
     return snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       return MataKuliah(
         doc.id,
         data['kodeMK'],
