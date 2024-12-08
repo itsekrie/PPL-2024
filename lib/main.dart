@@ -46,12 +46,10 @@ final GoRouter _router = GoRouter(
               return '/';
             },
           ),
-
           GoRoute(
             path: "Role",
             builder: (context, state) => const Role(),
           ),
-
           GoRoute(
             path: 'monitoring',
             builder: (context, state) => const MonitoringPage(),
@@ -64,18 +62,9 @@ final GoRouter _router = GoRouter(
             path: 'ruangan',
             builder: (context, state) => const ViewRuangOnly(),
           ),
+          GoRoute(path: 'khs', builder: (context, state) => const KHS()),
           GoRoute(
-            path: 'khs', 
-            builder: (context, state) => const KHS()
-          ),
-          GoRoute(
-            path: 'accruang', 
-            builder: (context, state) =>  const AccRuang()
-          ),
-          GoRoute(
-            path: 'assignruang', 
-            builder: (context, state) => const AssignRuang(),
-          ),
+
         ],
       ),
     ],

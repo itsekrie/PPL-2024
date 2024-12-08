@@ -38,10 +38,11 @@ class Role extends StatelessWidget {
 class RoleButton extends StatelessWidget {
   final IconData icon;
   final Text content;
-
+  final String role;
   const RoleButton({
     required this.icon,
     required this.content,
+    required this.role,
     super.key,
   });
 
