@@ -5,66 +5,65 @@ import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+class DashboardKaprodi extends StatefulWidget {
+  const DashboardKaprodi({super.key});
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<DashboardKaprodi> createState() => _DashboardKaprodiState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardKaprodiState extends State<DashboardKaprodi> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
-final user = FirebaseAuth.instance.currentUser ; // Get the current user
+    final user = FirebaseAuth.instance.currentUser; // Get the current user
 
-if (user == null) {
-  print('User  is null, not logged in');
-  return const Center(child: Text('User  not logged in'));
-} else {
-  print('User  is logged in: ${user.uid}');
-}
-
-return StreamBuilder<DocumentSnapshot>(
-  stream: _firestore.collection('User').doc(user.uid).snapshots(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (snapshot.hasError) {
-      print('Error fetching user data: ${snapshot.error}');
-      return Center(child: Text('Error: ${snapshot.error}'));
-    } else if (!snapshot.hasData || !snapshot.data!.exists) {
-      print('User data not found for uid: ${user.uid}');
-      return const Center(child: Text('User data not found'));
+    if (user == null) {
+      print('User  is null, not logged in');
+      return const Center(child: Text('User  not logged in'));
     } else {
-      final userData = snapshot.data!.data() as Map<String, dynamic>;
-      print('User data: $userData'); // Log data untuk debugging
-
-      // Ambil Role sebagai List
-      final roles = userData['Role'] as List<dynamic>? ?? [];
-
-      // Lakukan sesuatu dengan array Role
-      if (roles.contains('Dosen')) {
-        print('User is a Dosen');
-        return buildDashboardUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
-      } else if (roles.contains('Kaprodi')) {
-        print('User is a Kaprodi');
-        return buildDashboardUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
-      } else {
-        print('User has unknown roles');
-        return const Center(child: Text('Unknown Role'));
-      }
+      print('User  is logged in: ${user.uid}');
     }
-  },
-);
 
+    return StreamBuilder<DocumentSnapshot>(
+      stream: _firestore.collection('User').doc(user.uid).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          print('Error fetching user data: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || !snapshot.data!.exists) {
+          print('User data not found for uid: ${user.uid}');
+          return const Center(child: Text('User data not found'));
+        } else {
+          final userData = snapshot.data!.data() as Map<String, dynamic>;
+          print('User data: $userData'); // Log data untuk debugging
+
+          // Ambil Role sebagai List
+          final roles = userData['Role'] as List<dynamic>? ?? [];
+
+          // Lakukan sesuatu dengan array Role
+          if (roles.contains('Dosen')) {
+            print('User is a Dosen');
+            return buildDashboardKaprodiUI(
+                context, 'Dosen'); // Sesuaikan dengan UI Anda
+          } else if (roles.contains('Kaprodi')) {
+            print('User is a Kaprodi');
+            return buildDashboardKaprodiUI(
+                context, 'Kaprodi'); // Sesuaikan dengan UI Anda
+          } else {
+            print('User has unknown roles');
+            return const Center(child: Text('Unknown Role'));
+          }
+        }
+      },
+    );
   }
 
-
-
-  Widget buildDashboardUI(BuildContext context, String role) {
+  Widget buildDashboardKaprodiUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     print('Building UI for role: $role');
@@ -135,14 +134,13 @@ return StreamBuilder<DocumentSnapshot>(
                       child: Center(
                         child: Column(
                           children: [
-                            
-                              _MataKuliahButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                              SizedBox(height: 20),
-                              _MonitoringButton(),
+                            _MataKuliahButton(),
+                            SizedBox(height: 20),
+                            _IrsButton(),
+                            SizedBox(height: 20),
+                            _RencanaAkademikButton(),
+                            SizedBox(height: 20),
+                            _MonitoringButton(),
                           ],
                         ),
                       ),
@@ -158,11 +156,11 @@ return StreamBuilder<DocumentSnapshot>(
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardKaprodiContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardKaprodiContainer({
     required this.width,
     required this.child,
     super.key,
@@ -184,11 +182,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardKaprodiButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardKaprodiButton({
     required this.icon,
     required this.content,
     super.key,

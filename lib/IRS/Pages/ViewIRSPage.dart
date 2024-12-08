@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
-
-class IRSDosen extends StatefulWidget {
-  const IRSDosen({super.key});
-
-  @override
-  State<IRSDosen> createState() => _IRSDosenState();
-}
-
-class _IRSDosenState extends State<IRSDosen> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+import 'package:si_paling_undip/IRS/Services/IRSServices.dart';
 
 class IRSMahasiswa extends StatefulWidget {
   const IRSMahasiswa({super.key});
@@ -31,6 +18,9 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
           Column(
             children: [
               IRSMahasiswaCardInfo(),
+              IRSCounter(),
+              AddMatkul(),
+              IRSTab()
             ],
           ),
           SizedBox(
@@ -47,6 +37,39 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
   }
 }
 
+class AddMatkul extends StatelessWidget {
+  const AddMatkul({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("AddBar");
+  }
+}
+
+class IRSCounter extends StatelessWidget {
+  const IRSCounter({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("IRSCounter");
+  }
+}
+
+class IRSTab extends StatelessWidget {
+  const IRSTab({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("IRS Tab");
+  }
+}
+
 class EntryIRS extends StatelessWidget {
   const EntryIRS({
     super.key,
@@ -58,10 +81,25 @@ class EntryIRS extends StatelessWidget {
   }
 }
 
-class IRSMahasiswaCardInfo extends StatelessWidget {
+class IRSMahasiswaCardInfo extends StatefulWidget {
   const IRSMahasiswaCardInfo({
     super.key,
   });
+
+  @override
+  State<IRSMahasiswaCardInfo> createState() => _IRSMahasiswaCardInfoState();
+}
+
+class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // Future<void> getData() async {
+  //   var userData =
+  //   var IRSData = IRSServices().fetchMyIRS()
+  // }
 
   @override
   Widget build(BuildContext context) {
