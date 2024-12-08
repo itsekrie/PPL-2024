@@ -11,7 +11,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-
   final _formkey = GlobalKey<FormState>();
   String email = '';
   String password = '';
@@ -52,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class FormLogin extends StatelessWidget {
+class FormLogin extends StatefulWidget {
   const FormLogin({
     super.key,
     required GlobalKey<FormState> formkey,
@@ -67,12 +66,25 @@ class FormLogin extends StatelessWidget {
   final TextEditingController _controllerPassword;
 
   @override
+  State<FormLogin> createState() => _FormLoginState();
+}
+
+class _FormLoginState extends State<FormLogin> {
+  late final String _errorMessage;
+  @override
+  void updateMessage(String newMessage) {
+    setState(() {
+      _errorMessage = newMessage;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(
           horizontal: 200.0, vertical: 10.0),
       child: Form(
-        key: _formkey,
+        key: widget._formkey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -82,7 +94,7 @@ class FormLogin extends StatelessWidget {
                 label: Text('Email'),
                 border: OutlineInputBorder(),
               ),
-              controller: _controllerEmail,
+              controller: widget._controllerEmail,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Masukkan Email";
@@ -105,18 +117,27 @@ class FormLogin extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
-              controller: _controllerPassword,
+              controller: widget._controllerPassword,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Masukkan Password";
+                }
+              },
             ),
             const SizedBox(
               height: 20,
             ),
             ElevatedButton(
-              onPressed: () {
-                if (_formkey.currentState!.validate()) {
-                  var email = _controllerEmail.text;
-                  var password = _controllerPassword.text;
-                  AuthService().signIn(
-                      email: email, password: password, context: context);
+              onPressed: () async {
+                if (widget._formkey.currentState!.validate()) {
+                  var email = widget._controllerEmail.text;
+                  var password = widget._controllerPassword.text;
+                  try {
+                    await AuthService().signIn(
+                        email: email, password: password, context: context);
+                  } catch (e) {
+                    print("error");
+                  }
                 }
               },
               child: const Text('Sign in'),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 import '../../Jadwal/Services/JadwalService.dart';
 
@@ -27,13 +29,13 @@ class Dashboard extends StatelessWidget {
                   right: 120,
                   top: 120,
                 ),
-                child: const Align(
+                child: Align(
                   alignment: Alignment.centerLeft,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Welcome, Fahriant Ekrie!",
                         style: TextStyle(
                           fontSize: 52,
@@ -41,13 +43,19 @@ class Dashboard extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Sunday, 29th October 2024",
                         style: TextStyle(
                           fontSize: 28,
                           color: Color.fromARGB(255, 205, 205, 205),
                         ),
-                      )
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            AuthService().signOut();
+                            context.go("Login");
+                          },
+                          child: Text("Logout"))
                     ],
                   ),
                 ),
