@@ -2,33 +2,47 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'PertemuanService.dart';
 
 class Jadwal {
-  final String matakuliah, kelas;
-  final List<Pertemuan> pertemuanList;
+  final String kelas;
+  final List<String> pertemuanList;
+  final List<String> pengampu;
+  final List<String> mahasiswa;
 
   const Jadwal({
-    required this.matakuliah,
     required this.kelas,
+    required this.pengampu,
+    required this.mahasiswa,
     required this.pertemuanList,
   });
 
   factory Jadwal.fromJson(Map<String, dynamic> json) {
     var pertemuanJsonList = json['pertemuan'] as List;
-    List<Pertemuan> pertemuanList = pertemuanJsonList.map((pertemuanJson) {
-      return Pertemuan.fromJson(pertemuanJson);
-    }).toList();
+    var pengampuJsonList = json['pengampu'] as List;
+    var mahasiswaJsonList = json['mahasiswa'] as List;
+
+    // List<Pertemuan> pertemuanList = pertemuanJsonList.map((pertemuanJson) {
+    //   return Pertemuan.fromJson(pertemuanJson);
+    // }).toList();
+
+    List<String> pertemuanList = pertemuanJsonList.cast<String>();
+
+    List<String> pengampuList = pengampuJsonList.cast<String>();
+
+    List<String> mahasiswapuList = mahasiswaJsonList.cast<String>();
 
     return Jadwal(
-      matakuliah: json['matakuliah'],
       kelas: json['kelas'],
+      pengampu: pengampuList,
+      mahasiswa: mahasiswapuList,
       pertemuanList: pertemuanList,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'matakuliah': matakuliah,
       'kelas': kelas,
-      'pertemuan': pertemuanList.map((p) => p.toJson()).toList(),
+      'pertemuan': pertemuanList,
+      'pengampu': pengampu,
+      'mahasiswa': mahasiswa,
     };
   }
 }
@@ -46,36 +60,23 @@ class JadwalService {
     return jadwalList;
   }
 
-  Future<void> addJadwalWithPertemuan({
-    required String matakuliah,
-    required String kelas,
-    required int starttime,
-    required int endtime,
-    required int day,
-    required int year,
-    required String ruang,
-  }) async {
-    // Generate 14 pertemuan otomatis
-    List<Pertemuan> pertemuanList = List.generate(14, (index) {
-      return Pertemuan(
-        pertemuanke: index + 1, // iterasi pertemuan ke-1 hingga ke-14
-        starttime: starttime,
-        endtime: endtime,
-        day: (day + index) % 7 +
-            1, // Mengatur hari secara berulang dalam seminggu
-        year: year,
-        ruang: ruang,
-      );
-    });
+  Future<void> addJadwalWithPertemuan(
+      Jadwal inputJadwal, Pertemuan inputPertemuan) async {
+    Pertemuanservice pertemuanService = Pertemuanservice();
 
-    // Buat jadwal dengan pertemuan
+    // Memanggil addPertemuan dan mendapatkan UID untuk pertemuan
+    List<String> pertemuanList =
+        await pertemuanService.addPertemuan(inputPertemuan);
+
+    // Membuat objek Jadwal dengan foreign key ke koleksi Pertemuan
     Jadwal jadwal = Jadwal(
-      matakuliah: matakuliah,
-      kelas: kelas,
+      kelas: inputJadwal.kelas,
       pertemuanList: pertemuanList,
+      mahasiswa: inputJadwal.mahasiswa,
+      pengampu: inputJadwal.pengampu,
     );
 
-    // Tambahkan jadwal ke Firestore
+    // Simpan Jadwal ke Firestore
     await _firestore.collection('Jadwal').add(jadwal.toJson());
   }
 }
