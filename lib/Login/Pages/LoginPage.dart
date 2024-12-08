@@ -70,13 +70,13 @@ class FormLogin extends StatefulWidget {
 }
 
 class _FormLoginState extends State<FormLogin> {
-  late final String _errorMessage;
-  @override
-  void updateMessage(String newMessage) {
-    setState(() {
-      _errorMessage = newMessage;
-    });
-  }
+  // late final String _errorMessage;
+  // @override
+  // void updateMessage(String newMessage) {
+  //   setState(() {
+  //     _errorMessage = newMessage;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
