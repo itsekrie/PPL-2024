@@ -1,34 +1,59 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:si_paling_undip/Jadwal/Services/PertemuanService.dart';
+import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
-import '../../Jadwal/Services/JadwalService.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  Future<String>? roleFuture;
+  String role = '';
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    roleFuture = _getRole(); // Initialize the future
+    roleFuture!.then((value) {}).catchError((error) {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: roleFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          final String role = snapshot.data!;
+
+          return buildDashboardUI(context, role);
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
+    );
+  }
+
+  Future<String> _getRole() async {
+    User? user = _firebaseAuth.currentUser;
+    final AuthService authService = AuthService();
+    final String funcrole = await authService.currentRole();
+
+    return funcrole;
+  }
+
+  Widget buildDashboardUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    JadwalService jadwalService = JadwalService();
-    Jadwal jadwal = const Jadwal(
-      kelas: 'A',
-      pengampu: ['Pyro', 'Handoko'],
-      mahasiswa: ['Ekrie', 'Ucup', 'Okky'],
-      pertemuanList: [],
-    );
-
-    Pertemuan pertemuan = const Pertemuan(
-      pertemuanke: 1,
-      starttime: 9,
-      endtime: 12,
-      day: 1,
-      month: 8,
-      year: 2024,
-      ruang: 'E101',
-    );
-    String role = "pembimbing";
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 231, 231, 231),
@@ -69,10 +94,10 @@ class Dashboard extends StatelessWidget {
                       ),
                       ElevatedButton(
                           onPressed: () {
-                            jadwalService.addJadwalWithPertemuan(
-                                jadwal, pertemuan);
+                            AuthService().signOut();
+                            context.go("Login");
                           },
-                          child: const Text('Tambah'))
+                          child: const Text("Logout"))
                     ],
                   ),
                 ),
@@ -97,7 +122,7 @@ class Dashboard extends StatelessWidget {
                       child: Center(
                         child: Column(
                           children: [
-                            if (role == 'mahasiswa') ...const [
+                            if (role == 'Mahasiswa') ...const [
                               _JadwalButton(),
                               SizedBox(height: 20),
                               _IrsButton(),
@@ -144,7 +169,7 @@ class Dashboard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (role == 'mahasiswa') ...{
+                  if (role == 'Mahasiswa') ...{
                     DashboardContainer(
                       width: width / 4,
                       child: const Column(
@@ -423,7 +448,7 @@ class _JadwalButton extends RouteButton {
           icon: Icons.note_add,
           iconColor: Colors.black,
           content: "Jadwal",
-          route: 'jadwal',
+          route: '/jadwal',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,

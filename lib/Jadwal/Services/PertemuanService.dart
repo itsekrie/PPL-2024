@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 
 class Pertemuan {
   final int pertemuanke, starttime, endtime, day, month, year;
@@ -16,7 +17,7 @@ class Pertemuan {
 
   factory Pertemuan.fromJson(Map<String, dynamic> json) {
     return Pertemuan(
-      pertemuanke: json['pertemuanKe'],
+      pertemuanke: json['pertemuanke'],
       starttime: json['starttime'],
       endtime: json['endtime'],
       day: json['day'],
@@ -36,6 +37,10 @@ class Pertemuan {
       'year': year,
       'ruang': ruang,
     };
+  }
+
+  String toString() {
+    return 'Pertemuan{pertemuanke: $pertemuanke, starttime: $starttime, endtime: $endtime, day: $day, month: $month, year: $year, ruang: $ruang}';
   }
 }
 
@@ -87,5 +92,40 @@ class Pertemuanservice {
       }
     }
     return pertemuanUids;
+  }
+
+  Future<List<Pertemuan>> getPertemuanFromJadwal(String jadwalId) async {
+    try {
+      // Ambil data Jadwal berdasarkan ID
+      DocumentSnapshot jadwalSnapshot =
+          await _firestore.collection('Jadwal').doc(jadwalId).get();
+
+      if (!jadwalSnapshot.exists) {
+        throw Exception('Jadwal with ID $jadwalId not found');
+      }
+
+      // Parse data Jadwal untuk mendapatkan UID pertemuan
+      Jadwal jadwal =
+          Jadwal.fromJson(jadwalSnapshot.data() as Map<String, dynamic>);
+      String jadwalString = jadwal.toString();
+
+      List<Pertemuan> pertemuanList = [];
+      for (String pertemuanId in jadwal.pertemuanList) {
+        DocumentSnapshot pertemuanSnapshot =
+            await _firestore.collection('Pertemuan').doc(pertemuanId).get();
+
+        if (pertemuanSnapshot.exists) {
+          Pertemuan pertemuan = Pertemuan.fromJson(
+              pertemuanSnapshot.data() as Map<String, dynamic>);
+          pertemuanList.add(pertemuan);
+          // Mencetak informasi pertemuan
+        } else {
+          print('Pertemuan with ID $pertemuanId not found');
+        }
+      }
+      return pertemuanList;
+    } catch (e) {
+      throw Exception('Error fetching pertemuan: $e');
+    }
   }
 }
