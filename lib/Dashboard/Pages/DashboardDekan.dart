@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+class DashboardDekan extends StatelessWidget {
+  const DashboardDekan({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,13 @@ class Dashboard extends StatelessWidget {
                       padding: EdgeInsets.only(right: 60),
                       child: Center(
                         child: Column(
-                          children: [],
+                          children: [
+                            _JadwalAkademikButton(),
+                            SizedBox(height: 20),
+                            _RuangKelasButton(),
+                            SizedBox(height: 20),
+                            _RencanaAkademikAkademikButton(),
+                          ],
                         ),
                       ),
                     ),
@@ -92,11 +100,11 @@ class Dashboard extends StatelessWidget {
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardDekanContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardDekanContainer({
     required this.width,
     required this.child,
     super.key,
@@ -118,11 +126,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardDekanButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardDekanButton({
     required this.icon,
     required this.content,
     super.key,

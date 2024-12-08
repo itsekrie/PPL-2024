@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+class DashboardKaprodi extends StatelessWidget {
+  const DashboardKaprodi({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,15 @@ class Dashboard extends StatelessWidget {
                       padding: EdgeInsets.only(right: 60),
                       child: Center(
                         child: Column(
-                          children: [],
+                          children: [
+                            _MataKuliahButton(),
+                            SizedBox(height: 20),
+                            _IrsKaprodiButton(),
+                            SizedBox(height: 20),
+                            _RencanaAkademikKaprodiButton(),
+                            SizedBox(height: 20),
+                            _MonitoringKaprodiButton(),
+                          ],
                         ),
                       ),
                     ),
@@ -92,11 +100,11 @@ class Dashboard extends StatelessWidget {
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardKaprodiContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardKaprodiContainer({
     required this.width,
     required this.child,
     super.key,
@@ -118,11 +126,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardKaprodiButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardKaprodiButton({
     required this.icon,
     required this.content,
     super.key,

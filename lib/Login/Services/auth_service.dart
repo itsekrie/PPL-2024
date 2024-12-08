@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
 
 class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -17,9 +16,11 @@ class AuthService {
         return roleam;
       } else {
         print('Document does not exist.');
+        return Map();
       }
     } catch (e) {
       print('Error fetching data: $e');
+      return Map();
     }
   }
 
@@ -41,7 +42,7 @@ class AuthService {
       required BuildContext context}) async {
     try {
       if (roleAmount > 1) {
-        context.go("Role");
+        context.go("/role");
       } else {
         setRole(uID, role[0]);
         context.go("/");
@@ -73,7 +74,7 @@ class AuthService {
     return role;
   }
 
-  String _getErrorMessage(String errorCode) {
+  String getErrorMessage(String errorCode) {
     switch (errorCode) {
       case 'invalid-email':
         return 'Invalid email address.';
@@ -88,6 +89,10 @@ class AuthService {
     }
   }
 
+  Future<String> getUID() {
+    return _firebaseAuth.currentUser!.uid as Future<String>;
+  }
+
   Future<void> signIn({
     required String email,
     required String password,
@@ -100,13 +105,14 @@ class AuthService {
       final uid = _firebaseAuth.currentUser!.uid;
       var roleAmount = await getRoleAmount(uid);
       var roles = await getRoles(uid);
-
+      print(roleAmount);
+      print(roles);
       navigateUser(
           uID: uid, roleAmount: roleAmount, role: roles, context: context);
     } catch (e) {
-      print('error: $e');
-      _errorMessage = _getErrorMessage(e as String);
-      print(_errorMessage);
+      // print('error: $e');
+      // _errorMessage = getErrorMessage(e as String);
+      // print(_errorMessage);
     }
   }
 

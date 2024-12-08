@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+class DashboardMahasiswa extends StatelessWidget {
+  const DashboardMahasiswa({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,17 @@ class Dashboard extends StatelessWidget {
                       padding: EdgeInsets.only(right: 60),
                       child: Center(
                         child: Column(
-                          children: [],
+                          children: [
+                            _JadwalMhsButton(),
+                            SizedBox(height: 20),
+                            _IrsMhsButton(),
+                            SizedBox(height: 20),
+                            _KhsButton(),
+                            SizedBox(height: 20),
+                            _BimbinganMhsButton(),
+                            SizedBox(height: 20),
+                            _RegisterasiButton(),
+                          ],
                         ),
                       ),
                     ),
@@ -92,11 +102,11 @@ class Dashboard extends StatelessWidget {
   }
 }
 
-class DashboardContainer extends StatelessWidget {
+class DashboardMahasiswaContainer extends StatelessWidget {
   final double width;
   final Widget child;
 
-  const DashboardContainer({
+  const DashboardMahasiswaContainer({
     required this.width,
     required this.child,
     super.key,
@@ -118,11 +128,11 @@ class DashboardContainer extends StatelessWidget {
   }
 }
 
-class DashboardButton extends StatelessWidget {
+class DashboardMahasiswaButton extends StatelessWidget {
   final IconData icon;
   final Text content;
 
-  const DashboardButton({
+  const DashboardMahasiswaButton({
     required this.icon,
     required this.content,
     super.key,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:si_paling_undip/Ruangan/Services/RuanganService.dart';
+import 'package:si_paling_undip/Ruangan/Services/AssignmentRuangService.dart';
 import 'package:si_paling_undip/navbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,13 +11,14 @@ class AccRuang extends StatefulWidget {
 }
 
 class _AccRuangState extends State<AccRuang> {
-  final RuangService _ruangService = RuangService();
+  final AssignmentRuangService _asRuangService = AssignmentRuangService();
   final List<String> _departemenList = [
     'Informatika',
     'Biologi',
-    'Bioteknologi',
+    'Kimia',
     'Matematika',
     'Fisika',
+    'Statistika',
   ];
 
   late List<bool> _isExpanded;
@@ -31,30 +32,38 @@ class _AccRuangState extends State<AccRuang> {
   }
 
   void _approveAll(String departemen) async {
-    final ruangDepartemen = await _ruangService.fetchData();
+    final ruangDepartemen = await _asRuangService.fetchData();
     final batch = FirebaseFirestore.instance.batch();
 
     for (var ruang in ruangDepartemen.where((ruang) => ruang.departemen == departemen)) {
-      batch.update(FirebaseFirestore.instance.collection('Ruang').doc(ruang.no), {'status': 'disetujui'});
+      final ruangRef = FirebaseFirestore.instance.collection('Ruang').doc(ruang.id);
+
+      // Update status ruang menjadi disetujui
+      batch.update(ruangRef, {'status': 'disetujui'});
     }
 
     await batch.commit();
+
     setState(() {
       _statusDepartemen[_departemenList.indexOf(departemen)] = 'disetujui'; // Update status departemen
     });
   }
 
   void _rejectAll(String departemen) async {
-    final ruangDepartemen = await _ruangService.fetchData();
+    final ruangDepartemen = await _asRuangService.fetchData();
     final batch = FirebaseFirestore.instance.batch();
 
     for (var ruang in ruangDepartemen.where((ruang) => ruang.departemen == departemen)) {
-      batch.update(FirebaseFirestore.instance.collection('Ruang').doc(ruang.no), {'status': 'ditolak'});
+      final ruangRef = FirebaseFirestore.instance.collection('Ruang').doc(ruang.id);
+
+      // Update status ruang menjadi ditolak
+      batch.update(ruangRef, {'status': 'diajukan'});
     }
 
     await batch.commit();
+
     setState(() {
-      _statusDepartemen[_departemenList.indexOf(departemen)] = 'ditolak'; // Update status departemen
+      _statusDepartemen[_departemenList.indexOf(departemen)] = 'diajukan'; // Update status departemen
     });
   }
 
@@ -62,7 +71,7 @@ class _AccRuangState extends State<AccRuang> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-      appBar: MyNavbar(),
+      appBar: const MyNavbar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,8 +91,8 @@ class _AccRuangState extends State<AccRuang> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Card(
-                  child: FutureBuilder<List<RuangKuliah>>(
-                    future: _ruangService.fetchData(),
+                  child: FutureBuilder<List<AssignmentRuang>>(
+                    future: _asRuangService.fetchData(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -93,7 +102,7 @@ class _AccRuangState extends State<AccRuang> {
                         return const Center(child: Text('Tidak ada data'));
                       } else {
                         final ruangList = snapshot.data!;
-                        return Container(
+                        return SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +122,7 @@ class _AccRuangState extends State<AccRuang> {
                               const Divider(color: Colors.black),
                               ExpansionPanelList(
                                 elevation: 1,
-                                expandedHeaderPadding : const EdgeInsets.all(0),
+                                expandedHeaderPadding: const EdgeInsets.all(0),
                                 expansionCallback: (index, isExpanded) {
                                   setState(() {
                                     _isExpanded[index] = !_isExpanded[index];
@@ -124,7 +133,7 @@ class _AccRuangState extends State<AccRuang> {
                                   (index) {
                                     final departemen = _departemenList[index];
                                     final ruangDepartemen = ruangList
-                                        .where((ruang) => ruang.departemen == departemen && ruang.status == 'diajukan')
+                                        .where((ruang) => ruang.departemen == departemen && ruang.status == 'pending')
                                         .toList();
 
                                     return ExpansionPanel(
@@ -238,7 +247,7 @@ class _AccRuangState extends State<AccRuang> {
                                                               ),
                                                             ),
                                                             Padding(
-                                                              padding: const EdgeInsets.all(8.0),
+                                                              padding: const EdgeInsets .all(8.0),
                                                               child: Text(
                                                                 ruang.nama.isNotEmpty ? ruang.nama : '-',
                                                                 textAlign: TextAlign.center,
@@ -258,19 +267,19 @@ class _AccRuangState extends State<AccRuang> {
                                                                 textAlign: TextAlign.center,
                                                               ),
                                                             ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.all(8.0),
+                                                            const Padding(
+                                                              padding: EdgeInsets.all(8.0),
                                                               child: Text(
                                                                 'Belum Disetujui',
                                                                 textAlign: TextAlign.center,
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                   color: Colors.orange,
                                                                 ),
                                                               ),
                                                             ),
                                                           ],
                                                         );
-                                                      }).toList(),
+                                                      }),
                                                     ],
                                                   ),
                                                   Row(
