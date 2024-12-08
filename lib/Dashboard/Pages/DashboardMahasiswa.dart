@@ -48,11 +48,11 @@ class _DashboardMahasiswaState extends State<DashboardMahasiswa> {
           // Lakukan sesuatu dengan array Role
           if (roles.contains('Dosen')) {
             print('User is a Dosen');
-            return buildDashboardMahasiswaUI(
+            return buildDashboardUI(
                 context, 'Dosen'); // Sesuaikan dengan UI Anda
           } else if (roles.contains('Kaprodi')) {
             print('User is a Kaprodi');
-            return buildDashboardMahasiswaUI(
+            return buildDashboardUI(
                 context, 'Kaprodi'); // Sesuaikan dengan UI Anda
           } else {
             print('User has unknown roles');
@@ -63,7 +63,7 @@ class _DashboardMahasiswaState extends State<DashboardMahasiswa> {
     );
   }
 
-  Widget buildDashboardMahasiswaUI(BuildContext context, String role) {
+  Widget buildDashboardUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     print('Building UI for role: $role');
@@ -148,7 +148,7 @@ class _DashboardMahasiswaState extends State<DashboardMahasiswa> {
                       ),
                     ),
                   ),
-                  DashboardMahasiswaContainer(
+                  DashboardContainer(
                     width: width / 4,
                     child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,

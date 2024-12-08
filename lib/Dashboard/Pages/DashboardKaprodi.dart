@@ -48,11 +48,11 @@ class _DashboardKaprodiState extends State<DashboardKaprodi> {
           // Lakukan sesuatu dengan array Role
           if (roles.contains('Dosen')) {
             print('User is a Dosen');
-            return buildDashboardKaprodiUI(
+            return buildDashboardUI(
                 context, 'Dosen'); // Sesuaikan dengan UI Anda
           } else if (roles.contains('Kaprodi')) {
             print('User is a Kaprodi');
-            return buildDashboardKaprodiUI(
+            return buildDashboardUI(
                 context, 'Kaprodi'); // Sesuaikan dengan UI Anda
           } else {
             print('User has unknown roles');
@@ -63,7 +63,7 @@ class _DashboardKaprodiState extends State<DashboardKaprodi> {
     );
   }
 
-  Widget buildDashboardKaprodiUI(BuildContext context, String role) {
+  Widget buildDashboardUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     print('Building UI for role: $role');
