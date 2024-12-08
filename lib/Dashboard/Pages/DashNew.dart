@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
-import '../../Jadwal/Services/JadwalService.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -51,9 +50,9 @@ class Dashboard extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () {
-                            AuthService().signOut();
-                            context.go("Login");
+                          onPressed: () async {
+                            await AuthService().signOut();
+                            context.go("/login");
                           },
                           child: Text("Logout"))
                     ],

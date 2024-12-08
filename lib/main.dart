@@ -54,7 +54,7 @@ final GoRouter _router = GoRouter(
           ),
           GoRoute(
             path: 'irs',
-            builder: (context, state) => const ViewIRSPage(),
+            builder: (context, state) => const IRS(),
           ),
           GoRoute(
             path: 'ruangan',
