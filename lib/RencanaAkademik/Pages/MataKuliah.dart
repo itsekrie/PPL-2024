@@ -1,7 +1,122 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:si_paling_undip/Login/Services/auth_service.dart';
-import 'package:si_paling_undip/RencanaAkademik/Services/MataKuliahService.dart';
+
+class MataKuliah {
+  String no;
+  String namaMK;
+  String kodeMK;
+  int sks;
+  int semester;
+  String jenis;
+
+  MataKuliah(
+      this.no, this.kodeMK, this.namaMK, this.sks, this.semester, this.jenis);
+}
+
+class PilihDepartemenPage extends StatefulWidget {
+  @override
+  _PilihDepartemenPageState createState() => _PilihDepartemenPageState();
+}
+
+class _PilihDepartemenPageState extends State<PilihDepartemenPage> {
+  String? selectedDepartemen;
+  final List<String> departemenOptions = [
+    'Informatika',
+    'Matematika',
+    'Biologi',
+    'Statistika',
+    'Fisika',
+    'Kimia'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pilih Departemen',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Silakan pilih departemen Anda:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8.0),
+                border: Border.all(color: Colors.grey),
+              ),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                underline: const SizedBox(),
+                hint: const Text('Pilih Departemen'),
+                value: selectedDepartemen,
+                items: departemenOptions.map((String departemen) {
+                  return DropdownMenuItem<String>(
+                    value: departemen,
+                    child:
+                        Text(departemen, style: const TextStyle(fontSize: 16)),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedDepartemen = newValue;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  if (selectedDepartemen != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewMK(), // Arahkan ke ViewMK
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Silakan pilih departemen')),
+                    );
+                  }
+                },
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  size: 18,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  'Lanjutkan',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class ViewMK extends StatefulWidget {
   const ViewMK({super.key});
@@ -11,31 +126,23 @@ class ViewMK extends StatefulWidget {
 }
 
 class _ViewMKState extends State<ViewMK> {
-  String selectedSemester =
-      'Ganjil'; // Variabel untuk menyimpan semester yang dipilih
+  String? selectedSemester; // Variabel untuk menyimpan semester yang dipilih
   final List<String> semesterOptions = [
     'Ganjil',
     'Genap'
   ]; // Daftar pilihan semester
-  List<MataKuliah> mataKuliahList = [];
-
-  @override
-  var departemen = "";
-  void initState() {
-    super.initState();
-    _fetchMatkul();
-  }
-
-  Future<void> _fetchMatkul() async {
-    var userId = await AuthService().getUID();
-    var user = await AuthService().getUser(userId);
-    setState(() async {
-      departemen = await user?["Departemen"];
-      var matkul = await MataKuliahService()
-          .fetchMK(Departemen: departemen, Sem: selectedSemester as String);
-      mataKuliahList = matkul;
-    });
-  }
+  List<MataKuliah> mataKuliahList = [
+    MataKuliah('1', 'MK001', 'Pemrograman Dasar', 3, 1, 'Wajib'),
+    MataKuliah('2', 'MK002', 'Struktur Data', 3, 2, 'Wajib'),
+    MataKuliah('3', 'MK003', 'Algoritma', 3, 2, 'Wajib'),
+    MataKuliah('4', 'MK004', 'Basis Data', 3, 3, 'Wajib'),
+    MataKuliah('5', 'MK005', 'Jaringan Komputer', 3, 4, 'Pilihan'),
+    MataKuliah('6', 'MK006', 'Sistem Operasi', 3, 3, 'Wajib'),
+    MataKuliah('7', 'MK007', 'Rekayasa Perangkat Lunak', 3, 5, 'Wajib'),
+    MataKuliah('8', 'MK008', 'Kecerdasan Buatan', 3, 6, 'Pilihan'),
+    MataKuliah('9', 'MK009', 'Pengembangan Web', 3, 4, 'Wajib'),
+    MataKuliah('10', 'MK010', 'Mobile Programming', 3, 6, 'Pilihan'),
+  ];
 
   //   final RuangService _ruangService = RuangService();
 
@@ -129,7 +236,7 @@ class _ViewMKState extends State<ViewMK> {
                                 }).toList(),
                                 onChanged: (String? newValue) {
                                   setState(() {
-                                    selectedSemester = newValue!;
+                                    selectedSemester = newValue;
                                   });
                                 },
                                 underline: Container(),
@@ -360,7 +467,7 @@ class _ViewMKState extends State<ViewMK> {
                                     ),
                                   ],
                                 );
-                              }),
+                              }).toList(),
                             ],
                           ),
                         ],
@@ -407,8 +514,8 @@ class AddEditMataKuliahPage extends StatefulWidget {
   final bool isEdit;
   final MataKuliah? mataKuliah;
 
-  const AddEditMataKuliahPage(
-      {required this.isEdit, this.mataKuliah, super.key});
+  const AddEditMataKuliahPage({required this.isEdit, this.mataKuliah, Key? key})
+      : super(key: key);
 
   @override
   _AddEditMataKuliahPageState createState() => _AddEditMataKuliahPageState();
@@ -544,8 +651,7 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: Text(widget.isEdit ? 'Update' : 'Tambah',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white)),
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
                       padding: const EdgeInsets.symmetric(vertical: 16),

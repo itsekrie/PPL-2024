@@ -132,13 +132,21 @@ final GoRouter _router = GoRouter(
             path: 'ruangan',
             builder: (context, state) => const ViewRuangOnly(),
           ),
+          GoRoute(
+            path: 'assignruang',
+            builder: (context, state) => const AssignRuang(),
+          ),
+          GoRoute(
+            path: 'accruang',
+            builder: (context, state) => const AccRuang(),
+          ),
           GoRoute(path: 'khs', builder: (context, state) => const KHS()),
           GoRoute(
               path: 'raka',
               builder: (context, state) => const RencanaAkademik()),
           GoRoute(
             path: 'mk',
-            builder: (context, state) => const ViewMK(),
+            builder: (context, state) => PilihDepartemenPage(),
           )
         ],
       ),
