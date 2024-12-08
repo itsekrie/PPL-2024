@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class RepeaterForm extends StatefulWidget {
-  const RepeaterForm({super.key});
+class RencanaAkademik extends StatefulWidget {
+  const RencanaAkademik({super.key});
 
   @override
-  State<RepeaterForm> createState() => _RepeaterFormState();
+  State<RencanaAkademik> createState() => _RencanaAkademikState();
 }
 
-class _RepeaterFormState extends State<RepeaterForm> {
+class _RencanaAkademikState extends State<RencanaAkademik> {
   List<Map<String, String>> items = [];
 
   void addItem() {
