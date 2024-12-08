@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:si_paling_undip/RencanaAkademik/Services/RencanaAkademikService.dart';
 
 class RencanaAkademik extends StatefulWidget {
   const RencanaAkademik({super.key});
@@ -8,6 +9,30 @@ class RencanaAkademik extends StatefulWidget {
 }
 
 class _RencanaAkademikState extends State<RencanaAkademik> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: [
+          ElevatedButton(
+              onPressed: () async {
+                await Rencanaakademikservice().getRoomSchedule("Informatika");
+              },
+              child: Text("get rooms"))
+        ],
+      ),
+    );
+  }
+}
+
+class Form extends StatefulWidget {
+  const Form({super.key});
+
+  @override
+  State<Form> createState() => _FormState();
+}
+
+class _FormState extends State<Form> {
   List<Map<String, String>> items = [];
 
   void addItem() {

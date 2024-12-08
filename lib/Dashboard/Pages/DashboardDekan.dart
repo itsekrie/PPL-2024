@@ -18,51 +18,50 @@ class _DashboardDekanState extends State<DashboardDekan> {
 
   @override
   Widget build(BuildContext context) {
-final user = FirebaseAuth.instance.currentUser ; // Get the current user
+    final user = FirebaseAuth.instance.currentUser; // Get the current user
 
-if (user == null) {
-  print('User  is null, not logged in');
-  return const Center(child: Text('User  not logged in'));
-} else {
-  print('User  is logged in: ${user.uid}');
-}
-
-return StreamBuilder<DocumentSnapshot>(
-  stream: _firestore.collection('User').doc(user.uid).snapshots(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (snapshot.hasError) {
-      print('Error fetching user data: ${snapshot.error}');
-      return Center(child: Text('Error: ${snapshot.error}'));
-    } else if (!snapshot.hasData || !snapshot.data!.exists) {
-      print('User data not found for uid: ${user.uid}');
-      return const Center(child: Text('User data not found'));
+    if (user == null) {
+      print('User  is null, not logged in');
+      return const Center(child: Text('User  not logged in'));
     } else {
-      final userData = snapshot.data!.data() as Map<String, dynamic>;
-      print('User data: $userData'); // Log data untuk debugging
-
-      // Ambil Role sebagai List
-      final roles = userData['Role'] as List<dynamic>? ?? [];
-
-      // Lakukan sesuatu dengan array Role
-      if (roles.contains('Dosen')) {
-        print('User is a Dosen');
-        return buildDashboardDekanUI(context, 'Dosen'); // Sesuaikan dengan UI Anda
-      } else if (roles.contains('Kaprodi')) {
-        print('User is a Kaprodi');
-        return buildDashboardDekanUI(context, 'Kaprodi'); // Sesuaikan dengan UI Anda
-      } else {
-        print('User has unknown roles');
-        return const Center(child: Text('Unknown Role'));
-      }
+      print('User  is logged in: ${user.uid}');
     }
-  },
-);
 
+    return StreamBuilder<DocumentSnapshot>(
+      stream: _firestore.collection('User').doc(user.uid).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          print('Error fetching user data: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || !snapshot.data!.exists) {
+          print('User data not found for uid: ${user.uid}');
+          return const Center(child: Text('User data not found'));
+        } else {
+          final userData = snapshot.data!.data() as Map<String, dynamic>;
+          print('User data: $userData'); // Log data untuk debugging
+
+          // Ambil Role sebagai List
+          final roles = userData['Role'] as List<dynamic>? ?? [];
+
+          // Lakukan sesuatu dengan array Role
+          if (roles.contains('Dosen')) {
+            print('User is a Dosen');
+            return buildDashboardDekanUI(
+                context, 'Dosen'); // Sesuaikan dengan UI Anda
+          } else if (roles.contains('Kaprodi')) {
+            print('User is a Kaprodi');
+            return buildDashboardDekanUI(
+                context, 'Kaprodi'); // Sesuaikan dengan UI Anda
+          } else {
+            print('User has unknown roles');
+            return const Center(child: Text('Unknown Role'));
+          }
+        }
+      },
+    );
   }
-
-
 
   Widget buildDashboardDekanUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
@@ -135,12 +134,11 @@ return StreamBuilder<DocumentSnapshot>(
                       child: Center(
                         child: Column(
                           children: [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _AccRuangKelasButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            
+                            _JadwalButton(),
+                            SizedBox(height: 20),
+                            _AccRuangKelasButton(),
+                            SizedBox(height: 20),
+                            _RencanaAkademikButton(),
                           ],
                         ),
                       ),
