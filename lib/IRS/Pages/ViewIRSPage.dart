@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 
-class IRS extends StatefulWidget {
-  const IRS({super.key});
+class IRSDosen extends StatefulWidget {
+  const IRSDosen({super.key});
 
   @override
-  State<IRS> createState() => _IRSState();
+  State<IRSDosen> createState() => _IRSDosenState();
 }
 
-class _IRSState extends State<IRS> {
+class _IRSDosenState extends State<IRSDosen> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class IRSMahasiswa extends StatefulWidget {
+  const IRSMahasiswa({super.key});
+
+  @override
+  State<IRSMahasiswa> createState() => _IRSMahasiswaState();
+}
+
+class _IRSMahasiswaState extends State<IRSMahasiswa> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,13 +29,17 @@ class _IRSState extends State<IRS> {
       child: const Row(
         children: [
           Column(
-            children: [IRSCardInfo()],
+            children: [
+              IRSMahasiswaCardInfo(),
+            ],
           ),
           SizedBox(
             width: 30,
           ),
           Column(
-            children: [Text("IRS")],
+            children: [
+              EntryIRS(),
+            ],
           )
         ],
       ),
@@ -29,8 +47,19 @@ class _IRSState extends State<IRS> {
   }
 }
 
-class IRSCardInfo extends StatelessWidget {
-  const IRSCardInfo({
+class EntryIRS extends StatelessWidget {
+  const EntryIRS({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("IRSMahasiswa");
+  }
+}
+
+class IRSMahasiswaCardInfo extends StatelessWidget {
+  const IRSMahasiswaCardInfo({
     super.key,
   });
 
@@ -39,7 +68,7 @@ class IRSCardInfo extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        "IRSINFO",
+        "IRSMahasiswaINFO",
         style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
       ),
     );

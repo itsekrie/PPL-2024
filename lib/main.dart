@@ -57,7 +57,38 @@ final GoRouter _router = GoRouter(
           ),
           GoRoute(
             path: 'irs',
-            builder: (context, state) => const IRS(),
+            builder: (context, state) {
+              return FutureBuilder<String?>(
+                  future: AuthService().currentRole(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Scaffold(
+                        body: Center(child: CircularProgressIndicator()),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Scaffold(
+                        body: Center(
+                            child:
+                                Text('Error loading role: ${snapshot.error}')),
+                      );
+                    } else {
+                      final role = snapshot.data;
+                      if (role == 'Dosen') {
+                        return const IRSDosen();
+                      } else if (role == 'Mahasiswa') {
+                        return const IRSMahasiswa();
+                      }
+                      // else if (role == 'Dosen') {
+                      //   return const IRSMahasiswa();
+                      // }
+                      else {
+                        return const Scaffold(
+                          body: Center(child: Text('Invalid role')),
+                        );
+                      }
+                    }
+                  });
+            },
           ),
           GoRoute(
             path: 'ruangan',
