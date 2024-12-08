@@ -15,6 +15,8 @@ import 'package:si_paling_undip/Dashboard/Pages/DashboardMahasiswa.dart';
 import 'package:si_paling_undip/Dashboard/Pages/DashboardStaff.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSDosenPage.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSPage.dart';
+import 'package:si_paling_undip/Jadwal/Pages/JadwalMahasiswa.dart';
+import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 import 'package:si_paling_undip/KHS/Pages/KHSPage.dart';
 import 'package:si_paling_undip/Login/Pages/PilihRole.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
@@ -168,8 +170,40 @@ class MyApp extends StatelessWidget {
       routerConfig: _router,
       title: 'SiPalingUndip | ',
       theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.lightBlue,
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 16.0, color: Colors.black54),
+          bodySmall: TextStyle(fontSize: 14.0, color: Colors.grey),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.lightBlue,
+            foregroundColor: Colors.white,
+            textStyle:
+                const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.lightBlue),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          labelStyle: TextStyle(color: Colors.lightBlue),
+        ),
+      ),
     );
   }
 }
