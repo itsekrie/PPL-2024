@@ -20,7 +20,7 @@ import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 import 'package:si_paling_undip/KHS/Pages/KHSPage.dart';
 import 'package:si_paling_undip/Login/Pages/PilihRole.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
-import 'package:si_paling_undip/Dashboard/Pages/dashboard.dart';
+import 'package:si_paling_undip/Dashboard/Pages/Dashboard.dart';
 import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
 import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
 import 'package:si_paling_undip/RencanaAkademik/Pages/MataKuliah.dart';
@@ -43,38 +43,7 @@ final GoRouter _router = GoRouter(
     routes: <RouteBase>[
       GoRoute(
         path: '/',
-        builder: (context, state) {
-          return FutureBuilder<String?>(
-              future: AuthService().currentRole(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Scaffold(
-                    body: Center(child: CircularProgressIndicator()),
-                  );
-                } else if (snapshot.hasError) {
-                  return Scaffold(
-                    body: Center(
-                        child: Text('Error loading role: ${snapshot.error}')),
-                  );
-                } else {
-                  final role = snapshot.data;
-                  switch (role) {
-                    case "Mahasiswa":
-                      return const DashboardMahasiswa();
-                    case "Dosen":
-                      return const DashboardDosen();
-                    case "Kaprodi":
-                      return const DashboardKaprodi();
-                    case "Dekan":
-                      return const DashboardDekan();
-                    case "Staff":
-                      return const DashboardStaff();
-                    default:
-                      return const Text("Role tidak dikenali");
-                  }
-                }
-              });
-        },
+        builder: (context, state) => const Dashboard(),
         routes: [
           GoRoute(
             path: 'login',
@@ -129,10 +98,6 @@ final GoRouter _router = GoRouter(
                     }
                   });
             },
-          ),
-          GoRoute(
-            path: 'td',
-            builder: (context, state) => const TestDash(),
           ),
           GoRoute(
             path: 'ruangan',
