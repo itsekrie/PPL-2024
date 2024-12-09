@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashNew.dart';
+
 import 'package:si_paling_undip/Dashboard/Pages/DashboardDekan.dart';
 import 'package:si_paling_undip/Dashboard/Pages/DashboardDosen.dart';
 import 'package:si_paling_undip/Dashboard/Pages/DashboardKaprodi.dart';
@@ -15,12 +15,15 @@ import 'package:si_paling_undip/Dashboard/Pages/DashboardMahasiswa.dart';
 import 'package:si_paling_undip/Dashboard/Pages/DashboardStaff.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSDosenPage.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSPage.dart';
+import 'package:si_paling_undip/Jadwal/Pages/JadwalMahasiswa.dart';
+import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 import 'package:si_paling_undip/KHS/Pages/KHSPage.dart';
 import 'package:si_paling_undip/Login/Pages/PilihRole.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
-import 'package:si_paling_undip/Dashboard/Pages/dashboard.dart';
+import 'package:si_paling_undip/Dashboard/Pages/Dashboard.dart';
 import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
 import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
+import 'package:si_paling_undip/RencanaAkademik/Pages/MataKuliah.dart';
 import 'package:si_paling_undip/RencanaAkademik/Pages/RencanaAkademik.dart';
 import 'package:si_paling_undip/Ruangan/Pages/AccRuang.dart';
 import 'package:si_paling_undip/Ruangan/Pages/Ruang.dart';
@@ -40,38 +43,7 @@ final GoRouter _router = GoRouter(
     routes: <RouteBase>[
       GoRoute(
         path: '/',
-        builder: (context, state) {
-          return FutureBuilder<String?>(
-              future: AuthService().currentRole(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Scaffold(
-                    body: Center(child: CircularProgressIndicator()),
-                  );
-                } else if (snapshot.hasError) {
-                  return Scaffold(
-                    body: Center(
-                        child: Text('Error loading role: ${snapshot.error}')),
-                  );
-                } else {
-                  final role = snapshot.data;
-                  switch (role) {
-                    case "Mahasiswa":
-                      return const DashboardMahasiswa();
-                    case "Dosen":
-                      return const DashboardDosen();
-                    case "Kaprodi":
-                      return const DashboardKaprodi();
-                    case "Dekan":
-                      return const DashboardDekan();
-                    case "Staff":
-                      return const DashboardStaff();
-                    default:
-                      return const Text("Role tidak dikenali");
-                  }
-                }
-              });
-        },
+        builder: (context, state) => const Dashboard(),
         routes: [
           GoRoute(
             path: 'login',
@@ -131,10 +103,22 @@ final GoRouter _router = GoRouter(
             path: 'ruangan',
             builder: (context, state) => const ViewRuangOnly(),
           ),
+          GoRoute(
+            path: 'assignruang',
+            builder: (context, state) => const AssignRuang(),
+          ),
+          GoRoute(
+            path: 'accruang',
+            builder: (context, state) => const AccRuang(),
+          ),
           GoRoute(path: 'khs', builder: (context, state) => const KHS()),
           GoRoute(
               path: 'raka',
-              builder: (context, state) => const RencanaAkademik())
+              builder: (context, state) => const RencanaAkademik()),
+          // GoRoute(
+          //   path: 'mk',
+          //   builder: (context, state) => PilihDepartemenPage(),
+          // )
         ],
       ),
     ],
@@ -155,8 +139,40 @@ class MyApp extends StatelessWidget {
       routerConfig: _router,
       title: 'SiPalingUndip | ',
       theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.lightBlue,
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 16.0, color: Colors.black54),
+          bodySmall: TextStyle(fontSize: 14.0, color: Colors.grey),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.lightBlue,
+            foregroundColor: Colors.white,
+            textStyle:
+                const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.lightBlue),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+          labelStyle: TextStyle(color: Colors.lightBlue),
+        ),
+      ),
     );
   }
 }

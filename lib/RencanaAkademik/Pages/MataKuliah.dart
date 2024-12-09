@@ -1,105 +1,5 @@
 import 'package:flutter/material.dart';
-
-class MataKuliah {
-  String no;
-  String namaMK;
-  String kodeMK;
-  int sks;
-  int semester;
-  String jenis;
-
-  MataKuliah(
-      this.no, this.kodeMK, this.namaMK, this.sks, this.semester, this.jenis);
-}
-
-class PilihDepartemenPage extends StatefulWidget {
-  @override
-  _PilihDepartemenPageState createState() => _PilihDepartemenPageState();
-}
-
-class _PilihDepartemenPageState extends State<PilihDepartemenPage> {
-  String? selectedDepartemen;
-  final List<String> departemenOptions = ['Informatika', 'Matematika', 'Biologi', 'Statistika', 'Fisika', 'Kimia'];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pilih Departemen', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.deepPurple,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Silakan pilih departemen Anda:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: DropdownButton<String>(
-                isExpanded: true,
-                underline: const SizedBox(),
-                hint: const Text('Pilih Departemen'),
-                value: selectedDepartemen,
-                items: departemenOptions.map((String departemen) {
-                  return DropdownMenuItem<String>(
-                    value: departemen,
-                    child: Text(departemen, style: const TextStyle(fontSize: 16)),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedDepartemen = newValue;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  if (selectedDepartemen != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewMK(), // Arahkan ke ViewMK
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Silakan pilih departemen')),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.arrow_forward, size: 18, color: Colors.white,),
-                label: const Text(
-                  'Lanjutkan',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  backgroundColor: Colors.deepPurple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+import 'package:si_paling_undip/RencanaAkademik/Services/MataKuliahService.dart';
 
 class ViewMK extends StatefulWidget {
   const ViewMK({super.key});
@@ -110,27 +10,25 @@ class ViewMK extends StatefulWidget {
 
 class _ViewMKState extends State<ViewMK> {
   String? selectedSemester; // Variabel untuk menyimpan semester yang dipilih
-  final List<String> semesterOptions = ['Ganjil', 'Genap']; // Daftar pilihan semester
+  final List<String> semesterOptions = [
+    'Ganjil',
+    'Genap'
+  ]; // Daftar pilihan semester
   List<MataKuliah> mataKuliahList = [
-  MataKuliah('1', 'MK001', 'Pemrograman Dasar', 3, 1, 'Wajib'),
-  MataKuliah('2', 'MK002', 'Struktur Data', 3, 2, 'Wajib'),
-  MataKuliah('3', 'MK003', 'Algoritma', 3, 2, 'Wajib'),
-  MataKuliah('4', 'MK004', 'Basis Data', 3, 3, 'Wajib'),
-  MataKuliah('5', 'MK005', 'Jaringan Komputer', 3, 4, 'Pilihan'),
-  MataKuliah('6', 'MK006', 'Sistem Operasi', 3, 3, 'Wajib'),
-  MataKuliah('7', 'MK007', 'Rekayasa Perangkat Lunak', 3, 5, 'Wajib'),
-  MataKuliah('8', 'MK008', 'Kecerdasan Buatan', 3, 6, 'Pilihan'),
-  MataKuliah('9', 'MK009', 'Pengembangan Web', 3, 4, 'Wajib'),
-  MataKuliah('10', 'MK010', 'Mobile Programming', 3, 6, 'Pilihan'),
-];
+    MataKuliah('1', 'MK001', 'Pemrograman Dasar', 3, 1, 'Wajib'),
+    MataKuliah('2', 'MK002', 'Struktur Data', 3, 2, 'Wajib'),
+    MataKuliah('3', 'MK003', 'Algoritma', 3, 2, 'Wajib'),
+    MataKuliah('4', 'MK004', 'Basis Data', 3, 3, 'Wajib'),
+    MataKuliah('5', 'MK005', 'Jaringan Komputer', 3, 4, 'Pilihan'),
+    MataKuliah('6', 'MK006', 'Sistem Operasi', 3, 3, 'Wajib'),
+    MataKuliah('7', 'MK007', 'Rekayasa Perangkat Lunak', 3, 5, 'Wajib'),
+    MataKuliah('8', 'MK008', 'Kecerdasan Buatan', 3, 6, 'Pilihan'),
+    MataKuliah('9', 'MK009', 'Pengembangan Web', 3, 4, 'Wajib'),
+    MataKuliah('10', 'MK010', 'Mobile Programming', 3, 6, 'Pilihan'),
+  ];
 
-  //   final RuangService _ruangService = RuangService(); 
-
-  // Stream<List<Ruang>> _fetchRuangData() {
-  //   return _ruangService.fetchDataStream(); // Ubah ini menjadi stream
-  // }
-
-  void navigateToAddEditMataKuliahPage({MataKuliah? mk, required bool isEdit}) async {
+  void navigateToAddEditMataKuliahPage(
+      {MataKuliah? mk, required bool isEdit}) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -187,7 +85,8 @@ class _ViewMKState extends State<ViewMK> {
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             width: 150,
-                            height: 40, // Ensure finite width for DropdownButton
+                            height:
+                                40, // Ensure finite width for DropdownButton
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8),
@@ -207,7 +106,8 @@ class _ViewMKState extends State<ViewMK> {
                                     value: semester,
                                     child: Text(
                                       semester,
-                                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                                      style: const TextStyle(
+                                          fontSize: 16, color: Colors.black),
                                     ),
                                   );
                                 }).toList(),
@@ -229,18 +129,20 @@ class _ViewMKState extends State<ViewMK> {
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             onPressed: () {
-                               navigateToAddEditMataKuliahPage(isEdit: false);
+                              navigateToAddEditMataKuliahPage(isEdit: false);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             child: const Text(
                               'Add',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
                         ),
@@ -249,17 +151,17 @@ class _ViewMKState extends State<ViewMK> {
                     Container(
                       padding: const EdgeInsets.all(8.0),
                       color: Colors.white,
-                        child: Column(
+                      child: Column(
                         children: [
                           Table(
                             columnWidths: const {
                               0: FixedColumnWidth(40.0), // No
-                              1: FlexColumnWidth(1.5),  // Gedung
-                              2: FlexColumnWidth(2),    // Nama Ruang
-                              3: FlexColumnWidth(1),    // Kapasitas
-                              4: FlexColumnWidth(1.5),  // Aksi
-                              5: FlexColumnWidth(1.5),  
-                              6: FlexColumnWidth(1.5),  
+                              1: FlexColumnWidth(1.5), // Gedung
+                              2: FlexColumnWidth(2), // Nama Ruang
+                              3: FlexColumnWidth(1), // Kapasitas
+                              4: FlexColumnWidth(1.5), // Aksi
+                              5: FlexColumnWidth(1.5),
+                              6: FlexColumnWidth(1.5),
                             },
                             children: [
                               const TableRow(
@@ -269,7 +171,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'No',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -277,7 +180,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'Kode Mata Kuliah',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -285,7 +189,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'Nama Mata Kuliah',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -293,7 +198,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'SKS',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -301,7 +207,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'Semester',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -309,7 +216,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'Jenis',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -317,7 +225,8 @@ class _ViewMKState extends State<ViewMK> {
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
                                       'Aksi',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -328,7 +237,9 @@ class _ViewMKState extends State<ViewMK> {
                                 final mk = entry.value;
                                 return TableRow(
                                   decoration: BoxDecoration(
-                                    color: i % 2 == 0 ? Colors.white : Colors.grey[200],
+                                    color: i % 2 == 0
+                                        ? Colors.white
+                                        : Colors.grey[200],
                                   ),
                                   children: [
                                     Padding(
@@ -374,26 +285,35 @@ class _ViewMKState extends State<ViewMK> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: ElevatedButton(
                                               onPressed: () {
-                                                navigateToAddEditMataKuliahPage(mk: mk, isEdit: true);
+                                                navigateToAddEditMataKuliahPage(
+                                                    mk: mk, isEdit: true);
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.orange,
-                                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 24,
+                                                        vertical: 12),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
                                                 ),
                                               ),
                                               child: const Text(
                                                 'Edit',
-                                                style: TextStyle(fontSize: 16, color: Colors.white),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white),
                                               ),
                                             ),
                                           ),
@@ -403,14 +323,20 @@ class _ViewMKState extends State<ViewMK> {
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.red,
-                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 24,
+                                                      vertical: 12),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                               ),
                                             ),
                                             child: const Text(
                                               'Hapus',
-                                              style: TextStyle(fontSize: 16, color: Colors.white),
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ],
@@ -435,14 +361,16 @@ class _ViewMKState extends State<ViewMK> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                             child: const Text(
                               'Simpan',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
                         ),
@@ -457,13 +385,14 @@ class _ViewMKState extends State<ViewMK> {
       ),
     );
   }
-} 
+}
 
 class AddEditMataKuliahPage extends StatefulWidget {
   final bool isEdit;
   final MataKuliah? mataKuliah;
 
-  const AddEditMataKuliahPage({required this.isEdit, this.mataKuliah, Key? key}) : super(key: key);
+  const AddEditMataKuliahPage({required this.isEdit, this.mataKuliah, Key? key})
+      : super(key: key);
 
   @override
   _AddEditMataKuliahPageState createState() => _AddEditMataKuliahPageState();
@@ -507,7 +436,8 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           elevation: 8,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -529,11 +459,15 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                   Row(
                     children: [
                       Expanded(
-                        child: _buildTextField(controller: kodeController, label: 'Kode Mata Kuliah'),
+                        child: _buildTextField(
+                            controller: kodeController,
+                            label: 'Kode Mata Kuliah'),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: _buildTextField(controller: namaController, label: 'Nama Mata Kuliah'),
+                        child: _buildTextField(
+                            controller: namaController,
+                            label: 'Nama Mata Kuliah'),
                       ),
                     ],
                   ),
@@ -562,24 +496,28 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                     value: jenis,
                     decoration: InputDecoration(
                       labelText: 'Jenis',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
                     ),
                     items: ['Wajib', 'Pilihan']
-                        .map((jenis) => DropdownMenuItem(value: jenis, child: Text(jenis)))
+                        .map((jenis) =>
+                            DropdownMenuItem(value: jenis, child: Text(jenis)))
                         .toList(),
                     onChanged: (value) => setState(() => jenis = value),
-                    validator: (value) =>
-                        value == null ? 'Jenis mata kuliah harus dipilih' : null,
+                    validator: (value) => value == null
+                        ? 'Jenis mata kuliah harus dipilih'
+                        : null,
                   ),
                   const SizedBox(height: 32),
-                   ElevatedButton.icon(
+                  ElevatedButton.icon(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
                           if (widget.isEdit) {
                             setState(() {});
                           }
-                          Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+                          Navigator.of(context)
+                              .pop(); // Kembali ke halaman sebelumnya
                         } catch (e) {
                           // Tampilkan pesan kesalahan
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -589,11 +527,13 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
-                    label: Text(widget.isEdit ? 'Update' : 'Tambah', style: TextStyle(fontSize: 18, color: Colors.white)),
+                    label: Text(widget.isEdit ? 'Update' : 'Tambah',
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      textStyle: const TextStyle(fontSize:  18, color: Colors.white),
+                      textStyle:
+                          const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ],
@@ -625,4 +565,4 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
       },
     );
   }
-} 
+}

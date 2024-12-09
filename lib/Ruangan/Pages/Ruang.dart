@@ -284,7 +284,7 @@ class _ViewRuangOnlyState extends State<ViewRuangOnly> {
                                               ),
                                             ],
                                           );
-                                        }).toList(),
+                                        }),
                                       ],
                                     ),
 
@@ -334,7 +334,7 @@ class AddEditRuangOnlyPage extends StatefulWidget {
   final bool isEdit;
   final Ruang? ruang;
 
-  AddEditRuangOnlyPage({required this.isEdit, this.ruang});
+  const AddEditRuangOnlyPage({super.key, required this.isEdit, this.ruang});
 
   @override
   _AddEditRuangOnlyPageState createState() => _AddEditRuangOnlyPageState();

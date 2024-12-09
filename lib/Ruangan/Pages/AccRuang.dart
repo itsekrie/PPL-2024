@@ -71,7 +71,7 @@ class _AccRuangState extends State<AccRuang> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-      appBar: MyNavbar(),
+      appBar: const MyNavbar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class _AccRuangState extends State<AccRuang> {
                         return const Center(child: Text('Tidak ada data'));
                       } else {
                         final ruangList = snapshot.data!;
-                        return Container(
+                        return SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,19 +267,19 @@ class _AccRuangState extends State<AccRuang> {
                                                                 textAlign: TextAlign.center,
                                                               ),
                                                             ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.all(8.0),
+                                                            const Padding(
+                                                              padding: EdgeInsets.all(8.0),
                                                               child: Text(
                                                                 'Belum Disetujui',
                                                                 textAlign: TextAlign.center,
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                   color: Colors.orange,
                                                                 ),
                                                               ),
                                                             ),
                                                           ],
                                                         );
-                                                      }).toList(),
+                                                      }),
                                                     ],
                                                   ),
                                                   Row(

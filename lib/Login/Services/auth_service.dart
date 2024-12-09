@@ -44,7 +44,8 @@ class AuthService {
       if (roleAmount > 1) {
         context.go("/role");
       } else {
-        setRole(uID, role[0]);
+        await setRole(uID, role[0]);
+        await Future.delayed(const Duration(seconds: 1));
         context.go("/");
       }
     } catch (e) {
@@ -74,6 +75,19 @@ class AuthService {
     return role;
   }
 
+  Future<Map<String, dynamic>?> getCurrUser() async {
+    final userID = _firebaseAuth.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await _firestore.collection('User').doc(userID).get();
+    if (documentSnapshot.exists) {
+      Map<String, dynamic>? User = documentSnapshot.data();
+      return User;
+    } else {
+      print('Document does not exist.');
+      return Map();
+    }
+  }
+
   String getErrorMessage(String errorCode) {
     switch (errorCode) {
       case 'invalid-email':
@@ -89,7 +103,7 @@ class AuthService {
     }
   }
 
-  Future<String> getUID(String uID) {
+  Future<String> getUID() {
     return _firebaseAuth.currentUser!.uid as Future<String>;
   }
 

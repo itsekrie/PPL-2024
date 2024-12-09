@@ -16,7 +16,7 @@ class RuangService {
   Future<List<Ruang>> fetchData() async {
     final snapshot = await _firestore.collection('Ruang').get();
     return snapshot.docs.where((doc) => doc.id != 'Master').map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       return Ruang(
         doc.id,
         data['gedung'],
@@ -30,7 +30,7 @@ class RuangService {
   Stream<List<Ruang>> fetchDataStream() {
     return _firestore.collection('Ruang').snapshots().map((snapshot) {
       return snapshot.docs.where((doc) => doc.id != 'Master').map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
+        final data = doc.data();
         return Ruang(
           doc.id,
           data['gedung'] ?? '',

@@ -1,154 +1,118 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import '../../widget/route_button.dart';
 
-class DashboardDekan extends StatefulWidget {
+class DashboardDekan extends StatelessWidget {
   const DashboardDekan({super.key});
 
   @override
-  State<DashboardDekan> createState() => _DashboardDekanState();
-}
-
-class _DashboardDekanState extends State<DashboardDekan> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser; // Get the current user
-
-    if (user == null) {
-      print('User  is null, not logged in');
-      return const Center(child: Text('User  not logged in'));
-    } else {
-      print('User  is logged in: ${user.uid}');
-    }
-
-    return StreamBuilder<DocumentSnapshot>(
-      stream: _firestore.collection('User').doc(user.uid).snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          print('Error fetching user data: ${snapshot.error}');
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || !snapshot.data!.exists) {
-          print('User data not found for uid: ${user.uid}');
-          return const Center(child: Text('User data not found'));
-        } else {
-          final userData = snapshot.data!.data() as Map<String, dynamic>;
-          print('User data: $userData'); // Log data untuk debugging
-
-          // Ambil Role sebagai List
-          final roles = userData['Role'] as List<dynamic>? ?? [];
-
-          // Lakukan sesuatu dengan array Role
-          if (roles.contains('Dosen')) {
-            print('User is a Dosen');
-            return buildDashboardDekanUI(
-                context, 'Dosen'); // Sesuaikan dengan UI Anda
-          } else if (roles.contains('Kaprodi')) {
-            print('User is a Kaprodi');
-            return buildDashboardDekanUI(
-                context, 'Kaprodi'); // Sesuaikan dengan UI Anda
-          } else {
-            print('User has unknown roles');
-            return const Center(child: Text('Unknown Role'));
-          }
-        }
-      },
-    );
-  }
-
-  Widget buildDashboardDekanUI(BuildContext context, String role) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    print('Building UI for role: $role');
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 231, 231, 231),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: height * 0.5,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 0, 45, 136),
-              ),
-              child: Container(
-                padding: const EdgeInsets.only(
-                  left: 120,
-                  right: 120,
-                  top: 120,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Welcome, Fahriant Ekrie!",
-                        style: TextStyle(
-                          fontSize: 52,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Text(
-                        "Sunday, 29th October 2024",
-                        style: TextStyle(
-                          fontSize: 28,
-                          color: Color.fromARGB(255, 205, 205, 205),
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            AuthService().signOut();
-                            context.go("Login");
-                          },
-                          child: const Text("Logout"))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              //container 2
-              width: width,
-              margin: const EdgeInsets.only(
-                top: 40,
-                bottom: 40,
-                left: 120,
-                right: 120,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 60),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            _JadwalButton(),
-                            SizedBox(height: 20),
-                            _AccRuangKelasButton(),
-                            SizedBox(height: 20),
-                            _RencanaAkademikButton(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            WelcomeInfo(height, context),
+            DashboardButtons(width: width),
           ],
         ),
+      ),
+    );
+  }
+
+  Container WelcomeInfo(double height, BuildContext context) {
+    return Container(
+      height: height * 0.5,
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 0, 45, 136),
+      ),
+      child: Container(
+        padding: const EdgeInsets.only(
+          left: 120,
+          right: 120,
+          top: 120,
+        ),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Welcome, Fahriant Ekrie!",
+                style: TextStyle(
+                  fontSize: 52,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              const Text(
+                "Sunday, 29th October 2024",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: Color.fromARGB(255, 205, 205, 205),
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await AuthService().signOut();
+                    context.go("/login");
+                  },
+                  child: const Text("Logout"))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DashboardButtons extends StatelessWidget {
+  const DashboardButtons({
+    super.key,
+    required this.width,
+  });
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //container 2
+      width: width,
+      margin: const EdgeInsets.only(
+        top: 40,
+        bottom: 40,
+        left: 120,
+        right: 120,
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(right: 60),
+              child: Center(
+                child: Column(
+                  children: [
+                    _JadwalAkademikButton(),
+                    SizedBox(height: 20),
+                    _RuangKelasButton(),
+                    SizedBox(height: 20),
+                    _RencanaAkademikAkademikButton(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -267,13 +231,13 @@ class NotActiveAcademic extends StatelessWidget {
   }
 }
 
+// PARENT BUTTON START
 class _JadwalButton extends RouteButton {
-  const _JadwalButton()
+  const _JadwalButton({required super.route})
       : super(
           icon: Icons.note_add,
           iconColor: Colors.black,
           content: "Jadwal",
-          route: 'jadwal',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -284,12 +248,11 @@ class _JadwalButton extends RouteButton {
 }
 
 class _IrsButton extends RouteButton {
-  const _IrsButton()
+  const _IrsButton({required super.route})
       : super(
           icon: Icons.note_add,
           iconColor: Colors.black,
           content: "IRS",
-          route: 'irs',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -300,12 +263,27 @@ class _IrsButton extends RouteButton {
 }
 
 class _BimbinganButton extends RouteButton {
-  const _BimbinganButton()
+  const _BimbinganButton({required super.route})
       : super(
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Bimbingan",
-          route: 'bimbingan',
+          buttonColor: Colors.white,
+          fontColor: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          width: double.infinity,
+          height: 120,
+        );
+}
+
+class DashButton extends RouteButton {
+  const DashButton({
+    required super.icon,
+    required super.route,
+    required super.content,
+  }) : super(
+          iconColor: Colors.black,
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -316,12 +294,11 @@ class _BimbinganButton extends RouteButton {
 }
 
 class _RencanaAkademikButton extends RouteButton {
-  const _RencanaAkademikButton()
+  const _RencanaAkademikButton({required super.route})
       : super(
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Rencana Akademik",
-          route: 'rencanaakademik',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -332,12 +309,32 @@ class _RencanaAkademikButton extends RouteButton {
 }
 
 class _MonitoringButton extends RouteButton {
-  const _MonitoringButton()
+  const _MonitoringButton({required super.route})
       : super(
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Monitoring",
-          route: 'monitoring',
+          buttonColor: Colors.white,
+          fontColor: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          width: double.infinity,
+          height: 120,
+        );
+}
+// PARENT BUTTON END
+
+//##########################################################
+//##########################################################
+
+// KAPRODI BUTTON START
+class _MataKuliahButton extends RouteButton {
+  const _MataKuliahButton()
+      : super(
+          icon: Icons.app_registration_rounded,
+          iconColor: Colors.black,
+          content: "Mata Kuliah",
+          route: 'route',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -347,20 +344,38 @@ class _MonitoringButton extends RouteButton {
         );
 }
 
-class _MataKuliahButton extends RouteButton {
-  const _MataKuliahButton()
-      : super(
-          icon: Icons.app_registration_rounded,
-          iconColor: Colors.black,
-          content: "Mata Kuliah",
-          route: 'matakuliah',
-          buttonColor: Colors.white,
-          fontColor: Colors.black,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-          width: double.infinity,
-          height: 120,
-        );
+class _IrsKaprodiButton extends _IrsButton {
+  const _IrsKaprodiButton() : super(route: 'route');
+}
+
+class _RencanaAkademikKaprodiButton extends _RencanaAkademikButton {
+  const _RencanaAkademikKaprodiButton() : super(route: 'route');
+}
+
+class _MonitoringKaprodiButton extends _MonitoringButton {
+  const _MonitoringKaprodiButton() : super(route: 'route');
+}
+
+//KAPRODI BUTTON END
+
+//##########################################################
+//##########################################################
+
+// PEMBIMBING BUTTON START
+class _JadwalPembimbingButton extends _JadwalButton {
+  const _JadwalPembimbingButton() : super(route: 'route');
+}
+
+class _IrsPembimbingButton extends _IrsButton {
+  const _IrsPembimbingButton() : super(route: 'route');
+}
+
+class _BimbinganPembimbingButton extends _BimbinganButton {
+  const _BimbinganPembimbingButton() : super(route: 'route');
+}
+
+class _MonitoringPembimbingButton extends _MonitoringButton {
+  const _MonitoringPembimbingButton() : super(route: 'route');
 }
 
 class _InputNilaiButton extends RouteButton {
@@ -369,7 +384,7 @@ class _InputNilaiButton extends RouteButton {
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Input Nilai",
-          route: 'inputnilai',
+          route: 'route',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -378,6 +393,23 @@ class _InputNilaiButton extends RouteButton {
           height: 120,
         );
 }
+// PEMBIMBING BUTTON END
+
+//##########################################################
+//##########################################################
+
+// MAHASISWA BUTTON START
+class _JadwalMhsButton extends _JadwalButton {
+  const _JadwalMhsButton() : super(route: 'route');
+}
+
+class _IrsMhsButton extends _IrsButton {
+  const _IrsMhsButton() : super(route: 'route');
+}
+
+class _BimbinganMhsButton extends _BimbinganButton {
+  const _BimbinganMhsButton() : super(route: 'route');
+}
 
 class _KhsButton extends RouteButton {
   const _KhsButton()
@@ -385,7 +417,7 @@ class _KhsButton extends RouteButton {
           icon: Icons.note_alt,
           iconColor: Colors.black,
           content: "KHS",
-          route: 'khs',
+          route: 'route',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -401,7 +433,7 @@ class _RegisterasiButton extends RouteButton {
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Registerasi",
-          route: 'registerasi',
+          route: 'route',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -410,21 +442,27 @@ class _RegisterasiButton extends RouteButton {
           height: 120,
         );
 }
+// MAHASISWA BUTTON END
 
-class _JadwalAkademikButton extends RouteButton {
-  const _JadwalAkademikButton()
-      : super(
-          icon: Icons.app_registration_rounded,
-          iconColor: Colors.black,
-          content: "Jadwal Akademik",
-          route: 'jadwalakademik',
-          buttonColor: Colors.white,
-          fontColor: Colors.black,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-          width: double.infinity,
-          height: 120,
-        );
+//##########################################################
+//##########################################################
+
+// DEKAN BUTTON START
+class _JadwalDekanButton extends _JadwalButton {
+  const _JadwalDekanButton() : super(route: 'route');
+}
+
+class _RencanaAkademikDekanButton extends _RencanaAkademikButton {
+  const _RencanaAkademikDekanButton() : super(route: 'route');
+}
+// DEKAN BUTTON END
+
+//##########################################################
+//##########################################################
+
+// AKADEMIK BUTTON START
+class _JadwalAkademikButton extends _JadwalButton {
+  const _JadwalAkademikButton() : super(route: 'route');
 }
 
 class _RuangKelasButton extends RouteButton {
@@ -433,7 +471,7 @@ class _RuangKelasButton extends RouteButton {
           icon: Icons.app_registration_rounded,
           iconColor: Colors.black,
           content: "Ruang Kelas",
-          route: 'ruangan',
+          route: 'route',
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,
@@ -443,18 +481,7 @@ class _RuangKelasButton extends RouteButton {
         );
 }
 
-class _AccRuangKelasButton extends RouteButton {
-  const _AccRuangKelasButton()
-      : super(
-          icon: Icons.app_registration_rounded,
-          iconColor: Colors.black,
-          content: "Ruang Kelas",
-          route: 'accruang',
-          buttonColor: Colors.white,
-          fontColor: Colors.black,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-          width: double.infinity,
-          height: 120,
-        );
+class _RencanaAkademikAkademikButton extends _RencanaAkademikButton {
+  const _RencanaAkademikAkademikButton() : super(route: 'route');
 }
+// AKADEMIK BUTTON END

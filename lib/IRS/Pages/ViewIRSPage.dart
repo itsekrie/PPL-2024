@@ -23,7 +23,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
         child: Container(
           color: const Color.fromARGB(255, 205, 205, 205),
           padding: const EdgeInsets.all(8.0),
-          child: Row(
+          child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -41,6 +41,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
                       onUpdate: () => setState(() {}),
                     ),
                     const SizedBox(height: 16),
+
                   ],
                 ),
               ),
@@ -60,6 +61,8 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
     );
   }
 }
+
+
 
 class IRSCounter extends StatelessWidget {
   const IRSCounter({super.key});
@@ -329,3 +332,4 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
     );
   }
 }
+

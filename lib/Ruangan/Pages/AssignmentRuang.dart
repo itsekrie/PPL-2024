@@ -3,7 +3,7 @@ import 'package:si_paling_undip/Ruangan/Services/AssignmentRuangService.dart';
 import 'package:si_paling_undip/navbar.dart';
 
 class AssignRuang extends StatefulWidget {
-  const AssignRuang({Key? key}) : super(key: key);
+  const AssignRuang({super.key});
 
   @override
   State<AssignRuang> createState() => _AssignRuangState();
@@ -41,7 +41,7 @@ class _AssignRuangState extends State<AssignRuang> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-      appBar: MyNavbar(),
+      appBar: const MyNavbar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,7 +296,7 @@ class _AssignRuangState extends State<AssignRuang> {
                                             ),
                                           ],
                                         );
-                                      }).toList(),
+                                      }),
                                     ],
                                   ),
                                 ],
@@ -345,7 +345,7 @@ class AddEditRuangPage extends StatefulWidget {
   final bool isEdit;
   final AssignmentRuang? ruang;
 
-  AddEditRuangPage({required this.isEdit, this.ruang});
+  const AddEditRuangPage({super.key, required this.isEdit, this.ruang});
 
   @override
   _AddEditRuangPageState createState() => _AddEditRuangPageState();
@@ -365,7 +365,7 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
     'Matematika',
     'Fisika',
     'Statistika',]; // Contoh departemen
-  AssignmentRuangService _ruangService = AssignmentRuangService();
+  final AssignmentRuangService _ruangService = AssignmentRuangService();
   AssignmentRuang? ruangDetail;
 
 
@@ -512,7 +512,7 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Detail Ruang:',
                               style: TextStyle(
                                 fontSize: 18,
@@ -521,9 +521,9 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                               ),
                             ),
                             const Divider(thickness: 1),
-                            Text('Gedung: ${ruangDetail!.gedung}', style: TextStyle(fontSize: 16)),
-                            Text('Nama: ${ruangDetail!.nama}', style: TextStyle(fontSize: 16)),
-                            Text('Kapasitas: ${ruangDetail!.kapasitas}', style: TextStyle(fontSize: 16)),
+                            Text('Gedung: ${ruangDetail!.gedung}', style: const TextStyle(fontSize: 16)),
+                            Text('Nama: ${ruangDetail!.nama}', style: const TextStyle(fontSize: 16)),
+                            Text('Kapasitas: ${ruangDetail!.kapasitas}', style: const TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -564,7 +564,7 @@ class _AddEditRuangPageState extends State<AddEditRuangPage> {
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
-                    label: Text(widget.isEdit ? 'Update' : 'Tambah', style: TextStyle(fontSize: 18, color: Colors.white)),
+                    label: Text(widget.isEdit ? 'Update' : 'Tambah', style: const TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
                       padding: const EdgeInsets.symmetric(vertical: 16),
