@@ -42,11 +42,7 @@ class AuthService {
       required BuildContext context}) async {
     try {
       if (roleAmount > 1) {
-<<<<<<< HEAD
-        context.go("/Role");
-=======
         context.go("/role");
->>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
       } else {
         await setRole(uID, role[0]);
         await Future.delayed(const Duration(seconds: 1));
@@ -77,6 +73,19 @@ class AuthService {
 
     var role = list?["Current_Role"];
     return role;
+  }
+
+  Future<Map<String, dynamic>?> getCurrUser() async {
+    final userID = _firebaseAuth.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await _firestore.collection('User').doc(userID).get();
+    if (documentSnapshot.exists) {
+      Map<String, dynamic>? User = documentSnapshot.data();
+      return User;
+    } else {
+      print('Document does not exist.');
+      return Map();
+    }
   }
 
   String getErrorMessage(String errorCode) {
