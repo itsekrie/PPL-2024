@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import '../Services/JadwalService.dart';
 
 class JadwalMahasiswa extends StatefulWidget {
   const JadwalMahasiswa({super.key});
@@ -76,8 +77,6 @@ class _JadwalMahasiswaState extends State<JadwalMahasiswa> {
                         view: CalendarView.week,
                         showNavigationArrow: true,
                         initialDisplayDate: DateTime(2024, 8, 1),
-                        appointmentBuilder:
-                            (context, calendarAppointmentDetails) {},
                         dataSource: AppointmentDataSource(appointments)),
                   ),
                 ],

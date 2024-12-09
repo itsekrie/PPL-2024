@@ -368,7 +368,7 @@ class _InputNilaiButton extends RouteButton {
 
 // MAHASISWA BUTTON START
 class _JadwalMhsButton extends _JadwalButton {
-  const _JadwalMhsButton() : super(route: 'route');
+  const _JadwalMhsButton() : super(route: '/rencanaakademik');
 }
 
 class _IrsMhsButton extends _IrsButton {

@@ -112,68 +112,18 @@ class _DashboardState extends State<Dashboard> {
                 left: 120,
                 right: 120,
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(right: 60),
                       child: Center(
-                        child: Column(
-<<<<<<< HEAD
-                          children: [
-                            if (role == 'Mahasiswa') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _KhsButton(),
-                              SizedBox(height: 20),
-                              _BimbinganButton(),
-                              SizedBox(height: 20),
-                              _RegisterasiButton(),
-                            ] else if (role == 'kaprodi') ...const [
-                              _MataKuliahButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                              SizedBox(height: 20),
-                              _MonitoringButton(),
-                            ] else if (role == 'pembimbing') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _IrsButton(),
-                              SizedBox(height: 20),
-                              _BimbinganButton(),
-                              SizedBox(height: 20),
-                              _MonitoringButton(),
-                              SizedBox(height: 20),
-                              _InputNilaiButton(),
-                            ] else if (role == 'dekan') ...const [
-                              _JadwalButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            ] else if (role == 'akademik') ...const [
-                              _JadwalAkademikButton(),
-                              SizedBox(height: 20),
-                              _RuangKelasButton(),
-                              SizedBox(height: 20),
-                              _RencanaAkademikButton(),
-                            ] else ...const [
-                              // Widget alternatif untuk non-mahasiswa
-                              Text('Anda Siapa?'),
-                            ],
-                          ],
-=======
-                          children: [],
->>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
-                        ),
+                        child: Column(),
                       ),
                     ),
                   ),
-<<<<<<< HEAD
                   if (role == 'Mahasiswa') ...{
                     DashboardContainer(
                       width: width / 4,
@@ -324,8 +274,6 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                   },
-=======
->>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb
                 ],
               ),
             ),
@@ -447,6 +395,22 @@ class NotActiveAcademic extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DashboardButton extends RouteButton {
+  const _DashboardButton({
+    required super.icon,
+    required super.content,
+    required super.route,
+  }) : super(
+          iconColor: Colors.black,
+          buttonColor: Colors.white,
+          fontColor: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          width: double.infinity,
+          height: 120,
+        );
 }
 
 class _JadwalButton extends RouteButton {
@@ -624,11 +588,3 @@ class _RuangKelasButton extends RouteButton {
           height: 120,
         );
 }
-<<<<<<< HEAD
-=======
-
-class _RencanaAkademikAkademikButton extends _RencanaAkademikButton {
-  const _RencanaAkademikAkademikButton() : super(route: 'route');
-}
-// AKADEMIK BUTTON END
->>>>>>> 5d534df1cc4ba3c8c45ffabb8707ac6b742863eb

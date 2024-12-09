@@ -141,6 +141,10 @@ final GoRouter _router = GoRouter(
           GoRoute(
             path: 'mk',
             builder: (context, state) => const ViewMK(),
+          ),
+          GoRoute(
+            path: 'rencanaakademik',
+            builder: (context, state) => const RencanaAkademik(),
           )
         ],
       ),
