@@ -18,83 +18,101 @@ class DashboardDekan extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: height * 0.5,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 0, 45, 136),
-              ),
-              child: Container(
-                padding: const EdgeInsets.only(
-                  left: 120,
-                  right: 120,
-                  top: 120,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Welcome, Fahriant Ekrie!",
-                        style: TextStyle(
-                          fontSize: 52,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Text(
-                        "Sunday, 29th October 2024",
-                        style: TextStyle(
-                          fontSize: 28,
-                          color: Color.fromARGB(255, 205, 205, 205),
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            await AuthService().signOut();
-                            context.go("/login");
-                          },
-                          child: const Text("Logout"))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              //container 2
-              width: width,
-              margin: const EdgeInsets.only(
-                top: 40,
-                bottom: 40,
-                left: 120,
-                right: 120,
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 60),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            _JadwalAkademikButton(),
-                            SizedBox(height: 20),
-                            _RuangKelasButton(),
-                            SizedBox(height: 20),
-                            _RencanaAkademikAkademikButton(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            WelcomeInfo(height, context),
+            DashboardButtons(width: width),
           ],
         ),
+      ),
+    );
+  }
+
+  Container WelcomeInfo(double height, BuildContext context) {
+    return Container(
+      height: height * 0.5,
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 0, 45, 136),
+      ),
+      child: Container(
+        padding: const EdgeInsets.only(
+          left: 120,
+          right: 120,
+          top: 120,
+        ),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Welcome, Fahriant Ekrie!",
+                style: TextStyle(
+                  fontSize: 52,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              const Text(
+                "Sunday, 29th October 2024",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: Color.fromARGB(255, 205, 205, 205),
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await AuthService().signOut();
+                    context.go("/login");
+                  },
+                  child: const Text("Logout"))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DashboardButtons extends StatelessWidget {
+  const DashboardButtons({
+    super.key,
+    required this.width,
+  });
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //container 2
+      width: width,
+      margin: const EdgeInsets.only(
+        top: 40,
+        bottom: 40,
+        left: 120,
+        right: 120,
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(right: 60),
+              child: Center(
+                child: Column(
+                  children: [
+                    _JadwalAkademikButton(),
+                    SizedBox(height: 20),
+                    _RuangKelasButton(),
+                    SizedBox(height: 20),
+                    _RencanaAkademikAkademikButton(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -250,6 +268,22 @@ class _BimbinganButton extends RouteButton {
           icon: Icons.lock,
           iconColor: Colors.black,
           content: "Bimbingan",
+          buttonColor: Colors.white,
+          fontColor: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          width: double.infinity,
+          height: 120,
+        );
+}
+
+class DashButton extends RouteButton {
+  const DashButton({
+    required super.icon,
+    required super.route,
+    required super.content,
+  }) : super(
+          iconColor: Colors.black,
           buttonColor: Colors.white,
           fontColor: Colors.black,
           fontSize: 20.0,

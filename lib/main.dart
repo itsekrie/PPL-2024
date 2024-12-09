@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashNew.dart';
+
 import 'package:si_paling_undip/Dashboard/Pages/DashboardDekan.dart';
 import 'package:si_paling_undip/Dashboard/Pages/DashboardDosen.dart';
 import 'package:si_paling_undip/Dashboard/Pages/DashboardKaprodi.dart';
@@ -131,6 +131,10 @@ final GoRouter _router = GoRouter(
             },
           ),
           GoRoute(
+            path: 'td',
+            builder: (context, state) => const TestDash(),
+          ),
+          GoRoute(
             path: 'ruangan',
             builder: (context, state) => const ViewRuangOnly(),
           ),
@@ -146,10 +150,10 @@ final GoRouter _router = GoRouter(
           GoRoute(
               path: 'raka',
               builder: (context, state) => const RencanaAkademik()),
-          GoRoute(
-            path: 'mk',
-            builder: (context, state) => PilihDepartemenPage(),
-          )
+          // GoRoute(
+          //   path: 'mk',
+          //   builder: (context, state) => PilihDepartemenPage(),
+          // )
         ],
       ),
     ],

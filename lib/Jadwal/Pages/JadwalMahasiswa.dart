@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class JadwalMahasiswa extends StatefulWidget {
@@ -39,7 +40,7 @@ class _JadwalMahasiswaState extends State<JadwalMahasiswa> {
             List<Appointment> appointments = snapshot.data!;
 
             return Container(
-              color: const Color.fromARGB(255, 231, 231, 231),
+              color: const Color.fromARGB(255, 21, 0, 0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,18 +69,18 @@ class _JadwalMahasiswaState extends State<JadwalMahasiswa> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: width * 4 / 5,
-                    height: height,
-                    child: SfCalendar(
-                        backgroundColor: Colors.white,
-                        view: CalendarView.week,
-                        showNavigationArrow: true,
-                        initialDisplayDate: DateTime(2024, 8, 1),
-                        appointmentBuilder:
-                            (context, calendarAppointmentDetails) {},
-                        dataSource: AppointmentDataSource(appointments)),
-                  ),
+                  // SizedBox(
+                  //   width: width * 4 / 5,
+                  //   height: height,
+                  //   child: SfCalendar(
+                  //       backgroundColor: Colors.white,
+                  //       view: CalendarView.week,
+                  //       showNavigationArrow: true,
+                  //       initialDisplayDate: DateTime(2024, 8, 1),
+                  //       appointmentBuilder:
+                  //           (context, calendarAppointmentDetails) {},
+                  //       dataSource: AppointmentDataSource(appointments)),
+                  // ),
                 ],
               ),
             );

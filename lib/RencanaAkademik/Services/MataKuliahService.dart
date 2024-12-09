@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MataKuliah {
@@ -17,32 +19,30 @@ class MataKuliahService {
 
   Future<List<MataKuliah>> fetchMK({
     required String Departemen,
-    required String Sem,
   }) async {
     final snapshot = await _firestore
         .collection('Mata_Kuliah')
         .doc(Departemen)
-        .collection(Sem)
+        .collection("Mata Kuliah List")
         .get();
     return snapshot.docs.map((doc) {
       final data = doc.data();
       return MataKuliah(
         doc.id,
-        data['kodeMK'],
-        data['namaMK'],
-        data['semester'],
+        data['KodeMK'],
+        data['NamaMK'],
+        data['Semester'],
         data['SKS'],
-        data['jenis'],
+        data['Jenis'],
       );
     }).toList();
   }
 
-  Future<bool> isMataKuliahExists(
-      String nama, String Departemen, String Sem) async {
+  Future<bool> isMataKuliahExists(String nama, String Departemen) async {
     final snapshot = await _firestore
         .collection('Mata_Kuliah')
         .doc(Departemen)
-        .collection(Sem)
+        .collection("Mata Kuliah List")
         .where('Nama_MK', isEqualTo: nama)
         .get();
     return snapshot.docs.isNotEmpty;
@@ -57,7 +57,7 @@ class MataKuliahService {
     String departemen,
     String sem,
   ) async {
-    if (await isMataKuliahExists(namaMK, departemen, sem)) {
+    if (await isMataKuliahExists(namaMK, departemen)) {
       throw Exception('Ruang dengan nama $namaMK sudah ada.');
     }
     await _firestore
@@ -81,15 +81,14 @@ class MataKuliahService {
     String semester,
     String jenis,
     String departemen,
-    String sem,
   ) async {
-    if (await isMataKuliahExists(namaMK, departemen, sem)) {
+    if (await isMataKuliahExists(namaMK, departemen)) {
       throw Exception('Ruang dengan nama $namaMK sudah ada.');
     }
     await _firestore
         .collection('Mata_Kuliah')
         .doc(departemen)
-        .collection(sem)
+        .collection("Mata Kuliah List")
         .doc(id)
         .update({
       'Kode_MK': kodeMK,
