@@ -1,85 +1,84 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 
-class Role extends StatefulWidget {
-  const Role({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Role> createState() => _RoleState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RoleState extends State<Role> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  String roleA = "placeholder";
-  String roleB = "placeholder";
-  String uid = "placeholder";
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    User? user = _firebaseAuth.currentUser;
-    if (user != null) {
-      uid = user.uid;
-      try {
-        List<dynamic>? roles = await AuthService().getRoles(uid);
-        if (roles.length >= 2) {
-          setState(() {
-            roleA = roles[0];
-            roleB = roles[1];
-          });
-        } else {
-          // Handle cases where roles list is empty or has less than 2 elements
-          print("Roles list is empty or has less than 2 elements.");
-        }
-      } catch (e) {
-        // Handle errors during data fetching
-        print("Error fetching roles: $e");
-      }
-    } else {
-      // Handle cases where user is not logged in
-      print("User is not logged in.");
-    }
-  }
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    // Mendapatkan ukuran layar
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      body: Stack(
         children: [
-          const Text(
-            "Masuk Sebagai",
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
+          // Background image
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/assets/image/undipkampus.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RoleButton(
-                icon: Icons.school,
-                role: roleA,
-                uid: uid,
+          Center(
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 10,
+                // Adjust margin secara proporsional
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'lib/assets/image/universitas-diponegoro-logo.png',
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'SiPaling UNDIP',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        "Sistem Informasi Perencanaan Akademik Lengkap dan Monitoring",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      FormLogin(
+                        formkey: _formkey,
+                        controllerEmail: _controllerEmail,
+                        controllerPassword: _controllerPassword,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(
-                width: 50,
-              ),
-              RoleButton(
-                icon: Icons.school,
-                role: roleB,
-                uid: uid,
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -87,61 +86,99 @@ class _RoleState extends State<Role> {
   }
 }
 
-class RoleButton extends StatelessWidget {
-  final IconData icon;
-  final String role;
-  final String uid;
-  const RoleButton({
-    required this.icon,
-    required this.role,
-    required this.uid,
+class FormLogin extends StatelessWidget {
+  const FormLogin({
     super.key,
-  });
+    required GlobalKey<FormState> formkey,
+    required TextEditingController controllerEmail,
+    required TextEditingController controllerPassword,
+  })  : _formkey = formkey,
+        _controllerEmail = controllerEmail,
+        _controllerPassword = controllerPassword;
+
+  final GlobalKey<FormState> _formkey;
+  final TextEditingController _controllerEmail;
+  final TextEditingController _controllerPassword;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 340,
-      height: 340,
-      child: ElevatedButton.icon(
-        style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.resolveWith<Color>(
-              (states) {
-                if (states.contains(WidgetState.hovered)) {
-                  return const Color.fromARGB(
-                      255, 2, 67, 197); // Warna saat hover
-                }
-                return const Color.fromARGB(255, 0, 45, 136); // Warna default
-              },
+    return Form(
+      key: _formkey,
+      child: Column(
+        children: [
+          // Email field
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Email',
+              prefixIcon: const Icon(Icons.email),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-            )),
-        onPressed: () async {
-          await AuthService().setRole(uid, role);
-          context.go("/");
-        },
-        label: DefaultTextStyle.merge(
-          style: const TextStyle(
-              color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: Colors.white,
-                size: 50,
-              ),
-              const SizedBox(
-                width: 7,
-              ),
-              Text(role),
-            ],
+            controller: _controllerEmail,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your email";
+              }
+              String pattern =
+                  r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+              if (!RegExp(pattern).hasMatch(value)) {
+                return 'Enter a valid email address';
+              }
+              return null;
+            },
           ),
-        ),
+          const SizedBox(height: 15),
+          // Password field
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Password',
+              prefixIcon: const Icon(Icons.lock),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            obscureText: true,
+            controller: _controllerPassword,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your password";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          // Sign in button
+          ElevatedButton(
+            onPressed: () async {
+              if (_formkey.currentState!.validate()) {
+                String email = _controllerEmail.text;
+                String password = _controllerPassword.text;
+                try {
+                  await AuthService().signIn(
+                      email: email, password: password, context: context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error signing in. Try again!'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text(
+              'Sign In',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        ],
       ),
     );
   }
