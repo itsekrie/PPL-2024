@@ -82,7 +82,7 @@ class _ViewRuangOnlyState extends State<ViewRuangOnly> {
                                     navigateToAddEditOnlyPage(isEdit: false);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.lightBlue,
                                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -101,192 +101,172 @@ class _ViewRuangOnlyState extends State<ViewRuangOnly> {
                                   children: [
                                     Table(
                                       columnWidths: const {
-                                        0: FixedColumnWidth(40.0), // No
-                                        1: FlexColumnWidth(1.5),  // Gedung
-                                        2: FlexColumnWidth(2),    // Nama Ruang
-                                        3: FlexColumnWidth(1),    // Kapasitas
-                                        4: FlexColumnWidth(1.5),  // Aksi
-                                      },
-                                      children: [
-                                        const TableRow(
-                                          decoration: BoxDecoration(color: Colors.grey),
+                                      0: FixedColumnWidth(60.0), // No
+                                      1: FlexColumnWidth(1.5),  // Gedung
+                                      2: FlexColumnWidth(2),    // Nama Ruang
+                                      3: FlexColumnWidth(1),    // Kapasitas
+                                      4: FlexColumnWidth(1.5),  // Aksi
+                                    },
+                                    border: TableBorder.all(
+                                      color: Colors.grey.shade300, // Border warna abu-abu terang
+                                      width: 1,
+                                    ),
+                                    children: [
+                                      TableRow(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.lightBlue,
+                                        ),
+                                        children: const [
+                                          Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'No',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.white, // Warna teks header
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'Gedung',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'Nama Ruang',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'Kapasitas',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Text(
+                                              'Aksi',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      ...ruangList.asMap().entries.map((entry) {
+                                        final i = entry.key;
+                                        final ruangItem = entry.value;
+                                        return TableRow(
+                                          decoration: BoxDecoration(
+                                            color: i % 2 == 0 ? Colors.white : Colors.grey.shade200, // Warna baris selang-seling
+                                          ),
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Text(
-                                                'No',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                '${i + 1}',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(fontWeight: FontWeight.bold), // No lebih tegas
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                ruangItem.gedung,
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Text(
-                                                'Gedung',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                ruangItem.nama,
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Text(
-                                                'Nama Ruang',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                '${ruangItem.kapasitas}',
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text(
-                                                'Kapasitas',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text(
-                                                'Aksi',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        ...ruangList.asMap().entries.map((entry) {
-                                          final i = entry.key;
-                                          final ruangItem = entry.value;
-                                          return TableRow(
-                                            decoration: BoxDecoration(
-                                              color: i % 2 == 0 ? Colors.white : Colors.grey[200],
-                                            ),
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  '${i + 1}',
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  ruangItem.gedung,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  ruangItem.nama,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  '${ruangItem.kapasitas}',
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              Builder(
-                                                builder: (context) {
-                                                if (ruangItem.status == 'belum_diajukan'){
-
+                                            Builder(
+                                              builder: (context) {
+                                                if (ruangItem.status == 'belum_diajukan') {
                                                   return Padding(
-                                                    padding: const EdgeInsets.only(right: 8.0),
+                                                    padding: const EdgeInsets.all(8.0),
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: ElevatedButton(
-                                                            onPressed: () {
-                                                              navigateToAddEditOnlyPage(isEdit: true, ruang: ruangItem);
-                                                            },
-                                                            style: ElevatedButton.styleFrom(
-                                                              backgroundColor: Colors.orange,
-                                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                                              shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(8),
-                                                              ),
-                                                            ),
-                                                            child: const Text(
-                                                              'Edit',
-                                                              style: TextStyle(fontSize: 16, color: Colors.white),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        ElevatedButton(
-                                                          onPressed: () {
-                                                            showDialog(
-                                                              context: context,
-                                                              builder: (context) {
-                                                                return AlertDialog(
-                                                                  title: const Text('Konfirmasi Hapus'),
-                                                                  content: const Text('Apakah Anda yakin ingin menghapus ruang ini?'),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      onPressed: () {
-                                                                        Navigator.of(context).pop();
-                                                                      },
-                                                                      child: const Text('Batal'),
-                                                                    ),
-                                                                    TextButton(
-                                                                      onPressed: () {
-                                                                        _ruangService.deleteRuang(ruangItem.id);
-                                                                        Navigator.of(context).pop();
-                                                                        setState(() {}); // Refresh the view after deleting
-                                                                      },
-                                                                      child: const Text('Hapus'),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              },
-                                                            );
-                                                          },
-                                                          style: ElevatedButton.styleFrom(
-                                                            backgroundColor: Colors.red,
-                                                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(8),
-                                                            ),
-                                                          ),
-                                                          child: const Text(
-                                                            'Hapus',
-                                                            style: TextStyle(fontSize: 16, color: Colors.white),
-                                                          ),
+                                                        Icon(Icons.edit, color: Colors.orange), // Ikon edit
+                                                        const SizedBox(width: 5),
+                                                        Text(
+                                                          'Belum Diajukan',
+                                                          style: TextStyle(color: Colors.orange),
                                                         ),
                                                       ],
                                                     ),
                                                   );
-                                                } else if (ruangItem.status == 'diajukan' || ruangItem.status == 'pending'){
+                                                } else if (ruangItem.status == 'diajukan' || ruangItem.status == 'pending') {
                                                   return const Padding(
-                                                      padding:  EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                        'Belum Disetujui',
-                                                        style: TextStyle(color: Colors.orange),
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    );
-                                                } else if (ruangItem.status == 'disetujui') {
-                                                  return const  Padding(
                                                     padding: EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      'Sudah Disetujui',
-                                                      style: TextStyle(color: Colors.green),
+                                                      'Belum Disetujui',
+                                                      style: TextStyle(color: Colors.orange),
                                                       textAlign: TextAlign.center,
+                                                    ),
+                                                  );
+                                                } else if (ruangItem.status == 'disetujui') {
+                                                  return const Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(Icons.check_circle, color: Colors.green), // Ikon centang
+                                                        SizedBox(width: 5),
+                                                        Text(
+                                                          'Sudah Disetujui',
+                                                          style: TextStyle(color: Colors.green),
+                                                        ),
+                                                      ],
                                                     ),
                                                   );
                                                 }
                                                 return const SizedBox();
-                                                }
-                                              ),
-                                            ],
-                                          );
-                                        }),
-                                      ],
-                                    ),
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                    ],
+                                  ),
+
 
                                   ],
                                 ),
