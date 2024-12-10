@@ -297,19 +297,87 @@ class _DashboardButtonState extends State<DashboardButton> {
   }
 }
 
-class Button extends RouteButton {
+
+class Button extends StatefulWidget {
   const Button({
     super.key,
-    required super.icon,
-    required super.route,
-    required super.content,
-  }) : super(
-          iconColor: Colors.black,
-          buttonColor: Colors.white,
-          fontColor: Colors.black,
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-          width: double.infinity,
-          height: 120,
-        );
+    required this.icon,
+    required this.route,
+    required this.content,
+    this.iconColor = Colors.black,
+    this.buttonColor = Colors.white,
+    this.fontColor = Colors.black,
+    this.fontSize = 20.0,
+    this.fontWeight = FontWeight.bold,
+    this.width = double.infinity,
+    this.height = 120,
+  });
+
+  final IconData icon;
+  final String route;
+  final String content;
+  final Color iconColor;
+  final Color buttonColor;
+  final Color fontColor;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final double width;
+  final double height;
+
+  @override
+  State<Button> createState() => _ButtonState();
 }
+
+class _ButtonState extends State<Button> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: () => context.go(widget.route),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: widget.width,
+          height: widget.height,
+          decoration: BoxDecoration(
+            color: _isHovered
+                ? const Color.fromARGB(255, 0, 93, 191)
+                : widget.buttonColor,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              if (_isHovered)
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(2, 4),
+                ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                widget.icon,
+                color: _isHovered ? Colors.white : widget.iconColor,
+                size: 40,
+              ),
+              const SizedBox(width: 16),
+              Text(
+                widget.content,
+                style: TextStyle(
+                  color: _isHovered ? Colors.white : widget.fontColor,
+                  fontSize: widget.fontSize,
+                  fontWeight: widget.fontWeight,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
