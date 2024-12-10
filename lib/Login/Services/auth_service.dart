@@ -42,7 +42,7 @@ class AuthService {
       required BuildContext context}) async {
     try {
       if (roleAmount > 1) {
-        context.go("/role");
+        context.go("/Role");
       } else {
         await setRole(uID, role[0]);
         await Future.delayed(const Duration(seconds: 1));
