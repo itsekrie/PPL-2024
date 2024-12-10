@@ -28,7 +28,7 @@ class _RoleState extends State<Role> {
       uid = user.uid;
       try {
         List<dynamic>? roles = await AuthService().getRoles(uid);
-        if (roles != null && roles.length >= 2) {
+        if (roles.length >= 2) {
           setState(() {
             roleA = roles[0];
             roleB = roles[1];

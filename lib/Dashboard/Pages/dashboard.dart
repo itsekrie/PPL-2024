@@ -45,11 +45,16 @@ class DashboardState extends State<Dashboard> {
               final nama = user["Nama"];
               final role = user["Current_Role"];
               return Scaffold(
-                body: Column(
-                  children: [
-                    WelcomeInfo(height, width, context, nama),
-                    SingleChildScrollView(child: DashboardButtons(width: width, role: role,)),
-                  ],
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      WelcomeInfo(height, width, context, nama),
+                      DashboardButtons(
+                        width: width,
+                        role: role,
+                      ),
+                    ],
+                  ),
                 ),
               );
             }
@@ -71,71 +76,87 @@ class DashboardButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-                  width: width,
-                  margin: const EdgeInsets.only(
-                    top: 40,
-                    bottom: 40,
-                    left: 120,
-                    right: 120,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 60),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                if(role == "Mahasiswa" ) ... const[
-                                  DashboardButton(buttonName: "IRS"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "KHS"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Jadwal"),
-                                  SizedBox(height: 20,),
-                                  // DashboardButton(buttonName: "Bimbingan"),
-                                  // SizedBox(height: 20,),
-
-                                ]
-                                else if(role == "Dosen" ) ... const[
-                                  DashboardButton(buttonName: "IRS"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Bimbingan"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Jadwal"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Monitoring"),
-                                  SizedBox(height: 20,),
-
-
-                                ]
-                                else if(role == "Kaprodi" ) ... const[
-                                  DashboardButton(buttonName: "Rencana Akademik"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Mata Kuliah"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Monitoring"),
-                                  SizedBox(height: 20,),
-
-                                ]
-                                else if(role == "Dekan" ) ... const[
-                                  DashboardButton(buttonName: "Ruangan"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Rencana Akademik"),
-                                  SizedBox(height: 20,),
-
-                                ]
-                                else if(role == "Staff" ) ... const[
-                                  DashboardButton(buttonName: "Ruangan"),
-                                  SizedBox(height: 20,),
-                                  DashboardButton(buttonName: "Jadwal"),
-                                  SizedBox(height: 20,),
-
-                                ]
-        
-                                
+      width: width,
+      margin: const EdgeInsets.only(
+        top: 40,
+        bottom: 40,
+        left: 120,
+        right: 120,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 60),
+              child: Center(
+                child: Column(
+                  children: [
+                    if (role == "Mahasiswa") ...const [
+                      DashboardButton(buttonName: "IRS"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "KHS"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Jadwal"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // DashboardButton(buttonName: "Bimbingan"),
+                      // SizedBox(height: 20,),
+                    ] else if (role == "Dosen") ...const [
+                      DashboardButton(buttonName: "IRS"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Bimbingan"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Jadwal"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Monitoring"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ] else if (role == "Kaprodi") ...const [
+                      DashboardButton(buttonName: "Rencana Akademik"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Mata Kuliah"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Monitoring"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ] else if (role == "Dekan") ...const [
+                      DashboardButton(buttonName: "Ruangan"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Rencana Akademik"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ] else if (role == "Staff") ...const [
+                      DashboardButton(buttonName: "Ruangan"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DashboardButton(buttonName: "Jadwal"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ]
                   ],
                 ),
               ),
@@ -186,12 +207,13 @@ Container WelcomeInfo(
                 fontSize: 28,
                 color: Color.fromARGB(255, 205, 205, 205),
               ),
-            ),ElevatedButton(
-                  onPressed: () async {
-                    await AuthService().signOut();
-                    context.go("/login");
-                  },
-                  child: const Text("Logout"))
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await AuthService().signOut();
+                  context.go("/login");
+                },
+                child: const Text("Logout"))
           ],
         ),
       ),
@@ -218,8 +240,8 @@ class _DashboardButtonState extends State<DashboardButton> {
     _setIcon();
   }
 
-  void _setIcon(){
-    switch(widget.buttonName){
+  void _setIcon() {
+    switch (widget.buttonName) {
       case "Ruangan":
         setState(() {
           icon = Icons.app_registration_rounded;
@@ -260,33 +282,24 @@ class _DashboardButtonState extends State<DashboardButton> {
         setState(() {
           icon = Icons.app_registration_rounded;
         });
-
-        
-      
     }
   }
+
   @override
-  
-  
   Widget build(BuildContext context) {
     String ro = widget.buttonName.replaceAll(" ", "");
     String route = "/$ro";
-    return Button(
-      icon: icon, 
-      route: route, 
-      content: widget.buttonName
-      );
+    return Button(icon: icon, route: route, content: widget.buttonName);
   }
 }
 
-
 class Button extends RouteButton {
   const Button({
+    super.key,
     required super.icon,
     required super.route,
     required super.content,
   }) : super(
-    
           iconColor: Colors.black,
           buttonColor: Colors.white,
           fontColor: Colors.black,

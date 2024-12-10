@@ -7,12 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:si_paling_undip/Dashboard/Pages/DashboardDekan.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashboardDosen.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashboardKaprodi.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashboardMahasiswa.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashboardStaff.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSDosenPage.dart';
 import 'package:si_paling_undip/IRS/Pages/ViewIRSPage.dart';
 import 'package:si_paling_undip/Jadwal/Pages/JadwalMahasiswa.dart';
@@ -61,11 +55,11 @@ final GoRouter _router = GoRouter(
             builder: (context, state) => const Role(),
           ),
           GoRoute(
-            path: 'monitoring',
+            path: 'Monitoring',
             builder: (context, state) => const MonitoringPage(),
           ),
           GoRoute(
-            path: 'irs',
+            path: 'IRS',
             builder: (context, state) {
               return FutureBuilder<String?>(
                   future: AuthService().currentRole(),
@@ -100,7 +94,7 @@ final GoRouter _router = GoRouter(
             },
           ),
           GoRoute(
-            path: 'ruangan',
+            path: 'Ruangan',
             builder: (context, state) => const ViewRuangOnly(),
           ),
           GoRoute(
@@ -111,14 +105,10 @@ final GoRouter _router = GoRouter(
             path: 'accruang',
             builder: (context, state) => const AccRuang(),
           ),
-          GoRoute(path: 'khs', builder: (context, state) => const KHS()),
+          GoRoute(path: 'KHS', builder: (context, state) => const KHS()),
           GoRoute(
-              path: 'raka',
+              path: 'RencanaAkademik',
               builder: (context, state) => const RencanaAkademik()),
-          // GoRoute(
-          //   path: 'mk',
-          //   builder: (context, state) => PilihDepartemenPage(),
-          // )
         ],
       ),
     ],
