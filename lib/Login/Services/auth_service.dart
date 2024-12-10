@@ -75,6 +75,19 @@ class AuthService {
     return role;
   }
 
+  Future<Map<String, dynamic>?> getCurrUser() async {
+    final userID = _firebaseAuth.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await _firestore.collection('User').doc(userID).get();
+    if (documentSnapshot.exists) {
+      Map<String, dynamic>? User = documentSnapshot.data();
+      return User;
+    } else {
+      print('Document does not exist.');
+      return Map();
+    }
+  }
+
   String getErrorMessage(String errorCode) {
     switch (errorCode) {
       case 'invalid-email':

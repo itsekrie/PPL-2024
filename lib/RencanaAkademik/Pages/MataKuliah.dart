@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import 'package:si_paling_undip/RencanaAkademik/Services/MataKuliahService.dart';
 
 class ViewMK extends StatefulWidget {
@@ -11,37 +9,23 @@ class ViewMK extends StatefulWidget {
 }
 
 class _ViewMKState extends State<ViewMK> {
-  String selectedSemester =
-      'Ganjil'; // Variabel untuk menyimpan semester yang dipilih
+  String? selectedSemester; // Variabel untuk menyimpan semester yang dipilih
   final List<String> semesterOptions = [
     'Ganjil',
     'Genap'
   ]; // Daftar pilihan semester
-  List<MataKuliah> mataKuliahList = [];
-
-  @override
-  var departemen = "";
-  void initState() {
-    super.initState();
-    _fetchMatkul();
-  }
-
-  Future<void> _fetchMatkul() async {
-    var userId = await AuthService().getUID();
-    var user = await AuthService().getUser(userId);
-    setState(() async {
-      departemen = await user?["Departemen"];
-      var matkul = await MataKuliahService()
-          .fetchMK(Departemen: departemen, Sem: selectedSemester as String);
-      mataKuliahList = matkul;
-    });
-  }
-
-  //   final RuangService _ruangService = RuangService();
-
-  // Stream<List<Ruang>> _fetchRuangData() {
-  //   return _ruangService.fetchDataStream(); // Ubah ini menjadi stream
-  // }
+  List<MataKuliah> mataKuliahList = [
+    MataKuliah('1', 'MK001', 'Pemrograman Dasar', 3, 1, 'Wajib'),
+    MataKuliah('2', 'MK002', 'Struktur Data', 3, 2, 'Wajib'),
+    MataKuliah('3', 'MK003', 'Algoritma', 3, 2, 'Wajib'),
+    MataKuliah('4', 'MK004', 'Basis Data', 3, 3, 'Wajib'),
+    MataKuliah('5', 'MK005', 'Jaringan Komputer', 3, 4, 'Pilihan'),
+    MataKuliah('6', 'MK006', 'Sistem Operasi', 3, 3, 'Wajib'),
+    MataKuliah('7', 'MK007', 'Rekayasa Perangkat Lunak', 3, 5, 'Wajib'),
+    MataKuliah('8', 'MK008', 'Kecerdasan Buatan', 3, 6, 'Pilihan'),
+    MataKuliah('9', 'MK009', 'Pengembangan Web', 3, 4, 'Wajib'),
+    MataKuliah('10', 'MK010', 'Mobile Programming', 3, 6, 'Pilihan'),
+  ];
 
   void navigateToAddEditMataKuliahPage(
       {MataKuliah? mk, required bool isEdit}) async {
@@ -129,7 +113,7 @@ class _ViewMKState extends State<ViewMK> {
                                 }).toList(),
                                 onChanged: (String? newValue) {
                                   setState(() {
-                                    selectedSemester = newValue!;
+                                    selectedSemester = newValue;
                                   });
                                 },
                                 underline: Container(),
@@ -360,7 +344,7 @@ class _ViewMKState extends State<ViewMK> {
                                     ),
                                   ],
                                 );
-                              }),
+                              }).toList(),
                             ],
                           ),
                         ],
@@ -407,8 +391,8 @@ class AddEditMataKuliahPage extends StatefulWidget {
   final bool isEdit;
   final MataKuliah? mataKuliah;
 
-  const AddEditMataKuliahPage(
-      {required this.isEdit, this.mataKuliah, super.key});
+  const AddEditMataKuliahPage({required this.isEdit, this.mataKuliah, Key? key})
+      : super(key: key);
 
   @override
   _AddEditMataKuliahPageState createState() => _AddEditMataKuliahPageState();
@@ -544,8 +528,7 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: Text(widget.isEdit ? 'Update' : 'Tambah',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white)),
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
                       padding: const EdgeInsets.symmetric(vertical: 16),

@@ -10,22 +10,20 @@ class IRSMahasiswa extends StatefulWidget {
 class _IRSMahasiswaState extends State<IRSMahasiswa> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           color: const Color.fromARGB(255, 205, 205, 205),
           padding: const EdgeInsets.all(8.0),
-          child: Row(
+          child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-
             children: [
               Expanded(
                 flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     IRSMahasiswaCardInfo(),
                     SizedBox(height: 16),
                     IRSCounter(),
@@ -44,7 +42,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
                 flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     EntryIRS(),
                   ],
                 ),
@@ -62,7 +60,6 @@ class AddMatkul extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -77,15 +74,11 @@ class AddMatkul extends StatelessWidget {
           ),
         ),
         child: Container(
-          width: double.infinity,
-          height: 60,
-          child: const Text(
-            'Tambah Mata Kuliah'
-          )
-        ),
+            width: double.infinity,
+            height: 60,
+            child: const Text('Tambah Mata Kuliah')),
       ),
     );
-
   }
 }
 
@@ -94,7 +87,6 @@ class IRSCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,7 +106,6 @@ class IRSCounter extends StatelessWidget {
         ],
       ),
     );
-
   }
 }
 
@@ -123,7 +114,6 @@ class IRSTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
@@ -137,7 +127,6 @@ class IRSTab extends StatelessWidget {
         },
       ),
     );
-
   }
 }
 
@@ -146,7 +135,6 @@ class EntryIRS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -169,31 +157,51 @@ class EntryIRS extends StatelessWidget {
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Senin", style: TextStyle(fontSize: 24),)),
+                          child: Center(
+                              child: Text(
+                            "Senin",
+                            style: TextStyle(fontSize: 24),
+                          )),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Selasa", style: TextStyle(fontSize: 24),)),
+                          child: Center(
+                              child: Text(
+                            "Selasa",
+                            style: TextStyle(fontSize: 24),
+                          )),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Rabu", style: TextStyle(fontSize: 24),)),
+                          child: Center(
+                              child: Text(
+                            "Rabu",
+                            style: TextStyle(fontSize: 24),
+                          )),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Kamis", style: TextStyle(fontSize: 24),)),
+                          child: Center(
+                              child: Text(
+                            "Kamis",
+                            style: TextStyle(fontSize: 24),
+                          )),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Jumat", style: TextStyle(fontSize: 24),)),
+                          child: Center(
+                              child: Text(
+                            "Jumat",
+                            style: TextStyle(fontSize: 24),
+                          )),
                         ),
                       ),
                     ],
@@ -230,7 +238,6 @@ class EntryIRS extends StatelessWidget {
         ),
       ),
     );
-
   }
 }
 
@@ -248,64 +255,100 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
     // Jika membutuhkan pengambilan data, lakukan di sini.
   }
 
-@override
-Widget build(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Card(
-      child: Container(
-        height: 170,
-        width: 400,
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Padding(
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Container(
+          height: 170,
+          width: 400,
+          child: const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Jarak antara kolom
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align left
-                  children: [
-                    Text("Nama", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("NIM", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("Semester", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Spacer(),
-                    Text("IP Semester Sebelumnya", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("SKS Kumulatif", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("Maksimum SKS", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align left
-                  children: [
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Spacer(),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align right
-                  children: [
-                    Text("Yusuf Zaenul Mustofa", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("24060122120021", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("5", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Spacer(),
-                    Text("3.6", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("87", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("24", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                  ],
-                ),
-              ],
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // Jarak antara kolom
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Align left
+                    children: [
+                      Text("Nama",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("NIM",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("Semester",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Spacer(),
+                      Text("IP Semester Sebelumnya",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("SKS Kumulatif",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("Maksimum SKS",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Align left
+                    children: [
+                      Text(":",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text(":",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text(":",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Spacer(),
+                      Text(":",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text(":",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text(":",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Align right
+                    children: [
+                      Text("Yusuf Zaenul Mustofa",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("24060122120021",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("5",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Spacer(),
+                      Text("3.6",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("87",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                      Text("24",
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
