@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:si_paling_undip/Dashboard/Pages/DashNew.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 
 class MyNavbar extends StatelessWidget implements PreferredSizeWidget {
@@ -21,22 +20,21 @@ class MyNavbar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             TextButton(
               onPressed: () {
-                // Aksi ketika tombol ditekan
                 context.go('/');
               },
               style: TextButton.styleFrom(
-                backgroundColor: Colors.transparent, // Background transparan
-                padding: const EdgeInsets.all(8.0), // Padding tombol
+                backgroundColor: Colors.transparent,
+                padding: const EdgeInsets.all(8.0),
               ),
               child: Row(
-                mainAxisSize: MainAxisSize.min, // Ukuran sesuai konten
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
                     'lib/assets/image/universitas-diponegoro-logo.png',
                     width: 40,
                     height: 40,
                   ),
-                  const SizedBox(width: 8), // Jarak antara gambar dan teks
+                  const SizedBox(width: 8),
                   const Text(
                     'Sipaling Undip',
                     style: TextStyle(
