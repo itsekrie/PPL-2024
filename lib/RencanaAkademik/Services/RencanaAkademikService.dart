@@ -1,31 +1,78 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RuangRK {
   String id;
-  String NamaRuang;
-  int Kapasitas;
+  String namaRuang;
+  int kapasitas;
   List senin;
   List selasa;
   List rabu;
   List kamis;
   List jumat;
 
-  RuangRK(this.id, this.NamaRuang, this.Kapasitas, this.senin, this.selasa,
+  RuangRK(this.id, this.namaRuang, this.kapasitas, this.senin, this.selasa,
       this.rabu, this.kamis, this.jumat);
+}
+
+class MatkulRK {
+  String id;
+  String kodeMK;
+  String namaMK;
+  String sks;
+  String semester;
+  bool lower;
+  List pengampu;
+  List kelas;
+  List senin;
+  List selasa;
+  List rabu;
+  List kamis;
+  List jumat;
+
+  MatkulRK(
+      this.id,
+      this.kodeMK,
+      this.namaMK,
+      this.sks,
+      this.semester,
+      this.lower,
+      this.pengampu,
+      this.kelas,
+      this.senin,
+      this.selasa,
+      this.rabu,
+      this.kamis,
+      this.jumat);
 }
 
 class Rencanaakademikservice {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  Future<String> getDepartemen() async {
+    final uid = _firebaseAuth.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection("User").doc(uid).get();
+    Map<String, dynamic>? data = snapshot.data();
+    final departemen = data!["Departemen"];
+
+    return departemen;
+  }
   // Future<bool> isScheduleExist(){
   //   r
   // }
 
   Future<void> addRoomToSchedule(
-      String id, String namaRuang, int kapasitas) async {
-    await _firestore.collection("RuangRK").doc(id).set({
+      String id, String namaRuang, int kapasitas, String rencanaId) async {
+    await _firestore
+        .collection("Rencana Akademik")
+        .doc(rencanaId)
+        .collection("Ruang")
+        .doc(id)
+        .set({
       "NamaRuang": namaRuang,
       "Kapasitas": kapasitas,
       "Senin": [],
@@ -36,7 +83,7 @@ class Rencanaakademikservice {
     });
   }
 
-  Future<void> getRoomSchedule(String departemen) async {
+  Future<void> getRoomSchedule(String departemen, rencanaId) async {
     final data = await _firestore.collection("Ruang").doc("Master").get();
     var rooms = data[departemen];
 
@@ -49,7 +96,7 @@ class Rencanaakademikservice {
           var room_data =
               await _firestore.collection("Ruang").doc(rooms[i]).get();
           await addRoomToSchedule(
-              rooms[i], room_data["nama"], room_data["kapasitas"]);
+              rooms[i], room_data["nama"], room_data["kapasitas"], rencanaId);
         }
       } catch (e) {
         print(e);
@@ -57,24 +104,133 @@ class Rencanaakademikservice {
     }
   }
 
-  Future<void> addJadwal(
-      {required String rencanaID,
-      required String hari,
-      required String ruang,
-      required String matkul}) async {
-    try {
-      _firestore
-          .collection("Rencana Akademik")
-          .doc(rencanaID)
-          .collection("Mata Kuliah")
-          .doc(matkul);
-    } catch (e) {
-      print(e);
-      throw e;
-    }
+  Future<List?> getRuang({
+    required var rencanaId,
+    required var ruangId,
+    required var hari,
+  }) async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore
+        .collection("Rencana Akademik")
+        .doc(rencanaId)
+        .collection("Ruang")
+        .doc(ruangId)
+        .get();
+
+    Map<String, dynamic>? data = documentSnapshot.data();
+    var list = data?[hari];
+    print(list);
+    return list;
   }
 
-  List allOption = [
+  Future<List?> getMatkul({
+    required var rencanaId,
+    required var matkulId,
+    required var hari,
+  }) async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore
+        .collection("Rencana Akademik")
+        .doc(rencanaId)
+        .collection("Ruang")
+        .doc(matkulId)
+        .get();
+
+    Map<String, dynamic>? data = documentSnapshot.data();
+    var list = data?["Jumat"];
+    print(list);
+    return list;
+  }
+
+  Future<List> getJadwalOption({
+    required var rencanaId,
+    required var ruangId,
+    required var matkulId,
+    required var hari,
+    required var sks,
+  }) async {
+    var listA =
+        await getMatkul(hari: hari, matkulId: matkulId, rencanaId: rencanaId);
+    var listB = await getRuang(
+      hari: hari,
+      ruangId: ruangId,
+      rencanaId: rencanaId,
+    );
+    var listC;
+    if (listA!.isEmpty) {
+      if (listB!.isEmpty) {
+        listC = [];
+      } else {
+        listC = listB;
+      }
+    } else {
+      if (listB!.isEmpty) {
+        listC = listA;
+      } else {
+        listC = listA + listB;
+      }
+    }
+
+    var listD = allOption;
+    var listE = listD.toSet().difference(listC.toSet()).toList();
+    var listF = [];
+    for (var i = 0; i < listE.length; i++) {
+      if (listE.contains(listE[i] + (5 * sks))) {
+        listF.add(listE[i]);
+      }
+    }
+    print(listF);
+    return listF;
+  }
+
+  Future<void> addJadwalMatkul({
+    required var list,
+    required var rencanaId,
+    required var matkulId,
+    required var hari,
+  }) async {
+    await _firestore
+        .collection("Rencana Akademik")
+        .doc(rencanaId)
+        .collection("Mata Kuliah")
+        .doc(matkulId)
+        .update({hari: FieldValue.arrayUnion(list)});
+  }
+
+  Future<void> addJadwalRuang({
+    required var list,
+    required var rencanaId,
+    required var ruangId,
+    required var hari,
+  }) async {
+    await _firestore
+        .collection("Rencana Akademik")
+        .doc(rencanaId)
+        .collection("Ruang")
+        .doc(ruangId)
+        .update({hari: FieldValue.arrayUnion(list)});
+  }
+
+  Future<void> addJadwal(
+      {required var list,
+      required var rencanaId,
+      required var ruangId,
+      required var matkulId,
+      required var hari,
+      required var sks,
+      required var start}) async {
+    var list = [];
+
+    for (var i = start; i <= (sks * 5); i++) {
+      list.add(i);
+    }
+    await addJadwalMatkul(
+        list: list, hari: hari, matkulId: matkulId, rencanaId: rencanaId);
+    await addJadwalRuang(
+        list: list, hari: hari, ruangId: ruangId, rencanaId: rencanaId);
+
+    print(list);
+  }
+
+  List<int> allOption = [
     1,
     2,
     3,

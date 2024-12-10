@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../Services/JadwalService.dart';
 
 class JadwalMahasiswa extends StatefulWidget {
   const JadwalMahasiswa({super.key});

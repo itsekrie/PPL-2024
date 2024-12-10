@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class MonitoringPage extends StatelessWidget{
+class MonitoringPage extends StatelessWidget {
   const MonitoringPage({super.key});
 
   @override
