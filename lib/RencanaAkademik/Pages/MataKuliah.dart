@@ -390,9 +390,9 @@ class _ViewMKState extends State<ViewMK> {
 class AddEditMataKuliahPage extends StatefulWidget {
   final bool isEdit;
   final MataKuliah? mataKuliah;
-
   const AddEditMataKuliahPage(
       {required this.isEdit, this.mataKuliah, super.key});
+
 
   @override
   _AddEditMataKuliahPageState createState() => _AddEditMataKuliahPageState();
@@ -528,13 +528,12 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: Text(widget.isEdit ? 'Update' : 'Tambah',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white)),
+                    style: const TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      textStyle:
-                          const TextStyle(fontSize: 18, color: Colors.white),
+                    backgroundColor: const Color.fromARGB(255, 0, 45, 136),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    textStyle:
+                        const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ],
