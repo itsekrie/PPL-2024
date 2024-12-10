@@ -6,13 +6,14 @@ class RuangRK {
   String id;
   String NamaRuang;
   int Kapasitas;
-  bool Slot1;
-  bool Slot2;
-  bool Slot3;
-  bool Slot4;
+  List senin;
+  List selasa;
+  List rabu;
+  List kamis;
+  List jumat;
 
-  RuangRK(this.id, this.NamaRuang, this.Kapasitas, this.Slot1, this.Slot2,
-      this.Slot3, this.Slot4);
+  RuangRK(this.id, this.NamaRuang, this.Kapasitas, this.senin, this.selasa,
+      this.rabu, this.kamis, this.jumat);
 }
 
 class Rencanaakademikservice {
@@ -26,10 +27,21 @@ class Rencanaakademikservice {
     await _firestore.collection("RuangRK").doc(id).set({
       "NamaRuang": namaRuang,
       "Kapasitas": kapasitas,
-      "Slot1": false,
-      "Slot2": false,
-      "Slot3": false,
-      "Slot4": false,
+      "Senin": [
+        for (var i = 0; i < 36; i++) {false}
+      ],
+      "Selasa": [
+        for (var i = 0; i < 36; i++) {false}
+      ],
+      "Rabu": [
+        for (var i = 0; i < 36; i++) {false}
+      ],
+      "Kamis": [
+        for (var i = 0; i < 36; i++) {false}
+      ],
+      "Jum'at": [
+        for (var i = 0; i < 36; i++) {false}
+      ],
     });
   }
 

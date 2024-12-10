@@ -1,53 +1,27 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 
-class Role extends StatefulWidget {
-  const Role({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Role> createState() => _RoleState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RoleState extends State<Role> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  String roleA = "Kaprodi";
-  String roleB = "Dosen";
-  String uid = "placeholder";
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    User? user = _firebaseAuth.currentUser ;
-    if (user != null) {
-      uid = user.uid;
-      try {
-        List<dynamic>? roles = await AuthService().getRoles(uid);
-        if (roles.isNotEmpty) {
-          setState(() {
-            roleA = roles[0];
-            roleB = roles.length > 1 ? roles[1] : "Dosen";
-          });
-        }
-      } catch (e) {
-        print("Error fetching roles: $e");
-      }
-    } else {
-      print("User  is not logged in.");
-    }
-  }
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan ukuran layar
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Stack(
         children: [
-          // Background Gradient
+          // Background image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -56,53 +30,53 @@ class _RoleState extends State<Role> {
               ),
             ),
           ),
-          // Foreground content
           Center(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.all(30),
-              constraints: const BoxConstraints(maxWidth: 500),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    blurRadius: 15,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Masuk Sebagai",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 10,
+                // Adjust margin secara proporsional
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      RoleButton(
-                        icon: Icons.school,
-                        role: roleA,
-                        uid: uid,
+                      Image.asset(
+                        'lib/assets/image/universitas-diponegoro-logo.png',
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.contain,
                       ),
-                      const SizedBox(width: 16),
-                      RoleButton(
-                        icon: Icons.work,
-                        role: roleB,
-                        uid: uid,
+                      const SizedBox(height: 10),
+                      const Text(
+                        'SiPaling UNDIP',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        "Sistem Informasi Perencanaan Akademik Lengkap dan Monitoring",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      FormLogin(
+                        formkey: _formkey,
+                        controllerEmail: _controllerEmail,
+                        controllerPassword: _controllerPassword,
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -112,79 +86,99 @@ class _RoleState extends State<Role> {
   }
 }
 
-class RoleButton extends StatefulWidget {
-  final IconData icon;
-  final String role;
-  final String uid;
-
-  const RoleButton({
-    required this.icon,
-    required this.role,
-    required this.uid,
+class FormLogin extends StatelessWidget {
+  const FormLogin({
     super.key,
-  });
+    required GlobalKey<FormState> formkey,
+    required TextEditingController controllerEmail,
+    required TextEditingController controllerPassword,
+  })  : _formkey = formkey,
+        _controllerEmail = controllerEmail,
+        _controllerPassword = controllerPassword;
 
-  @override
-  State<RoleButton> createState() => _RoleButtonState();
-}
-
-class _RoleButtonState extends State<RoleButton> {
-  bool _isHovered = false;
+  final GlobalKey<FormState> _formkey;
+  final TextEditingController _controllerEmail;
+  final TextEditingController _controllerPassword;
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedScale(
-        scale: _isHovered ? 1.1 : 1.0,
-        duration: const Duration(milliseconds: 200),
-        child: GestureDetector(
-          onTap: () async {
-            await AuthService().setRole(widget.uid, widget.role);
-            context.go("/");
-          },
-          child: Container(
-            width: 140,
-            height: 140,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 0, 93, 191),
-                  Color.fromARGB(255, 0, 45, 136),
-                ],
-                begin: Alignment.topLeft,
+    return Form(
+      key: _formkey,
+      child: Column(
+        children: [
+          // Email field
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Email',
+              prefixIcon: const Icon(Icons.email),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 10,
-                  offset: const Offset(2, 4),
-                ),
-              ],
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  widget.icon,
-                  color: Colors.white,
-                  size: 60,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  widget.role,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            controller: _controllerEmail,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your email";
+              }
+              String pattern =
+                  r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+              if (!RegExp(pattern).hasMatch(value)) {
+                return 'Enter a valid email address';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 15),
+          // Password field
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Password',
+              prefixIcon: const Icon(Icons.lock),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            obscureText: true,
+            controller: _controllerPassword,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your password";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          // Sign in button
+          ElevatedButton(
+            onPressed: () async {
+              if (_formkey.currentState!.validate()) {
+                String email = _controllerEmail.text;
+                String password = _controllerPassword.text;
+                try {
+                  await AuthService().signIn(
+                      email: email, password: password, context: context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error signing in. Try again!'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text(
+              'Sign In',
+              style: TextStyle(fontSize: 18),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
