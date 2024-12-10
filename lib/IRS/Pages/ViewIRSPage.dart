@@ -23,7 +23,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
         child: Container(
           color: const Color.fromARGB(255, 205, 205, 205),
           padding: const EdgeInsets.all(8.0),
-          child: const Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -105,10 +105,10 @@ class SearchMatkul extends StatefulWidget {
   final VoidCallback onUpdate;
 
   const SearchMatkul({
-    Key? key,
+    super.key,
     required this.jadwalIRS,
     required this.onUpdate,
-  }) : super(key: key);
+  });
 
   @override
   _SearchMatkulState createState() => _SearchMatkulState();
@@ -135,7 +135,7 @@ class _SearchMatkulState extends State<SearchMatkul> {
       child: Center(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               child: DropdownMenu<Matkul>(
                 enableFilter: true,
@@ -188,7 +188,7 @@ class _SearchMatkulState extends State<SearchMatkul> {
 class EntryIRS extends StatelessWidget {
   final Map<String, List<Matkul>> jadwalIRS;
 
-  const EntryIRS({Key? key, required this.jadwalIRS}) : super(key: key);
+  const EntryIRS({super.key, required this.jadwalIRS});
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +280,7 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        child: Container(
+        child: SizedBox(
           height: 170,
           width: 400,
           child: const Padding(

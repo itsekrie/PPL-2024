@@ -278,7 +278,7 @@ class _BimbinganButton extends RouteButton {
 }
 
 class DashButton extends RouteButton {
-  const DashButton({
+  const DashButton({super.key, 
     required super.icon,
     required super.route,
     required super.content,

@@ -12,46 +12,81 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final _formkey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    const style1 = TextStyle(fontSize: 52, fontWeight: FontWeight.bold);
-    const style2 = TextStyle(fontSize: 20, fontWeight: FontWeight.w400);
+    // Mendapatkan ukuran layar
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Center(
-        child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('SiPaling UNDIP', style: style1),
-              const Text(
-                'Sistem Informasi Perencanaan Akademik dan Monitoring',
-                style: style2,
+      body: Stack(
+        children: [
+          // Background image
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/assets/image/undipkampus.jpg'),
+                fit: BoxFit.cover,
               ),
-              const Text(
-                'Universitas Diponegoro',
-                style: style2,
-              ),
-              FormLogin(
-                formkey: _formkey,
-                controllerEmail: _controllerEmail,
-                controllerPassword: _controllerPassword,
-              ),
-            ],
+            ),
           ),
-        ),
+          Center(
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 10,
+                // Adjust margin secara proporsional
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'lib/assets/image/universitas-diponegoro-logo.png',
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'SiPaling UNDIP',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        "Sistem Informasi Perencanaan Akademik Lengkap dan Monitoring",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      FormLogin(
+                        formkey: _formkey,
+                        controllerEmail: _controllerEmail,
+                        controllerPassword: _controllerPassword,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class FormLogin extends StatefulWidget {
+class FormLogin extends StatelessWidget {
   const FormLogin({
     super.key,
     required GlobalKey<FormState> formkey,
@@ -66,86 +101,86 @@ class FormLogin extends StatefulWidget {
   final TextEditingController _controllerPassword;
 
   @override
-  State<FormLogin> createState() => _FormLoginState();
-}
-
-class _FormLoginState extends State<FormLogin> {
-  // late final String _errorMessage;
-  // @override
-  // void updateMessage(String newMessage) {
-  //   setState(() {
-  //     _errorMessage = newMessage;
-  //   });
-  // }
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: 200.0, vertical: 10.0),
-      child: Form(
-        key: widget._formkey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                label: Text('Email'),
-                border: OutlineInputBorder(),
+    return Form(
+      key: _formkey,
+      child: Column(
+        children: [
+          // Email field
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Email',
+              prefixIcon: const Icon(Icons.email),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              controller: widget._controllerEmail,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Masukkan Email";
-                }
-                String pattern =
-                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-                RegExp regex = RegExp(pattern);
-                if (!regex.hasMatch(value)) {
-                  return 'Masukkan format email yang valid';
-                }
-                return null;
-              },
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                label: Text('Password'),
-                border: OutlineInputBorder(),
+            controller: _controllerEmail,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your email";
+              }
+              String pattern =
+                  r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+              if (!RegExp(pattern).hasMatch(value)) {
+                return 'Enter a valid email address';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 15),
+          // Password field
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Password',
+              prefixIcon: const Icon(Icons.lock),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              obscureText: true,
-              controller: widget._controllerPassword,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Masukkan Password";
+            ),
+            obscureText: true,
+            controller: _controllerPassword,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter your password";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          // Sign in button
+          ElevatedButton(
+            onPressed: () async {
+              if (_formkey.currentState!.validate()) {
+                String email = _controllerEmail.text;
+                String password = _controllerPassword.text;
+                try {
+                  await AuthService().signIn(
+                      email: email, password: password, context: context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error signing in. Try again!'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
-                return null;
-              },
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-            const SizedBox(
-              height: 20,
+            child: const Text(
+              'Sign In',
+              style: TextStyle(fontSize: 18),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                if (widget._formkey.currentState!.validate()) {
-                  var email = widget._controllerEmail.text;
-                  var password = widget._controllerPassword.text;
-                  try {
-                    await AuthService().signIn(
-                        email: email, password: password, context: context);
-                  } catch (e) {
-                    print("error");
-                  }
-                }
-              },
-              child: const Text('Sign in'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+

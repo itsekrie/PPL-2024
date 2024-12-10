@@ -39,6 +39,7 @@ class Pertemuan {
     };
   }
 
+  @override
   String toString() {
     return 'Pertemuan{pertemuanke: $pertemuanke, starttime: $starttime, endtime: $endtime, day: $day, month: $month, year: $year, ruang: $ruang}';
   }
