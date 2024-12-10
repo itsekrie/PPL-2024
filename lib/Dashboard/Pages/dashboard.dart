@@ -281,7 +281,7 @@ class _DashboardButtonState extends State<DashboardButton> {
 
 
 class Button extends RouteButton {
-  const Button({
+  const Button({super.key, 
     required super.icon,
     required super.route,
     required super.content,
