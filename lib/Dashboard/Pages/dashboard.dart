@@ -138,6 +138,10 @@ class DashboardButtons extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
+                      DashboardButton(buttonName: "Rencana Akademik"),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ] else if (role == "Dekan") ...const [
                       DashboardButton(buttonName: "Ruangan"),
                       SizedBox(
@@ -292,6 +296,7 @@ class _DashboardButtonState extends State<DashboardButton> {
     return Button(icon: icon, route: route, content: widget.buttonName);
   }
 }
+
 
 class Button extends StatefulWidget {
   const Button({

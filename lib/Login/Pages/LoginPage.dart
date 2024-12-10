@@ -12,7 +12,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final _formkey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     // Mendapatkan ukuran layar
@@ -183,4 +182,3 @@ class FormLogin extends StatelessWidget {
     );
   }
 }
-
