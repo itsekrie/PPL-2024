@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:si_paling_undip/Monitoring/Service/monitoring_service.dart';
 import 'package:si_paling_undip/navbar.dart';
 
+
 class MonitoringPage extends StatefulWidget {
+
   const MonitoringPage({super.key});
 
   @override
@@ -120,6 +122,7 @@ class MonitoringContent extends StatelessWidget {
   }
 }
 
+
 Container welcomeinfo(double height, double width, BuildContext context) {
   return Container(
     width: width,
@@ -168,3 +171,4 @@ Widget _buildCell(String text) {
     ),
   );
 }
+

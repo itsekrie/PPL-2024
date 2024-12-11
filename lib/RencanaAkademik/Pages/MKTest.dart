@@ -129,7 +129,8 @@ class _MataKuliahTableState extends State<MataKuliahTable> {
                           saveButton(),
                         ],
                       ),
-                    ))
+                    ),
+                  ),
               ],
             ),
           ),
@@ -193,181 +194,156 @@ class _MataKuliahTableState extends State<MataKuliahTable> {
   }
 
   Table MethodTable(List<MataKuliah> mataKuliahList) {
-    return Table(
-      columnWidths: const {
-        0: FixedColumnWidth(40.0), // No
-        1: FlexColumnWidth(1.5), // Gedung
-        2: FlexColumnWidth(2), // Nama Ruang
-        3: FlexColumnWidth(1), // Kapasitas
-        4: FlexColumnWidth(1.5), // Aksi
-        5: FlexColumnWidth(1.5),
-        6: FlexColumnWidth(1.5),
-      },
-      children: [
-        const TableRow(
-          decoration: BoxDecoration(color: Colors.grey),
+  return Table(
+    border: TableBorder.all(
+      color: Colors.grey,
+      width: 1,
+    ),
+    columnWidths: const {
+      0: FixedColumnWidth(60.0), // No
+      1: FlexColumnWidth(1.5), // Gedung
+      2: FlexColumnWidth(2), // Nama Ruang
+      3: FlexColumnWidth(1), // Kapasitas
+      4: FlexColumnWidth(1.5), // Semester
+      5: FlexColumnWidth(1.5), // Jenis
+      6: FlexColumnWidth(1.5), // Aksi
+    },
+    children: [
+      TableRow(
+        decoration: BoxDecoration(
+          color: Colors.blue[800],
+        ),
+        children: [
+          for (var header in [
+            'No',
+            'Kode Mata Kuliah',
+            'Nama Mata Kuliah',
+            'SKS',
+            'Semester',
+            'Jenis',
+            'Aksi',
+          ])
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                header,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+        ],
+      ),
+      ...mataKuliahList.asMap().entries.map((entry) {
+        final i = entry.key;
+        final mk = entry.value;
+        return TableRow(
+          decoration: BoxDecoration(
+            color: i % 2 == 0 ? Colors.white : Colors.blue[50],
+          ),
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                'No',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                '${i + 1}',
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                'Kode Mata Kuliah',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                mk.kodeMK,
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                'Nama Mata Kuliah',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                mk.namaMK,
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                'SKS',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                '${mk.sks}',
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                'Semester',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                '${mk.semester}',
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                'Jenis',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                mk.jenis,
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Aksi',
-                style: TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      navigateToAddEditMataKuliahPage(mk: mk, isEdit: true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      MataKuliahService().deleteMataKuliah(mk.id);
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Hapus',
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
-        ),
-        ...mataKuliahList.asMap().entries.map((entry) {
-          final i = entry.key;
-          final mk = entry.value;
-          return TableRow(
-            decoration: BoxDecoration(
-              color: i % 2 == 0 ? Colors.white : Colors.grey[200],
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${i + 1}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  mk.kodeMK,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  mk.namaMK,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${mk.sks}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${mk.semester}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  mk.jenis,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          navigateToAddEditMataKuliahPage(mk: mk, isEdit: true);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Edit',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Logika untuk menghapus ruang
-                        MataKuliahService().deleteMataKuliah(mk.id);
-                        setState(() {});
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Hapus',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        }),
-      ],
-    );
-  }
+        );
+      }),
+    ],
+  );
+}
+
 }
 
 class TitleCard extends StatelessWidget {
@@ -377,7 +353,7 @@ class TitleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.all(16.0),
       child: Text(
         "MATA KULIAH",
@@ -434,127 +410,154 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF003399),
       appBar: AppBar(
         title: Text(widget.isEdit ? 'Edit Mata Kuliah' : 'Tambah Mata Kuliah'),
+        backgroundColor: const Color(0xFF003399),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 8,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: flutterForm.Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  Text(
-                    widget.isEdit ? 'Edit Mata Kuliah' : 'Tambah Mata Kuliah',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 0, 45, 136),
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue[50]!, Colors.blue[100]!],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 5,
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.isEdit ? 'Edit Mata Kuliah' : 'Tambah Mata Kuliah',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF003399),
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const Divider(thickness: 2),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildTextField(
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
                             controller: kodeController,
-                            label: 'Kode Mata Kuliah'),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildTextField(
+                            label: 'Kode MK',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildTextField(
                             controller: namaController,
-                            label: 'Nama Mata Kuliah'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildTextField(
-                          controller: sksController,
-                          label: 'SKS',
-                          keyboardType: TextInputType.number,
+                            label: 'Nama MK',
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildTextField(
-                          controller: semesterController,
-                          label: 'Semester',
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  DropdownButtonFormField<String?>(
-                    value: _jenis,
-                    decoration: InputDecoration(
-                      labelText: 'Jenis',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                      ],
                     ),
-                    items: ["Wajib", "Pilihan"]
-                        .map((_jenis) => DropdownMenuItem(
-                            value: _jenis, child: Text(_jenis)))
-                        .toList(),
-                    onChanged: (value) => setState(() => _jenis = value),
-                    validator: (value) => value == null
-                        ? 'Jenis mata kuliah harus dipilih'
-                        : null,
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        try {
-                          if (widget.isEdit) {
-                            await MataKuliahService().editMataKuliah(
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextField(
+                            controller: sksController,
+                            label: 'SKS',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildTextField(
+                            controller: semesterController,
+                            label: 'Semester',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      value: _jenis,
+                      decoration: InputDecoration(
+                        labelText: 'Jenis',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      items: ['Wajib', 'Pilihan']
+                          .map((jenis) => DropdownMenuItem(
+                                value: jenis,
+                                child: Text(jenis),
+                              ))
+                          .toList(),
+                      onChanged: (value) => setState(() => _jenis = value),
+                      validator: (value) => value == null
+                          ? 'Jenis mata kuliah harus dipilih'
+                          : null,
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            if (widget.isEdit) {
+                              await MataKuliahService().editMataKuliah(
                                 widget.mataKuliah!.id,
                                 kodeController.text,
                                 namaController.text,
                                 int.tryParse(sksController.text),
                                 int.tryParse(semesterController.text),
-                                _jenis!);
-                            setState(() {});
-                          } else {
-                            await MataKuliahService().addMataKuliah(
+                                _jenis!,
+                              );
+                            } else {
+                              await MataKuliahService().addMataKuliah(
                                 kodeController.text,
                                 namaController.text,
                                 int.tryParse(semesterController.text),
                                 int.tryParse(sksController.text),
-                                _jenis!);
+                                _jenis!,
+                              );
+                            }
+                            Navigator.of(context).pop();
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
                           }
-                          Navigator.of(context)
-                              .pop(); // Kembali ke halaman sebelumnya
-                        } catch (e) {
-                          // Tampilkan pesan kesalahan
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString())),
-                          );
                         }
-                      }
-                    },
-                    icon: const Icon(Icons.save, color: Colors.white),
-                    label: Text(widget.isEdit ? 'Update' : 'Tambah',
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      textStyle:
-                          const TextStyle(fontSize: 18, color: Colors.white),
+                      },
+                      icon: const Icon(Icons.save, color: Colors.white),
+                      label: Text(
+                        widget.isEdit ? 'Update' : 'Tambah',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF003399),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 24,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -573,7 +576,14 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        labelStyle: const TextStyle(color: Color(0xFF003399)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Color(0xFF003399), width: 2),
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {

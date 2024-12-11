@@ -1,9 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:si_paling_undip/RencanaAkademik/Services/RencanaAkademikService.dart';
 
 class MataKuliah {
-  String no;
+  String id;
   String namaMK;
   String kodeMK;
   int sks;
@@ -11,7 +12,7 @@ class MataKuliah {
   String jenis;
 
   MataKuliah(
-      this.no, this.kodeMK, this.namaMK, this.sks, this.semester, this.jenis);
+      this.id, this.kodeMK, this.namaMK, this.sks, this.semester, this.jenis);
 }
 
 class MataKuliahService {
@@ -27,6 +28,7 @@ class MataKuliahService {
         .get();
     return snapshot.docs.map((doc) {
       final data = doc.data();
+      print(data);
       return MataKuliah(
         doc.id,
         data['KodeMK'],
@@ -43,7 +45,7 @@ class MataKuliahService {
         .collection('Mata_Kuliah')
         .doc(Departemen)
         .collection("Mata Kuliah List")
-        .where('Nama_MK', isEqualTo: nama)
+        .where('NamaMK', isEqualTo: nama)
         .get();
     return snapshot.docs.isNotEmpty;
   }
@@ -51,22 +53,21 @@ class MataKuliahService {
   Future<void> addMataKuliah(
     String kodeMK,
     String namaMK,
-    String semester,
-    String SKS,
+    var semester,
+    var SKS,
     String jenis,
-    String departemen,
-    String sem,
   ) async {
+    var departemen = await Rencanaakademikservice().getDepartemen();
     if (await isMataKuliahExists(namaMK, departemen)) {
-      throw Exception('Ruang dengan nama $namaMK sudah ada.');
+      throw Exception('Mata Kuliah dengan nama $namaMK sudah ada.');
     }
     await _firestore
         .collection('Mata_Kuliah')
         .doc(departemen)
-        .collection(sem)
+        .collection("Mata Kuliah List")
         .add({
-      'Kode_MK': kodeMK,
-      'Nama_MK': namaMK,
+      'KodeMK': kodeMK,
+      'NamaMK': namaMK,
       'Semester': semester,
       'SKS': SKS,
       'Jenis': jenis,
@@ -77,22 +78,32 @@ class MataKuliahService {
     String id,
     String kodeMK,
     String namaMK,
-    String SKS,
-    String semester,
+    var SKS,
+    var semester,
     String jenis,
-    String departemen,
   ) async {
-    if (await isMataKuliahExists(namaMK, departemen)) {
+    var departemen = await Rencanaakademikservice().getDepartemen();
+    final snapshot = await _firestore
+        .collection('Mata_Kuliah')
+        .doc(departemen)
+        .collection("Mata Kuliah List")
+        .where('NamaMK', isEqualTo: namaMK)
+        .where(FieldPath.documentId,
+            isNotEqualTo: id) // Pastikan tidak memeriksa dokumen yang sama
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
       throw Exception('Ruang dengan nama $namaMK sudah ada.');
     }
+
     await _firestore
         .collection('Mata_Kuliah')
         .doc(departemen)
         .collection("Mata Kuliah List")
         .doc(id)
         .update({
-      'Kode_MK': kodeMK,
-      'Nama_MK': namaMK,
+      'KodeMK': kodeMK,
+      'NamaMK': namaMK,
       'SKS': SKS,
       'Semester': semester,
       'Jenis': jenis,
@@ -101,13 +112,12 @@ class MataKuliahService {
 
   Future<void> deleteMataKuliah(
     String id,
-    String departemen,
-    String sem,
   ) async {
+    var departemen = await Rencanaakademikservice().getDepartemen();
     await _firestore
         .collection('Mata_Kuliah')
         .doc(departemen)
-        .collection(sem)
+        .collection("Mata Kuliah List")
         .doc(id)
         .delete();
   }

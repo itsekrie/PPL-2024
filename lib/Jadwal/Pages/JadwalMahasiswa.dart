@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 import 'package:si_paling_undip/navbar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../Services/JadwalService.dart';
 
 
 class MyWidget extends StatefulWidget {

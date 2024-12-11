@@ -17,7 +17,9 @@ import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import 'package:si_paling_undip/Dashboard/Pages/Dashboard.dart';
 import 'package:si_paling_undip/Login/Pages/LoginPage.dart';
 import 'package:si_paling_undip/Monitoring/Pages/MonitoringPage.dart';
+import 'package:si_paling_undip/RencanaAkademik/Pages/MKTest.dart';
 import 'package:si_paling_undip/RencanaAkademik/Pages/MataKuliah.dart';
+import 'package:si_paling_undip/RencanaAkademik/Pages/RKTest.dart';
 import 'package:si_paling_undip/RencanaAkademik/Pages/RencanaAkademik.dart';
 import 'package:si_paling_undip/Ruangan/Pages/AccRuang.dart';
 import 'package:si_paling_undip/Ruangan/Pages/Ruang.dart';
@@ -82,31 +84,45 @@ final GoRouter _router = GoRouter(
                         body: Center(child: Text('Invalid role')),
                       );
                     }
-                  }
-                });
-          },
-        ),
-        GoRoute(
-          path: 'Ruangan',
-          name: 'Ruangan',
-          builder: (context, state) => const ViewRuangOnly(),
-        ),
-        GoRoute(
-          path: 'Jadwal',
-          name: 'Jadwal',
-          builder: (context, state) => const JadwalMahasiswa(),
-        ),
-      ],
-    ),
-  ],
-  redirect: (context, state) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      return '/login';
-    }
-    return null;
-  },
-);
+
+                  });
+            },
+          ),
+          GoRoute(
+            path: 'Ruangan',
+            builder: (context, state) => const ViewRuangOnly(),
+          ),
+          GoRoute(
+            path: 'assignruang',
+            builder: (context, state) => const AssignRuang(),
+          ),
+          GoRoute(
+            path: 'accruang',
+            builder: (context, state) => const AccRuang(),
+          ),
+          GoRoute(path: 'KHS', builder: (context, state) => const KHS()),
+          GoRoute(
+              path: 'RencanaAkademik',
+              builder: (context, state) => const RencanaAkademik()),
+          GoRoute(
+            path: 'rk',
+            builder: (context, state) => const Rktest(),
+          ),
+          GoRoute(
+            path: 'MataKuliah',
+            builder: (context, state) => const Mktest(),
+          )
+        ],
+      ),
+    ],
+    redirect: (context, state) async {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return '/login';
+      }
+      return null;
+    });
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
