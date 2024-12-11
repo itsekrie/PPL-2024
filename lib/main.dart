@@ -34,91 +34,79 @@ void main() async {
 }
 
 final GoRouter _router = GoRouter(
-    routes: <RouteBase>[
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const Dashboard(),
-        routes: [
-          GoRoute(
-            path: 'login',
-            builder: (context, state) => const LoginPage(),
-            redirect: (context, state) async {
-              final user = FirebaseAuth.instance.currentUser;
-              if (user == null) {
-                return null;
-              }
-              return '/';
-            },
-          ),
-          GoRoute(
-            path: "Role",
-            builder: (context, state) => const Role(),
-          ),
-          GoRoute(
-            path: 'Monitoring',
-            builder: (context, state) => const MonitoringPage(),
-          ),
-          GoRoute(
-            path: 'IRS',
-            builder: (context, state) {
-              return FutureBuilder<String?>(
-                  future: AuthService().currentRole(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Scaffold(
-                        body: Center(child: CircularProgressIndicator()),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Scaffold(
-                        body: Center(
-                            child:
-                                Text('Error loading role: ${snapshot.error}')),
-                      );
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      name: 'Dashboard',
+      builder: (context, state) => const Dashboard(),
+      routes: [
+        GoRoute(
+          path: 'login',
+          name: 'Login',
+          builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: 'Role',
+          name: 'Role Selection',
+          builder: (context, state) => const Role(),
+        ),
+        GoRoute(
+          path: 'Monitoring',
+          name: 'Monitoring',
+          builder: (context, state) => const MonitoringPage(),
+        ),
+        GoRoute(
+          path: 'IRS',
+          name: 'IRS',
+          builder: (context, state) {
+            return FutureBuilder<String?>(
+                future: AuthService().currentRole(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Scaffold(
+                      body: Center(child: CircularProgressIndicator()),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Scaffold(
+                      body: Center(
+                          child: Text('Error loading role: ${snapshot.error}')),
+                    );
+                  } else {
+                    final role = snapshot.data;
+                    if (role == 'Dosen') {
+                      return const IRSDosen();
+                    } else if (role == 'Mahasiswa') {
+                      return const IRSMahasiswa();
                     } else {
-                      final role = snapshot.data;
-                      if (role == 'Dosen') {
-                        return const IRSDosen();
-                      } else if (role == 'Mahasiswa') {
-                        return const IRSMahasiswa();
-                      }
-                      // else if (role == 'Dosen') {
-                      //   return const IRSMahasiswa();
-                      // }
-                      else {
-                        return const Scaffold(
-                          body: Center(child: Text('Invalid role')),
-                        );
-                      }
+                      return const Scaffold(
+                        body: Center(child: Text('Invalid role')),
+                      );
                     }
-                  });
-            },
-          ),
-          GoRoute(
-            path: 'Ruangan',
-            builder: (context, state) => const ViewRuangOnly(),
-          ),
-          GoRoute(
-            path: 'assignruang',
-            builder: (context, state) => const AssignRuang(),
-          ),
-          GoRoute(
-            path: 'accruang',
-            builder: (context, state) => const AccRuang(),
-          ),
-          GoRoute(path: 'KHS', builder: (context, state) => const KHS()),
-          GoRoute(
-              path: 'RencanaAkademik',
-              builder: (context, state) => const RencanaAkademik()),
-        ],
-      ),
-    ],
-    redirect: (context, state) async {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        return '/login';
-      }
-      return null;
-    });
+                  }
+                });
+          },
+        ),
+        GoRoute(
+          path: 'Ruangan',
+          name: 'Ruangan',
+          builder: (context, state) => const ViewRuangOnly(),
+        ),
+        GoRoute(
+          path: 'Jadwal',
+          name: 'Jadwal',
+          builder: (context, state) => const JadwalMahasiswa(),
+        ),
+      ],
+    ),
+  ],
+  redirect: (context, state) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return '/login';
+    }
+    return null;
+  },
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
+import 'package:si_paling_undip/Jadwal/Services/PertemuanService.dart';
 import 'package:si_paling_undip/Login/Services/auth_service.dart';
 import 'package:intl/intl.dart';
 import 'package:si_paling_undip/widget/route_button.dart';
@@ -18,6 +20,31 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
+    Jadwal dummyJadwal = const Jadwal(
+      namamatkul: "Pemrograman Mobile",
+      kodematkul: "IF1234",
+      mahasiswa: ["John Doe", "Jane Doe", "Ali"],
+      kelas: "B",
+      ruang: "E101",
+      day: "Jumat", // Tanggal jadwal
+      startjam: 8,
+      startmenit: 0,
+      endjam: 10,
+      endmenit: 0,
+      pertemuanList: [], // Akan diisi oleh hasil dari `addPertemuan`
+    );
+
+    Pertemuan dummyPertemuan = const Pertemuan(
+      pertemuanke: 1,
+      starttime: 8,
+      startmenit: 0,
+      endtime: 10,
+      endmenit: 0,
+      day: 2,
+      month: 8,
+      year: 2024,
+      ruang: "E101",
+    );
 
     return FutureBuilder<Map<String, dynamic>?>(
       future: AuthService().getCurrUser(),
@@ -49,6 +76,12 @@ class DashboardState extends State<Dashboard> {
                   child: Column(
                     children: [
                       WelcomeInfo(height, width, context, nama),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       jadwalService.addJadwalWithPertemuan(
+                      //           dummyJadwal, dummyPertemuan);
+                      //     },
+                      //     child: const Text('data')),
                       DashboardButtons(
                         width: width,
                         role: role,
@@ -294,7 +327,6 @@ class _DashboardButtonState extends State<DashboardButton> {
 }
 
 class Button extends RouteButton {
-
   const Button({
     super.key,
     required super.icon,

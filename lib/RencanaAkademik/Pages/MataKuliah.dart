@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:si_paling_undip/RencanaAkademik/Services/MataKuliahService.dart';
+import 'package:si_paling_undip/navbar.dart';
 
 class ViewMK extends StatefulWidget {
   const ViewMK({super.key});
@@ -53,10 +54,7 @@ class _ViewMKState extends State<ViewMK> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-        title: const Text('View Mata Kuliah'),
-      ),
+      appBar: const MyNavbar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,7 +391,6 @@ class AddEditMataKuliahPage extends StatefulWidget {
   const AddEditMataKuliahPage(
       {required this.isEdit, this.mataKuliah, super.key});
 
-
   @override
   _AddEditMataKuliahPageState createState() => _AddEditMataKuliahPageState();
 }
@@ -528,12 +525,13 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: Text(widget.isEdit ? 'Update' : 'Tambah',
-                    style: const TextStyle(fontSize: 18, color: Colors.white)),
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 0, 45, 136),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    textStyle:
-                        const TextStyle(fontSize: 18, color: Colors.white),
+                      backgroundColor: const Color.fromARGB(255, 0, 45, 136),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      textStyle:
+                          const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ],

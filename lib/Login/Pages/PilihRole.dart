@@ -12,8 +12,8 @@ class Role extends StatefulWidget {
 
 class _RoleState extends State<Role> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  String roleA = "Kaprodi";
-  String roleB = "Dosen";
+  String roleA = "placeholder";
+  String roleB = "placeholder";
   String uid = "placeholder";
 
   @override
@@ -23,88 +23,63 @@ class _RoleState extends State<Role> {
   }
 
   Future<void> _fetchData() async {
-    User? user = _firebaseAuth.currentUser ;
+    User? user = _firebaseAuth.currentUser;
     if (user != null) {
       uid = user.uid;
       try {
         List<dynamic>? roles = await AuthService().getRoles(uid);
-        if (roles.isNotEmpty) {
+        if (roles != null && roles.length >= 2) {
           setState(() {
             roleA = roles[0];
-            roleB = roles.length > 1 ? roles[1] : "Dosen";
+            roleB = roles[1];
           });
+        } else {
+          // Handle cases where roles list is empty or has less than 2 elements
+          print("Roles list is empty or has less than 2 elements.");
         }
       } catch (e) {
+        // Handle errors during data fetching
         print("Error fetching roles: $e");
       }
     } else {
-      print("User  is not logged in.");
+      // Handle cases where user is not logged in
+      print("User is not logged in.");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Background Gradient
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('lib/assets/image/undipkampus.jpg'),
-                fit: BoxFit.cover,
-              ),
+          const Text(
+            "Masuk Sebagai",
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          // Foreground content
-          Center(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.all(30),
-              constraints: const BoxConstraints(maxWidth: 500),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    blurRadius: 15,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RoleButton(
+                icon: Icons.school,
+                role: roleA,
+                uid: uid,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Masuk Sebagai",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RoleButton(
-                        icon: Icons.school,
-                        role: roleA,
-                        uid: uid,
-                      ),
-                      const SizedBox(width: 16),
-                      RoleButton(
-                        icon: Icons.work,
-                        role: roleB,
-                        uid: uid,
-                      ),
-                    ],
-                  ),
-                ],
+              const SizedBox(
+                width: 50,
               ),
-            ),
+              RoleButton(
+                icon: Icons.school,
+                role: roleB,
+                uid: uid,
+              ),
+            ],
           ),
         ],
       ),
@@ -112,11 +87,10 @@ class _RoleState extends State<Role> {
   }
 }
 
-class RoleButton extends StatefulWidget {
+class RoleButton extends StatelessWidget {
   final IconData icon;
   final String role;
   final String uid;
-
   const RoleButton({
     required this.icon,
     required this.role,
@@ -125,64 +99,47 @@ class RoleButton extends StatefulWidget {
   });
 
   @override
-  State<RoleButton> createState() => _RoleButtonState();
-}
-
-class _RoleButtonState extends State<RoleButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedScale(
-        scale: _isHovered ? 1.1 : 1.0,
-        duration: const Duration(milliseconds: 200),
-        child: GestureDetector(
-          onTap: () async {
-            await AuthService().setRole(widget.uid, widget.role);
-            context.go("/");
-          },
-          child: Container(
-            width: 140,
-            height: 140,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 0, 93, 191),
-                  Color.fromARGB(255, 0, 45, 136),
-                ],
-                begin: Alignment.topLeft,
+    return SizedBox(
+      width: 340,
+      height: 340,
+      child: ElevatedButton.icon(
+        style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith<Color>(
+              (states) {
+                if (states.contains(WidgetState.hovered)) {
+                  return const Color.fromARGB(
+                      255, 2, 67, 197); // Warna saat hover
+                }
+                return const Color.fromARGB(255, 0, 45, 136); // Warna default
+              },
+            ),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
               ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 10,
-                  offset: const Offset(2, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  widget.icon,
-                  color: Colors.white,
-                  size: 60,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  widget.role,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+            )),
+        onPressed: () async {
+          await AuthService().setRole(uid, role);
+          context.go("/");
+        },
+        label: DefaultTextStyle.merge(
+          style: const TextStyle(
+              color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: Colors.white,
+                size: 50,
+              ),
+              const SizedBox(
+                width: 7,
+              ),
+              Text(role),
+            ],
           ),
         ),
       ),

@@ -141,4 +141,19 @@ class AuthService {
       rethrow;
     }
   }
+
+  Future<String> getUserName(String uid) async {
+    try {
+      // Assuming you have a 'Users' collection with user documents
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection('Users').doc(uid).get();
+
+      // Adjust the field name based on how you store the user's name in Firestore
+      // Common field names might be 'name', 'fullName', or 'displayName'
+      return userSnapshot.get('Nama') ?? 'Unknown User';
+    } catch (e) {
+      print('Error getting username: $e');
+      return 'Unknown User';
+    }
+  }
 }

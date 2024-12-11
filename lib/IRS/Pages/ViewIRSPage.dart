@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:si_paling_undip/navbar.dart';
 
 class IRSMahasiswa extends StatefulWidget {
   const IRSMahasiswa({super.key});
@@ -9,16 +10,17 @@ class IRSMahasiswa extends StatefulWidget {
 
 class _IRSMahasiswaState extends State<IRSMahasiswa> {
   Map<String, List<Matkul>> jadwalIRS = {
-  'Senin': [],
-  'Selasa': [],
-  'Rabu': [],
-  'Kamis': [],
-  'Jumat': [],
-};
+    'Senin': [],
+    'Selasa': [],
+    'Rabu': [],
+    'Kamis': [],
+    'Jumat': [],
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const MyNavbar(),
       body: SingleChildScrollView(
         child: Container(
           color: const Color.fromARGB(255, 205, 205, 205),
@@ -41,7 +43,6 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
                       onUpdate: () => setState(() {}),
                     ),
                     const SizedBox(height: 16),
-
                   ],
                 ),
               ),
@@ -61,8 +62,6 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
     );
   }
 }
-
-
 
 class IRSCounter extends StatelessWidget {
   const IRSCounter({super.key});
@@ -97,7 +96,11 @@ class Matkul {
   final String deskripsi;
   final String hari;
 
-  Matkul({required this.id, required this.nama, required this.deskripsi, required this.hari});
+  Matkul(
+      {required this.id,
+      required this.nama,
+      required this.deskripsi,
+      required this.hari});
 }
 
 class SearchMatkul extends StatefulWidget {
@@ -114,16 +117,24 @@ class SearchMatkul extends StatefulWidget {
   _SearchMatkulState createState() => _SearchMatkulState();
 }
 
-
-
-
 class _SearchMatkulState extends State<SearchMatkul> {
   List<Matkul> daftarMatkul = [
-    Matkul(id: 1, nama: 'Matematika', deskripsi: 'Dasar-dasar Matematika', hari: 'Senin'),
-    Matkul(id: 2, nama: 'Fisika', deskripsi: 'Dasar-dasar Fisika', hari: 'Senin'),
-    Matkul(id: 3, nama: 'Kimia', deskripsi: 'Dasar-dasar Kimia', hari: 'Selasa'),
-    Matkul(id: 4, nama: 'Biologi', deskripsi: 'Dasar-dasar Biologi', hari: 'Rabu'),
-    Matkul(id: 5, nama: 'Pemrograman', deskripsi: 'Dasar-dasar Pemrograman', hari: 'Kamis'),
+    Matkul(
+        id: 1,
+        nama: 'Matematika',
+        deskripsi: 'Dasar-dasar Matematika',
+        hari: 'Senin'),
+    Matkul(
+        id: 2, nama: 'Fisika', deskripsi: 'Dasar-dasar Fisika', hari: 'Senin'),
+    Matkul(
+        id: 3, nama: 'Kimia', deskripsi: 'Dasar-dasar Kimia', hari: 'Selasa'),
+    Matkul(
+        id: 4, nama: 'Biologi', deskripsi: 'Dasar-dasar Biologi', hari: 'Rabu'),
+    Matkul(
+        id: 5,
+        nama: 'Pemrograman',
+        deskripsi: 'Dasar-dasar Pemrograman',
+        hari: 'Kamis'),
   ];
 
   Matkul? selectedMatkul;
@@ -147,14 +158,13 @@ class _SearchMatkulState extends State<SearchMatkul> {
                 }).toList(),
                 onSelected: (selected) {
                   if (selected != null) {
-                  setState(() {
-                    widget.jadwalIRS[selected.hari]?.add(selected);
-                    widget.onUpdate();
-                  });
-                }
-                    selectedMatkul = selected;
-                  },
-                
+                    setState(() {
+                      widget.jadwalIRS[selected.hari]?.add(selected);
+                      widget.onUpdate();
+                    });
+                  }
+                  selectedMatkul = selected;
+                },
               ),
             ),
             if (selectedMatkul != null)
@@ -184,7 +194,6 @@ class _SearchMatkulState extends State<SearchMatkul> {
 //   ];
 // }
 
-
 class EntryIRS extends StatelessWidget {
   final Map<String, List<Matkul>> jadwalIRS;
 
@@ -213,42 +222,72 @@ class EntryIRS extends StatelessWidget {
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Senin", style: TextStyle(fontSize: 24))),
+                          child: Center(
+                              child: Text("Senin",
+                                  style: TextStyle(fontSize: 24))),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Selasa", style: TextStyle(fontSize: 24))),
+                          child: Center(
+                              child: Text("Selasa",
+                                  style: TextStyle(fontSize: 24))),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Rabu", style: TextStyle(fontSize: 24))),
+                          child: Center(
+                              child:
+                                  Text("Rabu", style: TextStyle(fontSize: 24))),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Kamis", style: TextStyle(fontSize: 24))),
+                          child: Center(
+                              child: Text("Kamis",
+                                  style: TextStyle(fontSize: 24))),
                         ),
                       ),
                       TableCell(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Jumat", style: TextStyle(fontSize: 24))),
+                          child: Center(
+                              child: Text("Jumat",
+                                  style: TextStyle(fontSize: 24))),
                         ),
                       ),
                     ],
                   ),
                   TableRow(
                     children: [
-                      TableCell(child: Column(children: jadwalIRS['Senin']!.map((matkul) => Text(matkul.nama)).toList())),
-                      TableCell(child: Column(children: jadwalIRS['Selasa']!.map((matkul) => Text(matkul.nama)).toList())),
-                      TableCell(child: Column(children: jadwalIRS['Rabu']!.map((matkul) => Text(matkul.nama)).toList())),
-                      TableCell(child: Column(children: jadwalIRS['Kamis']!.map((matkul) => Text(matkul.nama)).toList())),
-                      TableCell(child: Column(children: jadwalIRS['Jumat']!.map((matkul) => Text(matkul.nama)).toList())),               
+                      TableCell(
+                          child: Column(
+                              children: jadwalIRS['Senin']!
+                                  .map((matkul) => Text(matkul.nama))
+                                  .toList())),
+                      TableCell(
+                          child: Column(
+                              children: jadwalIRS['Selasa']!
+                                  .map((matkul) => Text(matkul.nama))
+                                  .toList())),
+                      TableCell(
+                          child: Column(
+                              children: jadwalIRS['Rabu']!
+                                  .map((matkul) => Text(matkul.nama))
+                                  .toList())),
+                      TableCell(
+                          child: Column(
+                              children: jadwalIRS['Kamis']!
+                                  .map((matkul) => Text(matkul.nama))
+                                  .toList())),
+                      TableCell(
+                          child: Column(
+                              children: jadwalIRS['Jumat']!
+                                  .map((matkul) => Text(matkul.nama))
+                                  .toList())),
                     ],
                   ),
                 ],
@@ -286,42 +325,61 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
           child: const Padding(
             padding: EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Jarak antara kolom
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween, // Jarak antara kolom
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Align left
                   children: [
-                    Text("Nama", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("NIM", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("Semester", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("Nama",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("NIM",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("Semester",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                     Spacer(),
-                    Text("IP Semester Sebelumnya", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("SKS Kumulatif", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("Maksimum SKS", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("IP Semester Sebelumnya",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("SKS Kumulatif",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("Maksimum SKS",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                   ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Align left
                   children: [
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text(":",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text(":",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text(":",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                     Spacer(),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text(":", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text(":",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text(":",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text(":",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                   ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Align right
                   children: [
-                    Text("Yusuf Zaenul Mustofa", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("24060122120021", style: TextStyle(color: Color.fromARGB(255, 0 , 0, 0))),
-                    Text("5", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("Yusuf Zaenul Mustofa",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("24060122120021",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("5",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                     Spacer(),
-                    Text("3.6", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("87", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-                    Text("24", style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("3.6",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("87",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+                    Text("24",
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                   ],
                 ),
               ],
@@ -332,4 +390,3 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
     );
   }
 }
-

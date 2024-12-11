@@ -1,68 +1,77 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'PertemuanService.dart';
 
 class Jadwal {
-  final String kelas;
-  // final int startjam, endjam;
-  // final String ruang;
+  final String kelas, ruang, namamatkul, kodematkul, day;
+  final int startjam, startmenit, endjam, endmenit;
   final List<String> pertemuanList;
-  final List<String> pengampu;
   final List<String> mahasiswa;
 
   const Jadwal({
-    required this.kelas,
-    // required this.startjam,
-    // required this.endjam,
-    // required this.ruang,
-    required this.pengampu,
+    required this.namamatkul,
+    required this.kodematkul,
     required this.mahasiswa,
+    required this.kelas,
+    required this.ruang,
+    required this.day,
+    required this.startjam,
+    required this.startmenit,
+    required this.endjam,
+    required this.endmenit,
     required this.pertemuanList,
   });
 
   factory Jadwal.fromJson(Map<String, dynamic> json) {
-    var pertemuanJsonList = json['pertemuan'] as List;
-    var pengampuJsonList = json['pengampu'] as List;
+    var pertemuanJsonList = json['pertemuanList'] as List;
     var mahasiswaJsonList = json['mahasiswa'] as List;
 
     List<String> pertemuanList = pertemuanJsonList.cast<String>();
 
-    List<String> pengampuList = pengampuJsonList.cast<String>();
-
     List<String> mahasiswapuList = mahasiswaJsonList.cast<String>();
 
     return Jadwal(
-      kelas: json['kelas'],
-      // startjam: json['startjam'],
-      // endjam: json['endjam'],
-      // ruang: json['ruang'],
-      pengampu: pengampuList,
+      namamatkul: json['namamatkul'],
+      kodematkul: json['kodematkul'],
       mahasiswa: mahasiswapuList,
+      kelas: json['kelas'],
+      ruang: json['ruang'],
+      day: json['day'],
+      startjam: json['startjam'],
+      startmenit: json['startmenit'],
+      endjam: json['endjam'],
+      endmenit: json['endmenit'],
       pertemuanList: pertemuanList,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'kelas': kelas,
-      // 'startjam': startjam,
-      // 'endjam': endjam,
-      // 'ruang': ruang,
-      'pertemuanList': pertemuanList,
-      'pengampu': pengampu,
+      'namamatkul': namamatkul,
+      'kodematkul': kodematkul,
       'mahasiswa': mahasiswa,
+      'kelas': kelas,
+      'ruang': ruang,
+      'day': day,
+      'startjam': startjam,
+      'startmenit': startmenit,
+      'endjam': endjam,
+      'endmenit': endmenit,
+      'pertemuanList': pertemuanList,
     };
   }
 
   @override
   String toString() {
-    return 'Jadwal(mahasiswa: $mahasiswa, pengampu: $pengampu, kelas: $kelas, pertemuanList: $pertemuanList)';
+    return 'Jadwal(namamatkul: $namamatkul,  kodematkul: $kodematkul,mahasiswa: $mahasiswa,  kelas: $kelas, ruang: $ruang, day: $day, startjam: $startjam, startmenit: $startmenit, endjam: $endjam, endtime: $endmenit ,pertemuanList: $pertemuanList,)';
   }
 }
 
 class JadwalService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final Pertemuanservice _pertemuanService = Pertemuanservice();
 
   Future<List<Jadwal>> getJadwal() async {
@@ -85,13 +94,17 @@ class JadwalService {
 
     // Membuat objek Jadwal dengan foreign key ke koleksi Pertemuan
     Jadwal jadwal = Jadwal(
-      kelas: inputJadwal.kelas,
-      // startjam: inputJadwal.startjam,
-      // endjam: inputJadwal.endjam,
-      // ruang: inputJadwal.ruang,
-      pertemuanList: pertemuanList,
+      namamatkul: inputJadwal.namamatkul,
+      kodematkul: inputJadwal.kodematkul,
       mahasiswa: inputJadwal.mahasiswa,
-      pengampu: inputJadwal.pengampu,
+      kelas: inputJadwal.kelas,
+      ruang: inputJadwal.ruang,
+      day: inputJadwal.day,
+      startjam: inputJadwal.startjam,
+      startmenit: inputJadwal.startmenit,
+      endjam: inputJadwal.endjam,
+      endmenit: inputJadwal.endmenit,
+      pertemuanList: pertemuanList,
     );
 
     // Simpan Jadwal ke Firestore
@@ -99,10 +112,33 @@ class JadwalService {
   }
 
   Future<List<Appointment>> getPertemuanAsAppointments(String jadwalId) async {
+    final userID = _firebaseAuth.currentUser!.uid;
     try {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await _firestore.collection('User').doc(userID).get();
+
+      Map<String, dynamic>? User = userSnapshot.data();
+
+      DocumentSnapshot jadwalSnapshot =
+          await _firestore.collection('Jadwal').doc(jadwalId).get();
+      final jadwalData = jadwalSnapshot.data();
+
+      Jadwal jadwal = Jadwal.fromJson(jadwalData as Map<String, dynamic>);
+
       // Mendapatkan data Pertemuan dari Jadwal
-      List<Pertemuan> pertemuanList =
-          await _pertemuanService.getPertemuanFromJadwal(jadwalId);
+      List<Pertemuan> pertemuanList = [];
+      for (String pertemuanId in jadwal.pertemuanList) {
+        DocumentSnapshot pertemuanSnapshot =
+            await _firestore.collection('Pertemuan').doc(pertemuanId).get();
+        if (pertemuanSnapshot.exists) {
+          Pertemuan pertemuan = Pertemuan.fromJson(
+              pertemuanSnapshot.data() as Map<String, dynamic>);
+          pertemuanList.add(pertemuan);
+          // Mencetak informasi pertemuan
+        } else {
+          print('Pertemuan with ID $pertemuanId not found');
+        }
+      }
 
       // Konversi Pertemuan ke Appointment
       List<Appointment> appointments = pertemuanList.map((pertemuan) {
@@ -111,17 +147,19 @@ class JadwalService {
             pertemuan.year,
             pertemuan.month,
             pertemuan.day,
-            pertemuan.starttime ~/ 100, // Jam
-            pertemuan.starttime % 100, // Menit
+            pertemuan.starttime,
+            0,
+            0,
           ),
           endTime: DateTime(
             pertemuan.year,
             pertemuan.month,
             pertemuan.day,
-            pertemuan.endtime ~/ 100, // Jam
-            pertemuan.endtime % 100, // Menit
+            pertemuan.endtime,
+            0,
+            0,
           ),
-          subject: 'Pertemuan ${pertemuan.pertemuanke}',
+          subject: '${jadwal.namamatkul} - ${pertemuan.ruang}',
           location: pertemuan.ruang,
           color: Colors.blue, // Warna default
           isAllDay: false,
