@@ -21,8 +21,9 @@ class MatkulRK {
   String id;
   String kodeMK;
   String namaMK;
-  String sks;
-  String semester;
+  int sks;
+  int semester;
+  String jenis;
   bool lower;
   List pengampu;
   List kelas;
@@ -38,6 +39,7 @@ class MatkulRK {
       this.namaMK,
       this.sks,
       this.semester,
+      this.jenis,
       this.lower,
       this.pengampu,
       this.kelas,
@@ -61,9 +63,20 @@ class Rencanaakademikservice {
 
     return departemen;
   }
-  // Future<bool> isScheduleExist(){
-  //   r
-  // }
+
+  Future<String> getRencanaID() async {
+    final departemen = await getDepartemen();
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection("Rencana Akademik").doc("Master").get();
+    Map<String, dynamic>? data = snapshot.data();
+    if (data != null) {
+      final rencanaID = data[departemen];
+      return rencanaID;
+    } else {
+      return "VRPr7a5FeAS4pB40jvDl";
+    }
+  }
 
   Future<void> addRoomToSchedule(
       String id, String namaRuang, int kapasitas, String rencanaId) async {
@@ -79,7 +92,7 @@ class Rencanaakademikservice {
       "Selasa": [],
       "Rabu": [],
       "Kamis": [],
-      "Jum'at": [],
+      "Jumat": [],
     });
   }
 
@@ -90,7 +103,7 @@ class Rencanaakademikservice {
     for (var i = 0; i < rooms.length; i++) {
       try {
         DocumentSnapshot<Map<String, dynamic>> snapshot =
-            await _firestore.collection("RuangRK").doc(rooms[i]).get();
+            await _firestore.collection("Ruang").doc(rooms[i]).get();
         print(rooms[i].toString());
         if (!snapshot.exists) {
           var room_data =
@@ -228,6 +241,65 @@ class Rencanaakademikservice {
         list: list, hari: hari, ruangId: ruangId, rencanaId: rencanaId);
 
     print(list);
+  }
+
+  Future<void> addMatkultoRK({
+    required var id,
+    required String kodeMK,
+    required String namaMK,
+    required int sks,
+    required int semester,
+    required String jenis,
+  }) async {
+    final departemen = await getRencanaID();
+    _firestore
+        .collection("Rencana Akademik")
+        .doc(departemen)
+        .collection("Mata Kuliah")
+        .doc(id)
+        .set({
+      "KodeMK": kodeMK,
+      "NamaMK": namaMK,
+      "SKS": sks,
+      "Semester": semester,
+      "Jenis": jenis,
+      "Lower": false,
+      "Pengampu": [],
+      "Kelas": [],
+      "Senin": [],
+      "Selasa": [],
+      "Rabu": [],
+      "Kamis": [],
+      "Jumat": [],
+    });
+  }
+
+  Future<void> batchAddMatkul(String Sem) async {
+    final departemen = await getDepartemen();
+    final data =
+        await _firestore.collection("Mata_Kuliah").doc(departemen).get();
+    final matkul = data[Sem];
+    for (var i = 0; i < matkul.length; i++) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection("Mata_Kuliah")
+          .doc(departemen)
+          .collection("Mata Kuliah List")
+          .doc(matkul[i])
+          .get();
+
+      if (snapshot.exists) {
+        var matkul2 = snapshot.data();
+        if (matkul2 != null) {
+          addMatkultoRK(
+              id: matkul[i],
+              kodeMK: matkul2['KodeMK'],
+              namaMK: matkul2["NamaMK"],
+              jenis: matkul2['Jenis'],
+              sks: matkul2["SKS"],
+              semester: matkul2["Semester"]);
+        }
+      }
+    }
   }
 
   List<int> allOption = [

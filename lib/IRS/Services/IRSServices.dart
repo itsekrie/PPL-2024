@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:si_paling_undip/Login/Services/auth_service.dart';
 
 class IRS {
   String id;
@@ -14,7 +16,7 @@ class IRS {
 
 class IRSServices {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Future<IRS> fetchMyIRS(String irsID) async {
     final data = await _firestore.collection('IRS').doc(irsID).get();
     return IRS(

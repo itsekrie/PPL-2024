@@ -61,7 +61,7 @@ class MataKuliahService {
     if (await isMataKuliahExists(namaMK, departemen)) {
       throw Exception('Mata Kuliah dengan nama $namaMK sudah ada.');
     }
-    await _firestore
+    final newMatkul = await _firestore
         .collection('Mata_Kuliah')
         .doc(departemen)
         .collection("Mata Kuliah List")
@@ -71,6 +71,16 @@ class MataKuliahService {
       'Semester': semester,
       'SKS': SKS,
       'Jenis': jenis,
+    });
+    String ganjilgenap = "";
+    if (SKS % 2 == 1) {
+      ganjilgenap = "Ganjil_List";
+    } else {
+      ganjilgenap = "Genap_List";
+    }
+
+    await _firestore.collection("Mata_Kuliah").doc(departemen).update({
+      ganjilgenap: FieldValue.arrayUnion([newMatkul.id])
     });
   }
 
