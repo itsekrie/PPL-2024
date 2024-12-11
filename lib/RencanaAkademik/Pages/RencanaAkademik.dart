@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:si_paling_undip/RencanaAkademik/Services/RencanaAkademikService.dart';
 import 'package:si_paling_undip/navbar.dart';
 
-class RencanaAkademik extends StatefulWidget {
-  const RencanaAkademik({super.key});
+class RencanaAkademikForm extends StatefulWidget {
+  const RencanaAkademikForm({super.key});
 
   @override
-  State<RencanaAkademik> createState() => _RencanaAkademikState();
+  State<RencanaAkademikForm> createState() => _RencanaAkademikFormState();
 }
 
-class _RencanaAkademikState extends State<RencanaAkademik> {
+class _RencanaAkademikFormState extends State<RencanaAkademikForm> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:si_paling_undip/Login/Services/auth_service.dart';
 class IRS {
   String id;
   String mahasiswa;

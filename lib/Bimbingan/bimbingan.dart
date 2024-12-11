@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class Bimbingan {
   String jenis_bimbingan;
@@ -34,7 +33,7 @@ class BimbinganService {
   Future<List<Bimbingan>> fetchData() async {
     final snapshot = await _firestore.collection('Bimbingan').get();
     return snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       return Bimbingan(
         data['jenis_bimbingan'],
         data['deskripsi'],
@@ -51,7 +50,7 @@ class AkunMahasiswa {
   Future<List<Mahasiswa>> fetchData() async {
     final snapshot = await _firestore.collection('Mahasiswa').get();
     return snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
       return Mahasiswa(
         data['nama'],
         data['nim'],
@@ -97,7 +96,7 @@ class HBimbingan extends StatelessWidget {
                         onPressed: () {
                           // Add action for the button here
                         },
-                        child: Text(
+                        child: const Text(
                           "Tambah",
                           style: TextStyle(
                             fontSize: 34,
@@ -120,27 +119,33 @@ class HBimbingan extends StatelessWidget {
                           child: FutureBuilder<List<Bimbingan>>(
                             future: BimbinganService().fetchData(),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Center(child: CircularProgressIndicator());
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
                               } else if (snapshot.hasError) {
                                 print('Error fetching data: ${snapshot.error}');
-                                return Center(child: Text('Error: ${snapshot.error}'));
-                              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Center(child: Text('No data available'));
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return const Center(
+                                    child: Text('No data available'));
                               }
 
                               final bimbinganList = snapshot.data!;
 
                               return DataTable(
                                 columns: [
-                                  DataColumn(label: Text('No')),
-                                  DataColumn(label: Text('Jenis')),
-                                  DataColumn(label: Text('Nama D osen')),
-                                  DataColumn(label: Text('Deskripsi')),
-                                  DataColumn(label: Text('Bimbingan Ke')),
-                                  DataColumn(label: Text('Waktu')),
+                                  const DataColumn(label: Text('No')),
+                                  const DataColumn(label: Text('Jenis')),
+                                  const DataColumn(label: Text('Nama D osen')),
+                                  const DataColumn(label: Text('Deskripsi')),
+                                  const DataColumn(label: Text('Bimbingan Ke')),
+                                  const DataColumn(label: Text('Waktu')),
                                 ],
-                                rows: bimbinganList.asMap().entries.map((entry) {
+                                rows:
+                                    bimbinganList.asMap().entries.map((entry) {
                                   int index = entry.key;
                                   Bimbingan item = entry.value;
                                   return DataRow(cells: [
@@ -148,8 +153,11 @@ class HBimbingan extends StatelessWidget {
                                     DataCell(Text(item.jenis_bimbingan)),
                                     DataCell(Text(item.dosen_pembimbing)),
                                     DataCell(Text(item.deskripsi)),
-                                    DataCell(Text('1')), // Placeholder for 'Bimbingan Ke'
-                                    DataCell(Text(item.waktu.toLocal().toString())), // Menampilkan waktu
+                                    const DataCell(Text(
+                                        '1')), // Placeholder for 'Bimbingan Ke'
+                                    DataCell(Text(item.waktu
+                                        .toLocal()
+                                        .toString())), // Menampilkan waktu
                                   ]);
                                 }).toList(),
                               );
@@ -172,25 +180,31 @@ class HBimbingan extends StatelessWidget {
                           child: FutureBuilder<List<Mahasiswa>>(
                             future: AkunMahasiswa().fetchData(),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Center(child: CircularProgressIndicator());
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
                               } else if (snapshot.hasError) {
                                 print('Error fetching data: ${snapshot.error}');
-                                return Center(child: Text('Error: ${snapshot.error}'));
-                              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Center(child: Text('No data available'));
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return const Center(
+                                    child: Text('No data available'));
                               }
 
                               final mahasiswaList = snapshot.data!;
 
                               return DataTable(
                                 columns: [
-                                  DataColumn(label: Text('No')),
-                                  DataColumn(label: Text('Nama')),
-                                  DataColumn(label: Text('NIM')),
-                                  DataColumn(label: Text('Dosen Wali')),
+                                  const DataColumn(label: Text('No')),
+                                  const DataColumn(label: Text('Nama')),
+                                  const DataColumn(label: Text('NIM')),
+                                  const DataColumn(label: Text('Dosen Wali')),
                                 ],
-                                rows: mahasiswaList.asMap().entries.map((entry) {
+                                rows:
+                                    mahasiswaList.asMap().entries.map((entry) {
                                   int index = entry.key;
                                   Mahasiswa item = entry.value;
                                   return DataRow(cells: [

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -31,13 +33,15 @@ class Bimbingan {
   }
 
   Future<void> updateStatus(String newStatus) async {
-    final docRef = FirebaseFirestore.instance.collection('bimbingan').doc(id); // Gunakan id
+    final docRef = FirebaseFirestore.instance
+        .collection('bimbingan')
+        .doc(id); // Gunakan id
     await docRef.update({'status': newStatus});
   }
 }
 
 class Dftbimbingan extends StatefulWidget {
-  const Dftbimbingan({Key? key}) : super(key: key);
+  const Dftbimbingan({super.key});
 
   @override
   _DftbimbinganState createState() => _DftbimbinganState();
@@ -49,8 +53,8 @@ class _DftbimbinganState extends State<Dftbimbingan> {
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Align(
               alignment: Alignment.centerLeft, // Mengatur teks ke kiri
               child: Text(
@@ -63,13 +67,15 @@ class _DftbimbinganState extends State<Dftbimbingan> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('bimbingan').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('bimbingan')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: const CircularProgressIndicator());
                 }
 
                 final bimbinganList = snapshot.data!.docs
@@ -95,23 +101,23 @@ class _DftbimbinganState extends State<Dftbimbingan> {
                     }
 
                     return Card(
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       child: Column(
                         children: [
                           ListTile(
                             title: Text(bimbingan.jenis_bimbingan),
                             subtitle: Text(
                               '${bimbingan.deskripsi}\nDosen: ${bimbingan.dosen_pembimbing}\nWaktu: ${bimbingan.waktu}',
-                              style: TextStyle(fontSize: 14),
+                              style: const TextStyle(fontSize: 14),
                             ),
                             isThreeLine: true,
                           ),
                           Container(
                             color: statusColor,
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Text(
                               bimbingan.status,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -132,21 +138,21 @@ class _DftbimbinganState extends State<Dftbimbingan> {
                                     bimbingan.updateStatus('Diterima');
                                   }
                                 },
-                                child: Text('Terima'),
+                                child: const Text('Terima'),
                               ),
                               TextButton(
                                 onPressed: () {
                                   if (bimbingan.status == 'Belum') {
                                     // Perbarui status di antarmuka
                                     setState(() {
-                                      bimbingan .status = 'Ditolak';
+                                      bimbingan.status = 'Ditolak';
                                     });
 
                                     // Perbarui status di Firestore
                                     bimbingan.updateStatus('Ditolak');
                                   }
                                 },
-                                child: Text('Tolak'),
+                                child: const Text('Tolak'),
                               ),
                             ],
                           ),
@@ -162,4 +168,4 @@ class _DftbimbinganState extends State<Dftbimbingan> {
       ),
     );
   }
-} 
+}
