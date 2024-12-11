@@ -36,62 +36,55 @@ void main() async {
 }
 
 final GoRouter _router = GoRouter(
-    routes: <RouteBase>[
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const Dashboard(),
-        routes: [
-          GoRoute(
-            path: 'login',
-            builder: (context, state) => const LoginPage(),
-            redirect: (context, state) async {
-              final user = FirebaseAuth.instance.currentUser;
-              if (user == null) {
-                return null;
-              }
-              return '/';
-            },
-          ),
-          GoRoute(
-            path: "Role",
-            builder: (context, state) => const Role(),
-          ),
-          GoRoute(
-            path: 'Monitoring',
-            builder: (context, state) => const MonitoringPage(),
-          ),
-          GoRoute(
-            path: 'IRS',
-            builder: (context, state) {
-              return FutureBuilder<String?>(
-                  future: AuthService().currentRole(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Scaffold(
-                        body: Center(child: CircularProgressIndicator()),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Scaffold(
-                        body: Center(
-                            child:
-                                Text('Error loading role: ${snapshot.error}')),
-                      );
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      name: 'Dashboard',
+      builder: (context, state) => const Dashboard(),
+      routes: [
+        GoRoute(
+          path: 'login',
+          name: 'Login',
+          builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: 'Role',
+          name: 'Role Selection',
+          builder: (context, state) => const Role(),
+        ),
+        GoRoute(
+          path: 'Monitoring',
+          name: 'Monitoring',
+          builder: (context, state) => const MonitoringPage(),
+        ),
+        GoRoute(
+          path: 'IRS',
+          name: 'IRS',
+          builder: (context, state) {
+            return FutureBuilder<String?>(
+                future: AuthService().currentRole(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Scaffold(
+                      body: Center(child: CircularProgressIndicator()),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Scaffold(
+                      body: Center(
+                          child: Text('Error loading role: ${snapshot.error}')),
+                    );
+                  } else {
+                    final role = snapshot.data;
+                    if (role == 'Dosen') {
+                      return const IRSDosen();
+                    } else if (role == 'Mahasiswa') {
+                      return const IRSMahasiswa();
                     } else {
-                      final role = snapshot.data;
-                      if (role == 'Dosen') {
-                        return const IRSDosen();
-                      } else if (role == 'Mahasiswa') {
-                        return const IRSMahasiswa();
-                      }
-                      // else if (role == 'Dosen') {
-                      //   return const IRSMahasiswa();
-                      // }
-                      else {
-                        return const Scaffold(
-                          body: Center(child: Text('Invalid role')),
-                        );
-                      }
+                      return const Scaffold(
+                        body: Center(child: Text('Invalid role')),
+                      );
                     }
+
                   });
             },
           ),
@@ -129,6 +122,7 @@ final GoRouter _router = GoRouter(
       }
       return null;
     });
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

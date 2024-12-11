@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:si_paling_undip/navbar.dart';
 
 class Transkripmhs extends StatefulWidget {
   const Transkripmhs({super.key});
@@ -13,6 +14,7 @@ class _TranskripmhstState extends State<Transkripmhs> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: const MyNavbar(),
       backgroundColor: const Color.fromARGB(255, 231, 231, 231),
       body: SingleChildScrollView(
         child: Column(
