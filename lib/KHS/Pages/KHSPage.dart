@@ -114,24 +114,28 @@ class _KHSState extends State<KHS> {
                             style: TextStyle(
                               fontSize: 54,
                               fontWeight: FontWeight.bold,
+                              color: Colors.black
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 20.0, top: 30),
-                          child: ElevatedButton(
+                          child: ElevatedButton.icon(
                             onPressed: () {
                               // Aksi ketika tombol ditekan
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
+                            icon: const Icon(
+                              Icons.print, // Menambahkan ikon printer
+                              color: Colors.white,
+                            ),
+                            label: const Text(
                               'Cetak Transkrip',
                               style: TextStyle(fontSize: 16, color: Colors.white),
                             ),
@@ -168,32 +172,118 @@ class _KHSState extends State<KHS> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  tileColor: Colors.blue,
+                                  tileColor: Colors.blueAccent,
                                 );
                               },
                               body: Container(
                                 padding: const EdgeInsets.all(8.0),
-                                color: Colors.white,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
                                 child: Column(
                                   children: [
+                                    // Data Table
                                     DataTable(
                                       columns: const [
-                                        DataColumn(label: Text('No')),
-                                        DataColumn(label: Text('Kode')),
-                                        DataColumn(label: Text('Mata Kuliah')),
-                                        DataColumn(label: Text('Status')),
-                                        DataColumn(label: Text('SKS')),
-                                        DataColumn(label: Text('Nilai Huruf')),
-                                        DataColumn(label: Text('Bobot')),
-                                        DataColumn(label: Text('SKS x Bobot')),
+                                        DataColumn(
+                                          label: Text(
+                                            'No',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Kode',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Mata Kuliah',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Status',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'SKS',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Nilai Huruf',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'Bobot',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                        DataColumn(
+                                          label: Text(
+                                            'SKS x Bobot',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                       rows: semester.subjects
                                           .map(
                                             (subject) => DataRow(
+                                              color: MaterialStateProperty.resolveWith<Color?>(
+                                                (states) => states.contains(MaterialState.selected)
+                                                    ? Colors.blue.withOpacity(0.2)
+                                                    : Colors.white,
+                                              ),
                                               cells: subject.values
                                                   .map(
                                                     (value) => DataCell(
-                                                      Text(value),
+                                                      Text(
+                                                        value,
+                                                        style: const TextStyle(
+                                                          color: Colors.black87,
+                                                          fontSize: 14,
+                                                        ),
+                                                      ),
                                                     ),
                                                   )
                                                   .toList(),
@@ -201,12 +291,22 @@ class _KHSState extends State<KHS> {
                                           )
                                           .toList(),
                                     ),
+                                    // IP Semester
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "IP Semester: ${semester.ipSemester}",
-                                        style: const TextStyle(
-                                          color: Colors.black,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blueAccent,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          "IP Semester: ${semester.ipSemester}",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
