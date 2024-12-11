@@ -2,13 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
 
 class Pertemuan {
-  final int pertemuanke, starttime, endtime, day, month, year;
+  final int pertemuanke,
+      starttime,
+      startmenit,
+      endtime,
+      endmenit,
+      day,
+      month,
+      year;
   final String ruang;
 
   const Pertemuan({
     required this.pertemuanke,
     required this.starttime,
+    required this.startmenit,
     required this.endtime,
+    required this.endmenit,
     required this.day,
     required this.month,
     required this.year,
@@ -19,7 +28,9 @@ class Pertemuan {
     return Pertemuan(
       pertemuanke: json['pertemuanke'],
       starttime: json['starttime'],
+      startmenit: json['startmenit'],
       endtime: json['endtime'],
+      endmenit: json['endmenit'],
       day: json['day'],
       month: json['month'],
       year: json['year'],
@@ -31,7 +42,9 @@ class Pertemuan {
     return {
       'pertemuanke': pertemuanke,
       'starttime': starttime,
+      'startmenit': startmenit,
       'endtime': endtime,
+      'endmenit': endmenit,
       'day': day,
       'month': month,
       'year': year,
@@ -41,7 +54,7 @@ class Pertemuan {
 
   @override
   String toString() {
-    return 'Pertemuan{pertemuanke: $pertemuanke, starttime: $starttime, endtime: $endtime, day: $day, month: $month, year: $year, ruang: $ruang}';
+    return 'Pertemuan{pertemuanke: $pertemuanke, starttime: $starttime, startmenit: $startmenit, endtime: $endtime, endmenit: $endmenit, day: $day, month: $month, year: $year, ruang: $ruang}';
   }
 }
 
@@ -65,7 +78,9 @@ class Pertemuanservice {
       Pertemuan pertemuan = Pertemuan(
         pertemuanke: i,
         starttime: inputPertemuan.starttime,
+        startmenit: inputPertemuan.startmenit,
         endtime: inputPertemuan.endtime,
+        endmenit: inputPertemuan.endmenit,
         day: currentDay,
         month: currentMonth,
         year: currentYear,

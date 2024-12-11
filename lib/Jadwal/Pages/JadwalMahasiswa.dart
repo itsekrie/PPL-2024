@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:si_paling_undip/Jadwal/Services/JadwalService.dart';
+import 'package:si_paling_undip/navbar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
 
 class JadwalMahasiswa extends StatefulWidget {
   const JadwalMahasiswa({super.key});
@@ -17,8 +33,9 @@ class _JadwalMahasiswaState extends State<JadwalMahasiswa> {
     super.initState();
     JadwalService jadwalService = JadwalService();
     _appointmentsFuture =
-        jadwalService.getPertemuanAsAppointments('GIOX4ea4LHXEps5HvGxv');
+        jadwalService.getPertemuanAsAppointments('ZyQepGOFstGG2OFvUG4m');
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +45,7 @@ class _JadwalMahasiswaState extends State<JadwalMahasiswa> {
     final double height2 = height1;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Jadwal Mahasiswa')),
+      appBar: const MyNavbar(),
       body: FutureBuilder<List<Appointment>>(
         future: _appointmentsFuture,
         builder: (context, snapshot) {
@@ -69,18 +86,16 @@ class _JadwalMahasiswaState extends State<JadwalMahasiswa> {
                       ),
                     ],
                   ),
-                  // SizedBox(
-                  //   width: width * 4 / 5,
-                  //   height: height,
-                  //   child: SfCalendar(
-                  //       backgroundColor: Colors.white,
-                  //       view: CalendarView.week,
-                  //       showNavigationArrow: true,
-                  //       initialDisplayDate: DateTime(2024, 8, 1),
-                  //       appointmentBuilder:
-                  //           (context, calendarAppointmentDetails) {},
-                  //       dataSource: AppointmentDataSource(appointments)),
-                  // ),
+                  SizedBox(
+                    width: width * 4 / 5,
+                    height: height,
+                    child: SfCalendar(
+                        backgroundColor: Colors.white,
+                        view: CalendarView.week,
+                        showNavigationArrow: true,
+                        initialDisplayDate: DateTime(2024, 8, 1),
+                        dataSource: AppointmentDataSource(appointments)),
+                  ),
                 ],
               ),
             );

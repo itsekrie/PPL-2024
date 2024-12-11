@@ -190,7 +190,7 @@ class _FormState extends State<Form> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration:
-                                  const BoxDecoration(color: Colors.white),
+                                  const BoxDecoration(color: Color.fromARGB(255, 115, 155, 223)),
                               child: DropdownButton(
                                 value: selectedValue,
                                 hint: const Text("Pilih program Studi"),
@@ -222,41 +222,122 @@ class _FormState extends State<Form> {
                         height: 20,
                       ),
                       Container(
-                        decoration: BoxDecoration(
+                          decoration: BoxDecoration(
+                            color: Colors.blue[100], // Latar belakang yang lembut
                             border: Border.all(
-                                color: Colors.black,
-                                width: 2.0,
-                                style: BorderStyle.solid),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(16))),
-                        child: const Column(
-                          children: [
-                            Text(
-                              "Dosen Pengampu",
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              color: Colors.blue.shade200.withOpacity(0.5), // Warna border lebih lembut
+                              width: 1.5,
+                              style: BorderStyle.solid,
                             ),
-                            FormDosen(),
-                          ],
+                            borderRadius: BorderRadius.circular(16), // Sudut lebih halus
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1), // Shadow lembut
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0), // Tambahkan padding
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.person, // Ikon untuk dekorasi
+                                      color: Colors.blue,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "Dosen Pengampu",
+                                      style: TextStyle(
+                                        fontSize: 24, // Ukuran font lebih kecil
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue.shade700, // Warna teks
+                                        letterSpacing: 1.2, // Spasi antar huruf
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16), // Jarak antara teks dan form
+                                const FormDosen(), // Form tetap sama
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "Kelas",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Kelas Title
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue[100], // Latar belakang yang lembut
+                                border: Border.all(
+                                  color: Colors.blue.shade200.withOpacity(0.5),
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1), // Efek bayangan
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.class_rounded,
+                                          color: Colors.blue,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text("Kelas",
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue.shade700,
+                                          letterSpacing:  1.2,// Warna teks
+                                        ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),   
+                                    const FormKelas(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // Tombol Hapus Item dengan desain yang lebih menonjol
+                            const SizedBox(height: 20),
+                            Center(
+                              child: IconButton(
+                                onPressed: () => removeItem(index),
+                                icon: const Icon(
+                                  Icons.delete_forever,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                                splashColor: Colors.red.shade100,
+                                splashRadius: 25,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const FormKelas(),
-                      IconButton(
-                        onPressed: () => removeItem(index),
-                        icon: const Icon(Icons.delete),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -315,7 +396,7 @@ class _FormDosenState extends State<FormDosen> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               return Card(
-                color: const Color.fromARGB(255, 238, 238, 238),
+                color: Colors.blue.shade200.withOpacity(0.5),
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
@@ -326,7 +407,7 @@ class _FormDosenState extends State<FormDosen> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration:
-                                  const BoxDecoration(color: Colors.white),
+                                  const BoxDecoration(color: Color(0xFFE3F2FD)),
                               child: DropdownButton(
                                 value: selectedProdi,
                                 hint: const Text("Pilih Program Studi"),
@@ -359,7 +440,7 @@ class _FormDosenState extends State<FormDosen> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration:
-                                  const BoxDecoration(color: Colors.white),
+                                  const BoxDecoration(color: Color(0xFFE3F2FD)),
                               child: DropdownButton(
                                 value: selectedDosen,
                                 hint: const Text("Pilih Nama Dosen"),
@@ -449,7 +530,7 @@ class _FormKelasState extends State<FormKelas> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               return Card(
-                color: const Color.fromARGB(255, 238, 238, 238),
+                color: Colors.blue.shade200.withOpacity(0.5),
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
@@ -460,7 +541,7 @@ class _FormKelasState extends State<FormKelas> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration:
-                                  const BoxDecoration(color: Colors.white),
+                                  const BoxDecoration(color: Color(0xFFE3F2FD)),
                               child: index == 0
                                   ? const Text('A')
                                   : index == 1
@@ -481,7 +562,7 @@ class _FormKelasState extends State<FormKelas> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration:
-                                  const BoxDecoration(color: Colors.white),
+                                  const BoxDecoration(color: Color(0xFFE3F2FD)),
                               child: DropdownButton(
                                 value: selectedDay,
                                 hint: const Text("Pilih Hari"),
@@ -514,7 +595,7 @@ class _FormKelasState extends State<FormKelas> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration:
-                                  const BoxDecoration(color: Colors.white),
+                                  const BoxDecoration(color: Color(0xFFE3F2FD)),
                               child: DropdownButton(
                                 value: selectedJam,
                                 hint: const Text("Pilih Jam"),
