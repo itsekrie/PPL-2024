@@ -18,6 +18,7 @@ dependencies:
   firebase_admin: ^0.3.0
   syncfusion_flutter_calendar: ^27.2.5
   intl: ^0.19.0
+  url_strategy: ^0.3.0
 
 dev_dependencies:
   flutter_test:

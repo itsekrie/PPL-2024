@@ -23,7 +23,7 @@ class _RoleState extends State<Role> {
   }
 
   Future<void> _fetchData() async {
-    User? user = _firebaseAuth.currentUser ;
+    User? user = _firebaseAuth.currentUser;
     if (user != null) {
       uid = user.uid;
       try {
