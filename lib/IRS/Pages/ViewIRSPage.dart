@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Kelas {
-  final String namaKelas; // Nama kelas, misalnya "Kelas A"
-  final String hari; // Tambahan: hari untuk kelas
+  final String namaKelas; 
+  final String hari; 
   final String jamMulai;
   final String jamSelesai;
 
   Kelas({
     required this.namaKelas, 
-    required this.hari,  // Tambahkan parameter hari 
+    required this.hari, 
     required this.jamMulai, 
     required this.jamSelesai
   });
@@ -18,7 +18,7 @@ class Matkul {
   final int id;
   final String nama;
   final int sks;
-  final List<Kelas> kelas; // Daftar kelas untuk mata kuliah
+  final List<Kelas> kelas; 
 
   Matkul({
     required this.id, 
@@ -309,86 +309,63 @@ class _EntryIRSState extends State<EntryIRS> {
   // Gunakan set untuk melacak kelas yang dipilih
   Set<String> selectedClasses = {};
 
-  void _toggleButton(Kelas kelas, Matkul matkul) {
-    setState(() {
-      String buttonKey = '${matkul.id}-${kelas.namaKelas}';
+  // Set untuk menyimpan range waktu yang sudah terisi
+  Set<String> occupiedTimeSlots = {};
 
-      // Jika kelas sudah dipilih, maka hapus
-      if (selectedClasses.contains(buttonKey)) {
-        selectedClasses.remove(buttonKey);
-      } else {
-        // Cek konflik sebelum menambahkan
-        bool hasConflict = _checkForConflicts(kelas, matkul);
+void _toggleButton(Kelas kelas, Matkul matkul) {
+  setState(() {
+    String buttonKey = '${matkul.id}-${kelas.namaKelas}';
+    String timeSlotKey = '${kelas.hari}-${_getTimeRange(kelas.jamMulai, kelas.jamSelesai)}';
+
+    // Jika kelas sudah dipilih, maka hapus
+    if (selectedClasses.contains(buttonKey)) {
+      selectedClasses.remove(buttonKey);
+      occupiedTimeSlots.remove(timeSlotKey);
+    } else {
+      // Cek apakah slot waktu sudah terisi
+      if (!occupiedTimeSlots.contains(timeSlotKey)) {
+        // Hapus kelas lain dari mata kuliah yang sama
+        selectedClasses.removeWhere((key) => key.startsWith('${matkul.id}-'));
         
-        if (!hasConflict) {
-          // Hapus kelas lain dari mata kuliah yang sama
-          selectedClasses.removeWhere((key) => key.startsWith('${matkul.id}-'));
-          
-          // Tambahkan kelas baru
-          selectedClasses.add(buttonKey);
-        }
-      }
-    });
-  }
-
-  bool _checkForConflicts(Kelas selectedKelas, Matkul selectedMatkul) {
-    // Periksa konflik dengan kelas lain yang sudah dipilih
-    for (var hari in widget.jadwalIRS.jadwal.keys) {
-      for (var range in widget.jadwalIRS.jadwal[hari]!.keys) {
-        for (var otherMatkul in widget.jadwalIRS.jadwal[hari]![range]!) {
-          for (var otherKelas in otherMatkul.kelas) {
-            // Lewati jika kelas yang sama
-            if (otherMatkul.id == selectedMatkul.id && 
-                otherKelas.namaKelas == selectedKelas.namaKelas) continue;
-
-            // Periksa konflik hari
-            bool sameDay = otherKelas.hari == selectedKelas.hari;
-            
-            // Periksa tumpang tindih waktu
-            bool timeOverlap = _hasTimeOverlap(
-              selectedKelas.jamMulai, 
-              selectedKelas.jamSelesai, 
-              otherKelas.jamMulai, 
-              otherKelas.jamSelesai
-            );
-
-            // Jika sudah ada kelas lain yang dipilih dengan konflik
-            if (sameDay && timeOverlap) {
-              String conflictKey = '${otherMatkul.id}-${otherKelas.namaKelas}';
-              if (selectedClasses.contains(conflictKey)) {
-                // Tampilkan pesan konflik
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Konflik jadwal dengan kelas ${otherMatkul.nama} - ${otherKelas.namaKelas}'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-                return true;
-              }
-            }
-          }
-        }
+        // Tambahkan kelas baru
+        selectedClasses.add(buttonKey);
+        occupiedTimeSlots.add(timeSlotKey);
       }
     }
-    return false;
+  });
+}
+
+  // Metode untuk mendapatkan range waktu
+  String _getTimeRange(String jamMulai, String jamSelesai) {
+    List<String> timeRanges = [
+      '07:00-09:30',
+      '09:40-12:10',
+      '13:00-15:30',
+      '15:40-18:10'
+    ];
+
+    return timeRanges.firstWhere(
+      (range) {
+        List<String> rangeParts = range.split('-');
+        return _isTimeInRange(jamMulai, rangeParts[0], rangeParts[1]);
+      },
+      orElse: () => '',
+    );
   }
 
-  bool _hasTimeOverlap(String start1, String end1, String start2, String end2) {
-    // Konversi waktu ke menit
+  // Metode untuk memeriksa apakah waktu berada dalam range
+  bool _isTimeInRange(String time, String rangeStart, String rangeEnd) {
     int convertToMinutes(String time) {
-      List<String> parts = time.split('.');
+      List<String> parts = time.split(':');
       return int.parse(parts[0]) * 60 + int.parse(parts[1]);
     }
 
-    int startMinutes1 = convertToMinutes(start1);
-    int endMinutes1 = convertToMinutes(end1);
-    int startMinutes2 = convertToMinutes(start2);
-    int endMinutes2 = convertToMinutes(end2);
+    int timeMinutes = convertToMinutes(time);
+    int startMinutes = convertToMinutes(rangeStart);
+    int endMinutes = convertToMinutes(rangeEnd);
 
-    // Periksa tumpang tindih waktu
-    return !(endMinutes1 <= startMinutes2 || endMinutes2 <= startMinutes1);
+    return timeMinutes >= startMinutes && timeMinutes <= endMinutes;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -435,25 +412,25 @@ class _EntryIRSState extends State<EntryIRS> {
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(child: Text("Selasa", style: TextStyle(fontSize: 24))),
-                        ),
+                          ),
                         ),
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(child: Text("Rabu", style: TextStyle(fontSize: 24))),
-                        ),
+                          ),
                         ),
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(child: Text("Kamis", style: TextStyle(fontSize: 24))),
-                        ),
+                          ),
                         ),
                         TableCell(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Center(child: Text("Jumat", style: TextStyle(fontSize: 24))),
-                        ),
+                          ),
                         ),
                       ],
                     ),
@@ -474,16 +451,19 @@ class _EntryIRSState extends State<EntryIRS> {
                                     .expand((matkul) => matkul.kelas.map(
                                           (kelas) {
                                             String buttonKey = '${matkul.id}-${kelas.namaKelas}';
+                                            String timeSlotKey = '${kelas.hari}-${_getTimeRange(kelas.jamMulai, kelas.jamSelesai)}';
+                                        
                                             bool isSelected = selectedClasses.contains(buttonKey);
+                                            bool isOccupied = occupiedTimeSlots.contains(timeSlotKey) && !isSelected;
 
                                             return Padding(
                                               padding: const EdgeInsets.all(8.0),
                                               child: ElevatedButton(
-                                                onPressed : () {
+                                                onPressed:isOccupied || selectedClasses.any((key) => key.startsWith('${matkul.id}-')) && !isSelected ? null : () {
                                                   _toggleButton(kelas, matkul);
                                                 },
                                                 style: ElevatedButton.styleFrom(
-                                                  backgroundColor: isSelected ? Colors.grey : Colors.orange,
+                                                  backgroundColor: isSelected ? Colors.green : (isOccupied ? Colors.orange : Colors.grey),
                                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(8),
@@ -517,7 +497,6 @@ class _EntryIRSState extends State<EntryIRS> {
     );
   }
 }
-
 
 
 class IRSCounter extends StatelessWidget {
@@ -569,7 +548,7 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
       child: Card(
         child: Container(
           height: 170,
-          width: 400,
+          width: 420,
           child: const Padding(
             padding: EdgeInsets.all(8.0),
             child: Row(

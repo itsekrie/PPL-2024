@@ -84,7 +84,8 @@ final GoRouter _router = GoRouter(
                       );
                     }
 
-                  });
+                  }}
+                  );
             },
           ),
           GoRoute(
