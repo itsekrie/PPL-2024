@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:si_paling_undip/navbar.dart';
 import 'dart:math';
+import 'package:si_paling_undip/IRS/Services/IRSMhsServices.dart';
 
 
 Color getRandomColor() {
@@ -169,6 +170,7 @@ class _IRSMahasiswaState extends State<IRSMahasiswa> {
                       isLocked: isLocked
                     ),
                     const SizedBox(height: 16),
+                    TestFetch(),
                   ],
                 ),
               ),
@@ -958,5 +960,109 @@ class _IRSMahasiswaCardInfoState extends State<IRSMahasiswaCardInfo> {
         ),
       ),
     );
+  }
+}
+
+
+class TestFetch extends StatefulWidget {
+  const TestFetch({super.key});
+
+  @override
+  State<TestFetch> createState() => _TestFetchState();
+}
+
+class _TestFetchState extends State<TestFetch> {
+  final IRSMhsServices _services = IRSMhsServices();
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+      StreamBuilder<List<MatkulA>>(
+        stream: _services.fetchDataMatkulA(),
+        builder: (BuildContext context, AsyncSnapshot<List<MatkulA>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Menampilkan indikator loading saat data sedang dimuat
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // Menampilkan pesan error jika ada kesalahan
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // Menampilkan pesan jika tidak ada data
+            return const Center(
+              child: Text('Tidak ada data'),
+            );
+          }
+
+          // Jika data tersedia, tampilkan dalam bentuk tabel
+          final List<MatkulA> matkulList = snapshot.data!;
+          return Table(
+            border: TableBorder.all(),
+            children: [
+              // Header tabel
+              const TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Kode MK', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Nama MK', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('SKS', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Semester', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ],
+              ),
+              // Data tabel
+              ...matkulList.map(
+                (matkul) => TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(matkul.kodemk),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(matkul.nama),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(matkul.sks.toString()),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(matkul.semester.toString()),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      );
   }
 }

@@ -579,6 +579,11 @@ class _AddEditMataKuliahPageState extends State<AddEditMataKuliahPage> {
         if (value == null || value.isEmpty) {
           return '$label tidak boleh kosong';
         }
+        if (controller == sksController &&
+          controller.text.isNotEmpty &&
+          int.tryParse(controller.text)! < 0) {
+            return 'Kapasitas harus positif';
+        }
         return null;
       },
     );

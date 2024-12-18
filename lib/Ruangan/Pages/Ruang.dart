@@ -217,50 +217,98 @@ class _ViewRuangOnlyState extends State<ViewRuangOnly> {
                                               ),
                                             ),
                                             Builder(
-                                              builder: (context) {
-                                                if (ruangItem.status == 'belum_diajukan') {
+                                                builder: (context) {
+                                                if (ruangItem.status == 'belum_diajukan'){
+
                                                   return Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding: const EdgeInsets.only(right: 8.0),
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       children: [
-                                                        Icon(Icons.edit, color: Colors.orange), // Ikon edit
-                                                        const SizedBox(width: 5),
-                                                        Text(
-                                                          'Belum Diajukan',
-                                                          style: TextStyle(color: Colors.orange),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              navigateToAddEditOnlyPage(isEdit: true, ruang: ruangItem);
+                                                            },
+                                                            style: ElevatedButton.styleFrom(
+                                                              backgroundColor: Colors.orange,
+                                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(8),
+                                                              ),
+                                                            ),
+                                                            child: const Text(
+                                                              'Edit',
+                                                              style: TextStyle(fontSize: 16, color: Colors.white),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                return AlertDialog(
+                                                                  title: const Text('Konfirmasi Hapus'),
+                                                                  content: const Text('Apakah Anda yakin ingin menghapus ruang ini?'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                      child: const Text('Batal'),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed: () {
+                                                                        _ruangService.deleteRuang(ruangItem.id);
+                                                                        Navigator.of(context).pop();
+                                                                        setState(() {}); // Refresh the view after deleting
+                                                                      },
+                                                                      child: const Text('Hapus'),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                            backgroundColor: Colors.red,
+                                                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8),
+                                                            ),
+                                                          ),
+                                                          child: const Text(
+                                                            'Hapus',
+                                                            style: TextStyle(fontSize: 16, color: Colors.white),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
                                                   );
-                                                } else if (ruangItem.status == 'diajukan' || ruangItem.status == 'pending') {
+                                                } else if (ruangItem.status == 'diajukan' || ruangItem.status == 'pending'){
                                                   return const Padding(
+                                                      padding:  EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        'Belum Disetujui',
+                                                        style: TextStyle(color: Colors.orange),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    );
+                                                } else if (ruangItem.status == 'disetujui') {
+                                                  return const  Padding(
                                                     padding: EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      'Belum Disetujui',
-                                                      style: TextStyle(color: Colors.orange),
+                                                      'Sudah Disetujui',
+                                                      style: TextStyle(color: Colors.green),
                                                       textAlign: TextAlign.center,
-                                                    ),
-                                                  );
-                                                } else if (ruangItem.status == 'disetujui') {
-                                                  return const Padding(
-                                                    padding: EdgeInsets.all(8.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        Icon(Icons.check_circle, color: Colors.green), // Ikon centang
-                                                        SizedBox(width: 5),
-                                                        Text(
-                                                          'Sudah Disetujui',
-                                                          style: TextStyle(color: Colors.green),
-                                                        ),
-                                                      ],
                                                     ),
                                                   );
                                                 }
                                                 return const SizedBox();
-                                              },
-                                            ),
+                                                }
+                                              ),
                                           ],
                                         );
                                       }),
@@ -483,6 +531,11 @@ class _AddEditRuangOnlyPageState extends State<AddEditRuangOnlyPage> {
         if (keyboardType == TextInputType.number && int.tryParse(value) == null) {
           return '$labelText harus berupa angka';
         }
+        if (controller == kapasitasController &&
+          controller.text.isNotEmpty &&
+          int.tryParse(controller.text)! < 0) {
+        return 'Kapasitas harus positif';
+      }
         return null;
       },
     );

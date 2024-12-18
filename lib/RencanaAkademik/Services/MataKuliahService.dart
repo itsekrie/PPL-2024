@@ -58,8 +58,8 @@ class MataKuliahService {
     String jenis,
   ) async {
     var departemen = await Rencanaakademikservice().getDepartemen();
-    if (await isMataKuliahExists(namaMK, departemen)) {
-      throw Exception('Mata Kuliah dengan nama $namaMK sudah ada.');
+    if (await isMataKuliahExists(kodeMK, departemen)) {
+      throw Exception('Mata Kuliah dengan kode $kodeMK sudah ada.');
     }
     final newMatkul = await _firestore
         .collection('Mata_Kuliah')
@@ -97,13 +97,13 @@ class MataKuliahService {
         .collection('Mata_Kuliah')
         .doc(departemen)
         .collection("Mata Kuliah List")
-        .where('NamaMK', isEqualTo: namaMK)
+        .where('KodeMK', isEqualTo: kodeMK)
         .where(FieldPath.documentId,
             isNotEqualTo: id) // Pastikan tidak memeriksa dokumen yang sama
         .get();
 
     if (snapshot.docs.isNotEmpty) {
-      throw Exception('Ruang dengan nama $namaMK sudah ada.');
+      throw Exception('Matkul dengan kdoe $kodeMK sudah ada.');
     }
 
     await _firestore
