@@ -153,9 +153,9 @@ class InformationPanel extends StatelessWidget {
           const SizedBox(
             width: 16,
           ),
-          const CircleAvatar(
-            backgroundColor: Colors.brown,
-            child: Text('AH'),
+          CircleAvatar(
+            backgroundColor: Colors.brown[400],
+            child: const Icon(Icons.account_circle_outlined, color: Colors.white, size: 32,),
           ),
         ],
       ),
